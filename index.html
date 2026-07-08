@@ -1,512 +1,76 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-title" content="BLOC73 Prospekt" />
-  <meta name="format-detection" content="telephone=no" />
-  <title>BLOC73 Marketing Prospekt App</title>
-  <style>
-    :root{
-      --paper:#ffffff;
-      --bg:#edf2f7;
-      --ink:#122033;
-      --muted:#607083;
-      --line:#d9e2ec;
-      --soft:#f6f8fb;
-      --soft2:#eef4f8;
-      --brand:#0d4f7c;
-      --brand2:#1d75a4;
-      --accent:#c22b2b;
-      --gold:#b98b32;
-      --radius:22px;
-      --shadow:0 18px 60px rgba(18,32,51,.16);
-      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --preview-scale:1;
-      color-scheme:light;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;font-family:var(--font);color:var(--ink);background:var(--bg);overscroll-behavior-y:none}
-    body{display:grid;grid-template-columns:380px 1fr;gap:0;}
-    button,input,textarea,select{font:inherit}
-    button{cursor:pointer;border:0;border-radius:12px;padding:10px 13px;font-weight:800;letter-spacing:.01em;background:var(--brand);color:white;box-shadow:0 8px 18px rgba(13,79,124,.18);min-height:44px;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-    button.secondary{background:#eef3f8;color:#153047;border:1px solid #d6e0e9;box-shadow:none}
-    button.danger{background:#fff1f1;color:#a80f0f;border:1px solid #ffd0d0;box-shadow:none}
-    button.slim{padding:7px 10px;border-radius:10px;font-size:12px}
-    button:disabled{opacity:.45;cursor:not-allowed}
-    label{display:block;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:#617284;margin:14px 0 6px}
-    input,textarea,select{width:100%;border:1px solid #d4dee8;background:white;border-radius:12px;padding:10px 11px;color:#17283a;outline:none;font-size:16px;min-height:44px;-webkit-appearance:none;appearance:none}
-    textarea{min-height:82px;resize:vertical;line-height:1.45}
-    input:focus,textarea:focus,select:focus{border-color:#8db8d3;box-shadow:0 0 0 3px rgba(29,117,164,.12)}
-    .panel{height:100vh;overflow:auto;background:#f9fbfd;border-right:1px solid #d6e0e8;padding:18px 16px 22px;position:sticky;top:0;z-index:5;-webkit-overflow-scrolling:touch}
-    .panel h1{font-size:18px;margin:0 0 4px;letter-spacing:-.02em}.panel p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}.panel .brandbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}.mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#eff7fc,#fff);border:1px solid #d8e6ef;display:grid;place-items:center;font-weight:1000;color:var(--brand)}
-    .section{border:1px solid #dde7ef;background:#fff;border-radius:18px;padding:13px;margin:14px 0}.section h2{font-size:13px;margin:0 0 8px;text-transform:uppercase;letter-spacing:.08em;color:#18324b}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.status{font-size:12px;line-height:1.35;color:#4f6173;background:#f0f5f9;border:1px solid #d9e5ed;border-radius:12px;padding:9px;margin-top:10px}.status.ok{background:#eef8f0;color:#24562f;border-color:#cfe9d5}.status.err{background:#fff2f2;color:#9d1717;border-color:#ffd3d3}.pages{display:grid;gap:8px;margin-top:10px}.pagebtn{display:flex;align-items:center;justify-content:space-between;gap:8px;text-align:left;padding:9px 10px;border:1px solid #d9e3ec;border-radius:12px;background:#fff;color:#173047;box-shadow:none}.pagebtn.active{border-color:#83b9d5;background:#eff8fc}.pagebtn b{font-size:12px}.pagebtn span{font-size:11px;color:#6a7b8d}.hint{font-size:11px;color:#708093;line-height:1.4;margin-top:6px}.sep{height:1px;background:#e3ebf2;margin:14px 0}.stage{min-height:100vh;overflow:auto;padding:22px 28px 80px}.toptools{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 auto 18px;max-width:1180px}.toptools .left,.toptools .right{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.toptools strong{font-size:14px}.canvas{display:grid;gap:22px;justify-content:center}.page{width:210mm;height:297mm;background:var(--paper);position:relative;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(18,32,51,.08);page-break-after:always}.safe{position:absolute;inset:10mm 10mm 9mm 10mm;display:flex;flex-direction:column}.page::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 8%,rgba(29,117,164,.09),transparent 35%),radial-gradient(circle at 92% 14%,rgba(194,43,43,.055),transparent 28%),linear-gradient(180deg,#fff,#fbfcfe 60%,#f7fafc)}
-    .page-header{height:20mm;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid #dfe7ef;position:relative;z-index:1}.logos{display:flex;align-items:center;gap:11px}.logo-stack{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.logo-chip{display:flex;align-items:center;justify-content:center;padding:2.5mm 4mm;background:#fff;border:1px solid #dce6ef;border-radius:14px;box-shadow:0 6px 18px rgba(18,32,51,.05)}.logo-img{max-height:13mm;max-width:45mm;object-fit:contain}.logo-img.cover-as{max-width:44mm;max-height:16mm}.logo-img.cover-bloc{max-width:26mm;max-height:26mm}.logo-fallback{font-weight:1000;letter-spacing:.04em;font-size:18px;color:#14324b}.logo-fallback .red{color:var(--accent)}.subbrand{font-size:8.8pt;color:#66778a;font-weight:700;letter-spacing:.02em}.head-contact{font-size:8.5pt;color:#5c6f83;text-align:right;line-height:1.35;font-weight:650}.cover-main{position:relative;z-index:1;display:grid;grid-template-rows:auto auto 1fr auto;gap:6mm;flex:1;padding-top:7mm}.cover-brandband{display:flex;justify-content:space-between;align-items:center;gap:8mm;padding:5mm 6mm;border:1px solid #dce6ef;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(246,250,253,.88));box-shadow:0 12px 36px rgba(18,32,51,.06)}.brandband-text{font-size:10.2pt;color:#4a5d73;line-height:1.45;max-width:92mm}.campaign{font-size:12pt;color:var(--accent);font-weight:1000;letter-spacing:.09em;text-transform:uppercase}.cover-title{font-size:34pt;line-height:1.02;letter-spacing:-.045em;margin:4mm 0 3mm;color:#102235;max-width:165mm}.cover-lead{font-size:13.5pt;line-height:1.45;color:#42546a;max-width:165mm;margin:0}.cover-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:8mm;align-items:stretch}.cover-card{background:rgba(255,255,255,.82);border:1px solid #dce6ee;border-radius:22px;padding:8mm;box-shadow:0 12px 36px rgba(18,32,51,.07)}.cover-card h2{font-size:19pt;line-height:1.1;margin:0 0 3mm;letter-spacing:-.035em}.cover-card p{font-size:10.6pt;line-height:1.5;color:#4c5e72;margin:0}.pillgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:4mm;margin-top:6mm}.pill{border:1px solid #dfe7ee;background:#f8fbfd;border-radius:15px;padding:4mm}.pill b{display:block;font-size:10pt;color:#102235}.pill span{display:block;font-size:8.8pt;color:#66778a;margin-top:1mm;line-height:1.3}.cover-footer{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:end;border-top:1px solid #dfe7ef;padding-top:5mm}.contact-block{font-size:9.5pt;color:#526579;line-height:1.45}.contact-block b{color:#102235}.qr-wrap{text-align:center}.qr{width:24mm;height:24mm;border:1px solid #d8e3eb;border-radius:8px;background:white;padding:2mm;object-fit:contain}.qrtext{font-size:7.6pt;font-weight:1000;color:#354b61;letter-spacing:.08em;margin-top:1.5mm;text-transform:uppercase}
-    .machine-main{position:relative;z-index:1;flex:1;display:grid;grid-template-rows:auto 1fr auto;gap:6mm;padding-top:7mm}.machine-hero{display:grid;grid-template-columns:94mm 1fr;gap:7mm;min-height:92mm}.image-card{background:linear-gradient(145deg,#ffffff,#f4f8fb);border:1px solid #dce7ef;border-radius:24px;position:relative;overflow:hidden;display:grid;place-items:center;box-shadow:0 12px 35px rgba(18,32,51,.08)}.image-card::after{content:"";position:absolute;left:10mm;right:10mm;bottom:8mm;height:1px;background:linear-gradient(90deg,transparent,rgba(18,32,51,.18),transparent)}.machine-img{max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain;object-position:center;transform:translate(var(--img-x,0),var(--img-y,0)) scale(var(--img-scale,1));padding:4mm}.machine-img.cover{object-fit:cover;padding:0}.image-placeholder{text-align:center;color:#708195;font-size:10pt;line-height:1.4;padding:9mm}.kicker{font-size:9pt;font-weight:1000;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3mm}.machine-title{font-size:27pt;line-height:1.05;letter-spacing:-.045em;margin:0 0 3mm;color:#102235}.machine-subtitle{font-size:12pt;color:#526579;line-height:1.38;margin:0 0 5mm}.intro-text{font-size:10.8pt;color:#3d5065;line-height:1.47;margin:0}.chips{display:flex;flex-wrap:wrap;gap:2.5mm;margin-top:5mm}.chip{font-size:8.4pt;font-weight:900;color:#16324a;background:#eef6fa;border:1px solid #d6e7ef;border-radius:999px;padding:2mm 3mm}.machine-body{display:grid;grid-template-columns:1fr 72mm;gap:7mm;align-items:start}.block{border:1px solid #dce6ef;background:rgba(255,255,255,.86);border-radius:20px;padding:5mm}.block h3{font-size:12pt;text-transform:uppercase;letter-spacing:.08em;margin:0 0 3.5mm;color:#16324a}.spec-table{width:100%;border-collapse:collapse;font-size:9.5pt}.spec-table tr{border-bottom:1px solid #e6edf3}.spec-table tr:last-child{border-bottom:0}.spec-table td{padding:2.1mm 0;vertical-align:top}.spec-table td:first-child{font-weight:850;color:#33485e;width:42%;padding-right:4mm}.spec-table td:last-child{color:#42556a}.benefits{display:grid;gap:3mm}.benefit{display:grid;grid-template-columns:6mm 1fr;gap:3mm;font-size:9.7pt;line-height:1.38;color:#42556a}.benefit::before{content:"";width:6mm;height:6mm;border-radius:999px;background:linear-gradient(135deg,#e5f1f7,#fff);border:1.5px solid #9bc4d8;align-self:start}.pricebox{margin-top:5mm;background:#f8fafc;border:1px solid #dce6ee;border-radius:16px;padding:4mm}.pricebox b{display:block;font-size:9pt;text-transform:uppercase;letter-spacing:.08em;color:#627489}.pricebox strong{display:block;font-size:16pt;color:#102235;margin-top:1mm}.machine-footer{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:end;border-top:1px solid #dfe7ef;padding-top:4.5mm}.source-note{font-size:7.8pt;color:#6f8092;line-height:1.35}.cta{font-size:9.2pt;color:#42556a;line-height:1.4}.cta b{color:#102235}.smallqr{display:flex;gap:4mm;align-items:center}.smallqr img{width:19mm;height:19mm;border:1px solid #d8e3eb;border-radius:7px;padding:1.5mm;background:#fff}.smallqr div{font-size:7.5pt;font-weight:1000;letter-spacing:.08em;text-transform:uppercase;color:#354b61;line-height:1.25}.badge{position:absolute;right:10mm;top:29mm;background:#fff;border:1px solid #dce6ee;border-radius:999px;padding:2mm 3mm;font-size:7.8pt;font-weight:900;color:#637386;z-index:2}.watermark{position:absolute;right:-8mm;bottom:16mm;font-size:52pt;font-weight:1000;letter-spacing:-.06em;color:rgba(13,79,124,.055);z-index:0;transform:rotate(-3deg)}
-    .hidden{display:none!important}
-    @media(max-width:1100px){body{grid-template-columns:1fr}.panel{position:relative;height:auto}.stage{padding:16px}.toptools{position:sticky;top:0;background:rgba(237,242,247,.92);backdrop-filter:blur(8px);z-index:2;padding:8px 0}.canvas{transform-origin:top center}.page{width:210mm;height:297mm}}
-    @media(pointer:coarse){body{display:block;grid-template-columns:1fr;overflow-x:hidden}.panel{position:relative;height:auto;max-height:none;border-right:0;border-bottom:1px solid #d6e0e8;padding:16px 14px 18px}.stage{padding:10px 6px 110px;overflow-x:hidden}.toptools{position:sticky;top:0;background:rgba(237,242,247,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:10;border:1px solid #d6e0e8;border-radius:16px;padding:9px;margin-bottom:12px}.toptools .left span{display:none}.btnrow{gap:10px}.row{grid-template-columns:1fr}.section{border-radius:20px}.canvas{display:block;overflow:visible}.page{box-shadow:0 10px 32px rgba(18,32,51,.18)}}
-    @media print{
-      html,body{background:#fff!important;display:block}.panel,.toptools{display:none!important}.stage{padding:0!important;overflow:visible}.canvas{display:block}.page-wrap{width:210mm!important;height:297mm!important;margin:0!important;break-after:page;page-break-after:always}.page-wrap:last-child{break-after:auto;page-break-after:auto}.page{box-shadow:none!important;border:0!important;margin:0!important;width:210mm!important;height:297mm!important;transform:none!important}.page::before{-webkit-print-color-adjust:exact;print-color-adjust:exact}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-    }
-    @page{size:A4;margin:0}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="BLOC73 Prospekt">
+<meta name="format-detection" content="telephone=no">
+<title>BLOC73 Marketing Prospekt App</title>
+<style>
+:root{--bg:#eef3f7;--paper:#fff;--ink:#122033;--muted:#637588;--line:#dce6ef;--soft:#f7fafc;--brand:#12618e;--accent:#c22b2b;--shadow:0 18px 60px rgba(18,32,51,.16);--scale:1;color-scheme:light}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--ink)}body{display:grid;grid-template-columns:390px 1fr}button,input,textarea,select{font:inherit}button{border:0;border-radius:13px;background:var(--brand);color:#fff;font-weight:850;padding:11px 14px;min-height:44px;box-shadow:0 8px 18px rgba(18,97,142,.16);cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}button.secondary{background:#eef4f8;color:#19324a;border:1px solid #d8e2eb;box-shadow:none}button.danger{background:#fff1f1;color:#a60f0f;border:1px solid #ffd2d2;box-shadow:none}button.slim{font-size:12px;padding:8px 11px;min-height:38px}button:disabled{opacity:.45}label{display:block;margin:13px 0 6px;color:#65778a;font-size:11px;text-transform:uppercase;font-weight:950;letter-spacing:.08em}input,textarea,select{width:100%;border:1px solid #d4dee8;background:#fff;border-radius:13px;padding:10px 11px;font-size:16px;min-height:44px;outline:none;-webkit-appearance:none}textarea{min-height:86px;line-height:1.45;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#8db9d2;box-shadow:0 0 0 3px rgba(18,97,142,.12)}
+.panel{height:100vh;overflow:auto;position:sticky;top:0;background:#fbfdff;border-right:1px solid #d7e1ea;padding:16px;z-index:10;-webkit-overflow-scrolling:touch}.brandtop{display:flex;gap:12px;align-items:center;margin-bottom:11px}.mark{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#fff,#eaf4fa);border:1px solid #d8e6ef;display:grid;place-items:center;font-weight:1000;color:var(--brand)}.brandtop h1{font-size:18px;margin:0 0 3px}.brandtop p{font-size:13px;color:var(--muted);line-height:1.35;margin:0}.notice{font-size:12px;line-height:1.38;color:#42556a;background:#f0f6fa;border:1px solid #d9e6ef;border-radius:14px;padding:10px;margin:10px 0}.notice b{color:#123}.section{border:1px solid #dce6ef;background:#fff;border-radius:19px;padding:13px;margin:13px 0}.section h2{font-size:13px;margin:0 0 9px;text-transform:uppercase;letter-spacing:.08em;color:#18324b}.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.pages{display:grid;gap:8px}.pagebtn{display:flex;justify-content:space-between;align-items:center;text-align:left;background:#fff;color:#18324b;border:1px solid #d9e3ec;box-shadow:none;border-radius:13px;padding:9px 10px}.pagebtn.active{background:#edf8fc;border-color:#88bdd8}.pagebtn b{font-size:12px}.pagebtn span{font-size:11px;color:#708093}.hidden{display:none!important}.hint{font-size:11px;color:#718294;line-height:1.4}.status{font-size:12px;line-height:1.35;color:#4f6173;background:#f0f5f9;border:1px solid #d9e5ed;border-radius:12px;padding:9px;margin-top:10px}.status.ok{background:#edf8f0;color:#24562f;border-color:#cbe8d2}.status.err{background:#fff2f2;color:#9d1717;border-color:#ffd3d3}
+.stage{min-height:100vh;overflow:auto;padding:22px 28px 80px}.tools{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:0 auto 18px;max-width:1180px}.tools .left,.tools .right{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.canvas{display:grid;gap:22px;justify-content:center}.pagewrap{width:210mm;height:297mm;transform:scale(var(--scale));transform-origin:top center;margin-bottom:calc((297mm * var(--scale)) - 297mm + 22px)}.page{width:210mm;height:297mm;background:var(--paper);position:relative;overflow:hidden;border:1px solid rgba(18,32,51,.08);box-shadow:var(--shadow);page-break-after:always}.page:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 12% 8%,rgba(18,97,142,.09),transparent 34%),radial-gradient(circle at 92% 10%,rgba(194,43,43,.055),transparent 30%),linear-gradient(180deg,#fff,#fbfcfe 60%,#f7fafc)}.safe{position:absolute;inset:10mm 10mm 9mm;display:flex;flex-direction:column}.pagehead{height:21mm;display:flex;justify-content:space-between;align-items:center;gap:10mm;border-bottom:1px solid #dfe7ef;z-index:1}.logos{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.logobox{background:#fff;border:1px solid #dce6ef;border-radius:13px;padding:2mm 3mm;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(18,32,51,.05)}.aslogo{width:32mm;max-height:14mm;object-fit:contain}.bloclogo{width:17mm;height:17mm;object-fit:contain}.subbrand{font-size:8.2pt;color:#66788b;font-weight:750}.headcontact{text-align:right;font-size:8.3pt;color:#5c6f83;line-height:1.35;font-weight:650}.watermark{position:absolute;right:-10mm;bottom:16mm;font-size:52pt;font-weight:1000;letter-spacing:-.06em;color:rgba(18,97,142,.055);z-index:0;transform:rotate(-3deg)}
+.covermain{z-index:1;position:relative;display:grid;grid-template-rows:auto auto 1fr auto;gap:6mm;flex:1;padding-top:7mm}.brandband{display:flex;align-items:center;justify-content:space-between;gap:8mm;padding:5mm 6mm;background:rgba(255,255,255,.9);border:1px solid #dce6ef;border-radius:22px;box-shadow:0 12px 34px rgba(18,32,51,.06)}.brandband .logos .aslogo{width:42mm;max-height:17mm}.brandband .logos .bloclogo{width:25mm;height:25mm}.brandbandtxt{font-size:10.1pt;color:#4a5d73;line-height:1.45;max-width:92mm}.campaign{font-size:11.5pt;color:var(--accent);font-weight:1000;letter-spacing:.09em;text-transform:uppercase}.covertitle{font-size:33pt;line-height:1.02;letter-spacing:-.045em;margin:4mm 0 3mm;color:#102235;max-width:168mm}.coverlead{font-size:13pt;line-height:1.45;color:#42546a;max-width:168mm;margin:0}.covergrid{display:grid;grid-template-columns:1.05fr .95fr;gap:8mm}.card{background:rgba(255,255,255,.84);border:1px solid #dce6ee;border-radius:22px;padding:7mm;box-shadow:0 12px 36px rgba(18,32,51,.07)}.card h2{font-size:18pt;line-height:1.1;margin:0 0 3mm;letter-spacing:-.035em}.card p{font-size:10.3pt;line-height:1.5;color:#4c5e72;margin:0}.pillgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:3.5mm;margin-top:5mm}.pill{border:1px solid #dfe7ee;background:#f8fbfd;border-radius:15px;padding:3.5mm}.pill b{display:block;font-size:9.5pt}.pill span{display:block;font-size:8.4pt;color:#66778a;margin-top:1mm;line-height:1.3}.coverfoot{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:end;border-top:1px solid #dfe7ef;padding-top:5mm}.contactblock{font-size:9.3pt;color:#526579;line-height:1.45}.qrwrap{text-align:center}.qr{width:24mm;height:24mm;border:1px solid #d8e3eb;border-radius:8px;background:white;padding:2mm}.qrtext{font-size:7.5pt;font-weight:1000;color:#354b61;letter-spacing:.08em;margin-top:1.5mm;text-transform:uppercase}
+.machine{z-index:1;position:relative;display:grid;grid-template-rows:auto 1fr auto;gap:6mm;flex:1;padding-top:7mm}.hero{display:grid;grid-template-columns:94mm 1fr;gap:7mm;min-height:92mm}.imagecard{background:linear-gradient(145deg,#fff,#f4f8fb);border:1px solid #dce7ef;border-radius:24px;position:relative;overflow:hidden;display:grid;place-items:center;box-shadow:0 12px 35px rgba(18,32,51,.08)}.imagecard:after{content:"";position:absolute;left:10mm;right:10mm;bottom:8mm;height:1px;background:linear-gradient(90deg,transparent,rgba(18,32,51,.18),transparent)}.mimg{width:100%;height:100%;object-fit:contain;object-position:center;transform:translate(var(--x,0),var(--y,0)) scale(var(--z,1));padding:4mm}.mimg.cover{object-fit:cover;padding:0}.placeholder{text-align:center;color:#708195;font-size:10pt;line-height:1.4;padding:9mm}.kicker{font-size:9pt;font-weight:1000;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3mm}.mtitle{font-size:27pt;line-height:1.05;letter-spacing:-.045em;margin:0 0 3mm;color:#102235}.msub{font-size:12pt;color:#526579;line-height:1.38;margin:0 0 5mm}.desc{font-size:10.6pt;color:#3d5065;line-height:1.47;margin:0}.chips{display:flex;flex-wrap:wrap;gap:2.5mm;margin-top:5mm}.chip{font-size:8.3pt;font-weight:900;color:#16324a;background:#eef6fa;border:1px solid #d6e7ef;border-radius:999px;padding:2mm 3mm}.bodygrid{display:grid;grid-template-columns:1fr 72mm;gap:7mm;align-items:start}.block{border:1px solid #dce6ef;background:rgba(255,255,255,.86);border-radius:20px;padding:5mm}.block h3{font-size:12pt;text-transform:uppercase;letter-spacing:.08em;margin:0 0 3.5mm;color:#16324a}.spec{width:100%;border-collapse:collapse;font-size:9.35pt}.spec tr{border-bottom:1px solid #e6edf3}.spec tr:last-child{border-bottom:0}.spec td{padding:2mm 0;vertical-align:top}.spec td:first-child{font-weight:850;color:#33485e;width:42%;padding-right:4mm}.benefits{display:grid;gap:3mm}.benefit{display:grid;grid-template-columns:6mm 1fr;gap:3mm;font-size:9.55pt;line-height:1.38;color:#42556a}.benefit:before{content:"";width:6mm;height:6mm;border-radius:999px;background:linear-gradient(135deg,#e5f1f7,#fff);border:1.5px solid #9bc4d8}.price{margin-top:5mm;background:#f8fafc;border:1px solid #dce6ee;border-radius:16px;padding:4mm}.price b{display:block;font-size:9pt;text-transform:uppercase;letter-spacing:.08em;color:#627489}.price strong{display:block;font-size:16pt;margin-top:1mm}.mfoot{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:end;border-top:1px solid #dfe7ef;padding-top:4.5mm}.source{font-size:7.7pt;color:#6f8092;line-height:1.35}.cta{font-size:9pt;color:#42556a;line-height:1.4}.smallqr{display:flex;gap:4mm;align-items:center}.smallqr img{width:19mm;height:19mm;border:1px solid #d8e3eb;border-radius:7px;padding:1.5mm;background:#fff}.smallqr div{font-size:7.4pt;font-weight:1000;letter-spacing:.08em;text-transform:uppercase;color:#354b61;line-height:1.25}.badge{position:absolute;right:10mm;top:29mm;background:#fff;border:1px solid #dce6ee;border-radius:999px;padding:2mm 3mm;font-size:7.8pt;font-weight:900;color:#637386;z-index:2}
+@media(max-width:1100px){body{display:block}.panel{height:auto;position:relative;border-right:0;border-bottom:1px solid #d7e1ea}.row{grid-template-columns:1fr}.stage{padding:10px 6px 110px}.tools{position:sticky;top:0;z-index:20;background:rgba(238,243,247,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid #d6e0e8;border-radius:16px;padding:9px}.tools .left span{display:none}.canvas{display:block}.page{box-shadow:0 10px 32px rgba(18,32,51,.18)}}
+@media print{html,body{background:#fff!important;display:block}.panel,.tools{display:none!important}.stage{padding:0!important}.canvas{display:block}.pagewrap{width:210mm!important;height:297mm!important;margin:0!important;transform:none!important;break-after:page;page-break-after:always}.pagewrap:last-child{break-after:auto;page-break-after:auto}.page{box-shadow:none!important;border:0!important;width:210mm!important;height:297mm!important}.page:before,*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}@page{size:A4;margin:0}
+</style>
 </head>
 <body>
-  <aside class="panel">
-    <div class="brandbar">
-      <div class="mark">B73</div>
-      <div><h1>Marketing Prospekt App</h1><p>iPad/Safari-Version für BLOC73 Machinery / AS Technical Solution. A4-PDF, Maschinenblätter, Website-Import, sauberes Bildraster.</p></div>
-    </div>
-    <div class="status">Wichtig: Die Datei direkt in <b>Safari</b> öffnen, nicht nur in der Dateien-Vorschau. Nur in Safari funktionieren die Buttons, das Speichern und der PDF-Export sauber auf dem iPad.</div>
-
-    <div class="section">
-      <h2>Prospekt-Seiten</h2>
-      <div class="btnrow">
-        <button class="slim" id="addPageBtn">+ Maschinen-Seite</button>
-        <button class="slim secondary" id="duplicateBtn">Duplizieren</button>
-        <button class="slim danger" id="deleteBtn">Löschen</button>
-      </div>
-      <div class="pages" id="pageList"></div>
-    </div>
-
-    <div class="section" id="globalSection">
-      <h2>Grunddaten</h2>
-      <label>AS Technical Logo</label>
-      <input type="file" id="asLogoInput" accept="image/*" />
-      <label>BLOC73 Logo</label>
-      <input type="file" id="blocLogoInput" accept="image/*" />
-      <label>Kontakt / Fußzeile</label>
-      <textarea id="contactInput"></textarea>
-      <label>QR-Code Ziel</label>
-      <input id="qrInput" />
-      <label>QR Text</label>
-      <input id="qrTextInput" />
-      <div class="row">
-        <div><label>Marke links</label><input id="brandInput"></div>
-        <div><label>Akzentfarbe</label><input id="accentInput" type="color"></div>
-      </div>
-    </div>
-
-    <div class="section" id="coverEditor">
-      <h2>Startseite</h2>
-      <label>Werbung / Monat / Jahr</label>
-      <input id="coverCampaign" />
-      <label>Hauptüberschrift</label>
-      <textarea id="coverTitle"></textarea>
-      <label>Einleitung</label>
-      <textarea id="coverLead"></textarea>
-      <label>AS Technical Solution Erklärung</label>
-      <textarea id="coverAsText"></textarea>
-      <label>BLOC73 Machinery Erklärung</label>
-      <textarea id="coverBlocText"></textarea>
-    </div>
-
-    <div class="section hidden" id="machineEditor">
-      <h2>Maschinen-Seite</h2>
-      <label>Website-Link für automatische Datenübernahme</label>
-      <input id="sourceUrl" placeholder="https://..." />
-      <div class="btnrow">
-        <button class="slim" id="importBtn">Link analysieren</button>
-        <button class="slim secondary" id="pasteBtn">Text-Fallback öffnen</button>
-      </div>
-      <div id="importStatus" class="status hidden"></div>
-
-      <div id="pasteBox" class="hidden">
-        <label>Fallback: Text von Herstellerseite einfügen</label>
-        <textarea id="fallbackText" placeholder="Technische Daten oder Website-Text hier einfügen"></textarea>
-        <button class="slim secondary" id="parseFallbackBtn">Eingefügten Text auslesen</button>
-      </div>
-
-      <label>Maschinenbild hochladen</label>
-      <input type="file" id="imageInput" accept="image/*" />
-      <label>Oder Bild-URL</label>
-      <input id="imageUrl" placeholder="https://...jpg/png/webp" />
-      <div class="row">
-        <div><label>Bildmodus</label><select id="imageFit"><option value="contain">Einpassen ohne Beschnitt</option><option value="cover">Rahmen füllen</option></select></div>
-        <div><label>Bildgröße</label><input id="imageScale" type="range" min="0.75" max="1.45" step="0.01"></div>
-      </div>
-      <div class="row">
-        <div><label>Bild X</label><input id="imageX" type="range" min="-30" max="30" step="1"></div>
-        <div><label>Bild Y</label><input id="imageY" type="range" min="-30" max="30" step="1"></div>
-      </div>
-      <label>Kategorie / Hersteller</label>
-      <input id="kickerInput" />
-      <label>Maschinenname</label>
-      <input id="titleInput" />
-      <label>Unterzeile</label>
-      <textarea id="subtitleInput"></textarea>
-      <label>Beschreibung</label>
-      <textarea id="descInput"></textarea>
-      <label>Technische Daten — eine Zeile pro Wert: Bezeichnung: Wert</label>
-      <textarea id="specsInput"></textarea>
-      <label>Nutzen im Betrieb — eine Zeile pro Nutzen</label>
-      <textarea id="benefitsInput"></textarea>
-      <div class="row">
-        <div><label>Preis / Aktion</label><input id="priceInput"></div>
-        <div><label>Verfügbarkeit</label><input id="availabilityInput"></div>
-      </div>
-      <label>Hinweis / Quelle</label>
-      <textarea id="noteInput"></textarea>
-    </div>
-
-    <div class="section">
-      <h2>Speichern / Ausgabe</h2>
-      <div class="btnrow">
-        <button class="slim" id="printBtn">PDF/Druck</button>
-        <button class="slim secondary" id="exportBtn">JSON Export</button>
-        <button class="slim secondary" id="importJsonBtn">JSON Import</button>
-        <input type="file" id="jsonFile" class="hidden" accept="application/json" />
-        <button class="slim danger" id="resetBtn">Reset</button>
-      </div>
-      <div class="hint">iPad: Teilen → Drucken → Vorschau auseinanderziehen → Teilen → In Dateien sichern. Papierformat A4, Ränder: Keine.</div>
-    </div>
-  </aside>
-
-  <main class="stage">
-    <div class="toptools">
-      <div class="left"><strong id="docTitle">BLOC73 Monatsangebote</strong><span class="hint">Layout: hell, hochwertig, identische Maschinen-Seiten</span></div>
-      <div class="right"><button class="secondary slim" id="saveBtn">Speichern</button><button class="slim" id="printBtn2">PDF/Druck</button></div>
-    </div>
-    <div class="canvas" id="canvas"></div>
-  </main>
-
+<aside class="panel">
+  <div class="brandtop"><div class="mark">B73</div><div><h1>Marketing Prospekt App</h1><p>iPad/Safari · kompletter Index · Logos direkt per Weblink eingebunden.</p></div></div>
+  <div class="notice"><b>Wichtig:</b> Diese Version läuft über GitHub Pages in Safari. AS-Logo und BLOC73-Logo sind direkt im Code hinterlegt. Zusätzlich kannst du Logos manuell hochladen.</div>
+  <div class="section"><h2>Prospekt-Seiten</h2><div class="btnrow"><button class="slim" id="addPage">+ Maschinen-Seite</button><button class="slim secondary" id="dupPage">Duplizieren</button><button class="slim danger" id="delPage">Löschen</button></div><div class="pages" id="pageList"></div></div>
+  <div class="section"><h2>Grunddaten</h2><label>AS Logo URL</label><input id="asLogoUrl"><label>BLOC73 Logo URL</label><input id="blocLogoUrl"><label>AS Logo Datei laden</label><input type="file" id="asLogoFile" accept="image/*"><label>BLOC73 Logo Datei laden</label><input type="file" id="blocLogoFile" accept="image/*"><div class="btnrow"><button class="slim secondary" id="resetLogos">Original-Logos wiederherstellen</button></div><label>Kontakt / Fußzeile</label><textarea id="contact"></textarea><label>QR-Code Ziel</label><input id="qr"><label>QR Text</label><input id="qrText"><div class="row"><div><label>Marke</label><input id="brand"></div><div><label>Akzentfarbe</label><input id="accent" type="color"></div></div></div>
+  <div class="section" id="coverEditor"><h2>Startseite</h2><label>Werbung / Monat / Jahr</label><input id="campaign"><label>Hauptüberschrift</label><textarea id="coverTitle"></textarea><label>Einleitung</label><textarea id="coverLead"></textarea><label>AS Technical Solution Erklärung</label><textarea id="asText"></textarea><label>BLOC73 Machinery Erklärung</label><textarea id="blocText"></textarea></div>
+  <div class="section hidden" id="machineEditor"><h2>Maschinen-Seite</h2><label>Website-Link für technische Daten</label><input id="sourceUrl" placeholder="https://..."><div class="btnrow"><button class="slim" id="importLink">Link analysieren</button><button class="slim secondary" id="openFallback">Text-Fallback öffnen</button></div><div id="status" class="status hidden"></div><div id="fallbackBox" class="hidden"><label>Fallback: Herstellertext einfügen</label><textarea id="fallbackText" placeholder="Technische Daten oder Text von der Herstellerseite hier einfügen"></textarea><button class="slim secondary" id="parseFallback">Eingefügten Text auslesen</button></div><label>Maschinenbild hochladen</label><input type="file" id="machineImage" accept="image/*"><label>Oder Bild-URL</label><input id="imageUrl" placeholder="https://...jpg/png/webp"><div class="row"><div><label>Bildmodus</label><select id="fit"><option value="contain">Einpassen ohne Beschnitt</option><option value="cover">Rahmen füllen</option></select></div><div><label>Bildgröße</label><input id="zoom" type="range" min="0.75" max="1.5" step="0.01"></div></div><div class="row"><div><label>Bild X</label><input id="imgX" type="range" min="-35" max="35" step="1"></div><div><label>Bild Y</label><input id="imgY" type="range" min="-35" max="35" step="1"></div></div><label>Kategorie / Hersteller</label><input id="kicker"><label>Maschinenname</label><input id="title"><label>Unterzeile</label><textarea id="subtitle"></textarea><label>Beschreibung</label><textarea id="description"></textarea><label>Technische Daten — Bezeichnung: Wert</label><textarea id="specs"></textarea><label>Nutzen im Betrieb — eine Zeile pro Nutzen</label><textarea id="benefits"></textarea><div class="row"><div><label>Preis / Aktion</label><input id="price"></div><div><label>Verfügbarkeit</label><input id="availability"></div></div><label>Hinweis / Quelle</label><textarea id="note"></textarea></div>
+  <div class="section"><h2>Speichern / Ausgabe</h2><div class="btnrow"><button class="slim" id="print1">PDF/Druck</button><button class="slim secondary" id="saveBtn">Speichern</button><button class="slim secondary" id="exportJson">JSON Export</button><button class="slim secondary" id="importJsonBtn">JSON Import</button><button class="slim danger" id="resetAll">Reset</button><input type="file" id="importJson" class="hidden" accept="application/json"></div><div class="hint">iPad: In Safari öffnen → Teilen → Drucken → Vorschau auseinanderziehen → Teilen → In Dateien sichern.</div></div>
+</aside>
+<main class="stage"><div class="tools"><div class="left"><strong id="docTitle">BLOC73 Prospekt</strong><span class="hint">Helles A4-Layout · hochwertige Maschinenblätter · iPad optimiert</span></div><div class="right"><button class="secondary slim" id="print2">PDF/Druck</button></div></div><div id="canvas" class="canvas"></div></main>
 <script>
-(() => {
-  const STORAGE_KEY = 'bloc73_marketing_prospekt_app_v1';
-  const $ = id => document.getElementById(id);
-  const clean = s => String(s || '').replace(/\s+/g,' ').trim();
-  const lines = s => String(s || '').split(/\n+/).map(v => v.trim()).filter(Boolean);
-  const esc = s => String(s ?? '').replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
-  const absUrl = (u, base) => { try { return new URL(u, base).href; } catch(e){ return u || ''; } };
-  const qrUrl = data => 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=' + encodeURIComponent(data || 'https://bloc73machinery.com/kontakt/');
-
-  const defaultState = () => ({
-    selected: 0,
-    settings: {
-      brand: 'BLOC73 MACHINERY',
-      logo: '',
-      accent: '#c22b2b',
-      qr: 'https://bloc73machinery.com/kontakt/',
-      qrText: 'SCANNEN & DIREKT ANFRAGEN',
-      contact: 'Robert Kutschke · Vertriebsleiter / Head of Sales\nMobil / WhatsApp: +49 160 91658700\nE-Mail: r.kutschke@as-technical.de\nAS Technical Solution GmbH · Industrieweg 13–15 · 48324 Sendenhorst'
-    },
-    cover: {
-      campaign: 'MONATSANGEBOTE JULI 2026',
-      title: 'Professionelle Maschinenlösungen für Ihren Betrieb.',
-      lead: 'Technik, Service und Vertrieb aus einer Hand: sauber erklärt, fachlich eingeordnet und direkt anfragbar für Lebensmittelbetriebe, Metzgereien, Produktion, LEH und Großküchen.',
-      asText: 'AS Technical Solution steht für Service, Wartung, Modernisierung und Retrofit von Fleischereimaschinen und Anlagen in der Lebensmittelindustrie. Aus Sendenhorst betreuen wir Kunden bundesweit – technisch fundiert, praxisnah und mit eigener Werkstatt.',
-      blocText: 'BLOC73 Machinery bündelt den Maschinenvertrieb: professionelle Lösungen für Schneiden, Verpacken, Füllen, Wolfen, Kuttern, Formen, Kühlen und Verbrauchsmaterial. Ziel ist nicht nur eine Maschine, sondern eine passende Lösung, die sich im Alltag rechnet.'
-    },
-    pages: [
-      { type:'cover', name:'Startseite' },
-      machineTemplate('Neue Maschinen-Seite')
-    ]
-  });
-
-  function machineTemplate(name='Maschinen-Seite'){
-    return {
-      type:'machine', name,
-      sourceUrl:'', image:'', imageUrl:'', imageFit:'contain', imageScale:1, imageX:0, imageY:0,
-      kicker:'PROFESSIONELLE LEBENSMITTELTECHNIK',
-      title:'Maschinenname eintragen',
-      subtitle:'Kurzbeschreibung der Maschine, Zielgruppe und Einsatzbereich.',
-      desc:'Hier steht die klare vertriebliche Einordnung: Was macht die Maschine, für wen ist sie geeignet und warum ist sie für den Betrieb interessant.',
-      specs:'Leistung: laut Herstellerangaben\nSpannung: laut Herstellerangaben\nAbmessungen: laut Herstellerangaben\nGewicht: laut Herstellerangaben',
-      benefits:'Klare technische Einordnung für die Kaufentscheidung\nSaubere Darstellung der wichtigsten Daten\nDirekte Anfrage über QR-Code / WhatsApp möglich',
-      price:'Preis auf Anfrage',
-      availability:'Verfügbarkeit nach Rücksprache',
-      note:'Technische Daten laut Herstellerangaben. Änderungen und Zwischenverkauf vorbehalten.'
-    };
-  }
-
-  let state = load();
-
-  function load(){
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const data = raw ? JSON.parse(raw) : defaultState();
-      data.settings = data.settings || {};
-      if(!data.settings.asLogo && data.settings.logo) data.settings.asLogo = data.settings.logo;
-      if(!data.settings.asLogo) data.settings.asLogo = defaultState().settings.asLogo;
-      if(!data.settings.blocLogo) data.settings.blocLogo = defaultState().settings.blocLogo;
-      return data;
-    } catch(e){ return defaultState(); }
-  }
-  function save(){ if(storeState()) flash('Gespeichert auf dem iPad.', 'ok'); }
-  function storeState(){
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); return true; }
-    catch(e){ flash('iPad-Speicher voll: Bitte Bilder kleiner hochladen oder Seiten exportieren und Bilder reduzieren.', 'err'); return false; }
-  }
-  function setAccent(){ document.documentElement.style.setProperty('--accent', state.settings.accent || '#c22b2b'); }
-
-  function render(){
-    setAccent();
-    renderPageList();
-    renderEditors();
-    renderCanvas();
-    $('docTitle').textContent = state.cover.campaign || 'BLOC73 Prospekt';
-  }
-
-  function renderPageList(){
-    $('pageList').innerHTML = state.pages.map((p,i)=>`<button class="pagebtn ${state.selected===i?'active':''}" data-index="${i}"><b>${i+1}. ${esc(p.name || (p.type==='cover'?'Startseite':'Maschine'))}</b><span>${p.type==='cover'?'Start':'Maschine'}</span></button>`).join('');
-    [...$('pageList').querySelectorAll('.pagebtn')].forEach(btn => { const openPage = () => { state.selected = Number(btn.dataset.index); render(); }; btn.onclick = openPage; btn.addEventListener('touchend', e => { e.preventDefault(); openPage(); }, {passive:false}); });
-    $('deleteBtn').disabled = state.selected === 0;
-    $('duplicateBtn').disabled = state.selected === 0;
-  }
-
-  function renderEditors(){
-    $('brandInput').value = state.settings.brand || '';
-    $('accentInput').value = state.settings.accent || '#c22b2b';
-    $('qrInput').value = state.settings.qr || '';
-    $('qrTextInput').value = state.settings.qrText || '';
-    $('contactInput').value = state.settings.contact || '';
-    $('coverCampaign').value = state.cover.campaign || '';
-    $('coverTitle').value = state.cover.title || '';
-    $('coverLead').value = state.cover.lead || '';
-    $('coverAsText').value = state.cover.asText || '';
-    $('coverBlocText').value = state.cover.blocText || '';
-    const p = state.pages[state.selected];
-    $('coverEditor').classList.toggle('hidden', p.type !== 'cover');
-    $('machineEditor').classList.toggle('hidden', p.type !== 'machine');
-    if(p.type === 'machine'){
-      $('sourceUrl').value = p.sourceUrl || '';
-      $('imageUrl').value = p.imageUrl || '';
-      $('imageFit').value = p.imageFit || 'contain';
-      $('imageScale').value = p.imageScale || 1;
-      $('imageX').value = p.imageX || 0;
-      $('imageY').value = p.imageY || 0;
-      $('kickerInput').value = p.kicker || '';
-      $('titleInput').value = p.title || '';
-      $('subtitleInput').value = p.subtitle || '';
-      $('descInput').value = p.desc || '';
-      $('specsInput').value = p.specs || '';
-      $('benefitsInput').value = p.benefits || '';
-      $('priceInput').value = p.price || '';
-      $('availabilityInput').value = p.availability || '';
-      $('noteInput').value = p.note || '';
-    }
-  }
-
-  function renderCanvas(){
-    $('canvas').innerHTML = state.pages.map((p,i)=> `<div class="page-wrap">${p.type==='cover' ? coverPage(i) : machinePage(p,i)}</div>`).join('');
-    fitPreview();
-  }
-
-  function logoHtml(){
-    if(state.settings.logo) return `<img class="logo-img" src="${state.settings.logo}" alt="Logo">`;
-    return `<div class="logo-fallback">BLOC<span class="red">73</span> MACHINERY</div>`;
-  }
-  function pageHeader(pageNo){
-    return `<div class="page-header"><div class="logos">${logoHtml()}<div class="subbrand">eine Marke der AS Technical Solution GmbH</div></div><div class="head-contact">${esc(state.settings.contact).replace(/\n/g,'<br>')}</div></div>`;
-  }
-  function coverPage(i){
-    return `<article class="page"><div class="safe">${pageHeader(i+1)}<div class="cover-main"><div><div class="campaign">${esc(state.cover.campaign)}</div><h1 class="cover-title">${esc(state.cover.title)}</h1><p class="cover-lead">${esc(state.cover.lead)}</p></div><div class="cover-grid"><div class="cover-card"><h2>AS Technical Solution</h2><p>${esc(state.cover.asText)}</p><div class="pillgrid"><div class="pill"><b>Service & Wartung</b><span>Praxisnah für Lebensmitteltechnik.</span></div><div class="pill"><b>Retrofit</b><span>Modernisierung statt unnötiger Austausch.</span></div><div class="pill"><b>DGUV V3</b><span>Prüfung und Dokumentation.</span></div><div class="pill"><b>Bundesweit</b><span>Technischer Einsatz aus Sendenhorst.</span></div></div></div><div class="cover-card"><h2>BLOC73 Machinery</h2><p>${esc(state.cover.blocText)}</p><div class="pillgrid"><div class="pill"><b>Maschinenhandel</b><span>Ausgewählte Technik für Betriebe.</span></div><div class="pill"><b>Beratung</b><span>Fachliche Einordnung vor Angebot.</span></div><div class="pill"><b>Partnernetz</b><span>Markenlösungen für Produktion & Theke.</span></div><div class="pill"><b>Anfrage</b><span>Direkt per QR-Code oder WhatsApp.</span></div></div></div></div><div class="cover-footer"><div class="contact-block"><b>Direkter Kontakt für Maschinen und Projekte</b><br>${esc(state.settings.contact).replace(/\n/g,'<br>')}</div><div class="qr-wrap"><img class="qr" src="${qrUrl(state.settings.qr)}" alt="QR Code"><div class="qrtext">${esc(state.settings.qrText)}</div></div></div></div></div><div class="watermark">MACHINERY</div></article>`;
-  }
-
-  function parseSpecs(txt){
-    const arr = lines(txt).map(l => {
-      let parts = l.split(/[:;|]\s*/);
-      if(parts.length < 2) parts = l.split(/\s[-–—]\s/);
-      if(parts.length >= 2) return {k:clean(parts.shift()), v:clean(parts.join(' '))};
-      return {k:'Daten', v:clean(l)};
-    }).filter(r => r.v || r.k).slice(0,12);
-    return arr.length ? arr : [{k:'Technische Daten',v:'laut Herstellerangaben'}];
-  }
-  function machinePage(p,i){
-    const img = p.image || p.imageUrl;
-    const specs = parseSpecs(p.specs).map(r=>`<tr><td>${esc(r.k)}</td><td>${esc(r.v)}</td></tr>`).join('');
-    const benefits = lines(p.benefits).slice(0,6).map(b=>`<div class="benefit">${esc(b)}</div>`).join('') || `<div class="benefit">Fachliche Einordnung und direkte Anfrage möglich.</div>`;
-    const note = p.note || 'Technische Daten laut Herstellerangaben.';
-    return `<article class="page"><div class="safe">${pageHeader(i+1)}<div class="badge">Seite ${i+1}</div><div class="machine-main"><div class="machine-hero"><div class="image-card">${img ? `<img class="machine-img ${p.imageFit==='cover'?'cover':''}" style="--img-scale:${Number(p.imageScale||1)};--img-x:${Number(p.imageX||0)}px;--img-y:${Number(p.imageY||0)}px" src="${img}" alt="${esc(p.title)}">` : `<div class="image-placeholder">Maschinenbild hochladen oder Bild-URL einfügen.<br>Der Rahmen bleibt immer gleich.</div>`}</div><div><div class="kicker">${esc(p.kicker)}</div><h1 class="machine-title">${esc(p.title)}</h1><p class="machine-subtitle">${esc(p.subtitle)}</p><p class="intro-text">${esc(p.desc)}</p><div class="chips">${p.availability?`<span class="chip">${esc(p.availability)}</span>`:''}${p.sourceUrl?`<span class="chip">Quelle: Herstellerlink</span>`:''}<span class="chip">Technische Daten laut Hersteller</span></div>${p.price?`<div class="pricebox"><b>Preis / Aktion</b><strong>${esc(p.price)}</strong></div>`:''}</div></div><div class="machine-body"><div class="block"><h3>Technische Daten</h3><table class="spec-table">${specs}</table></div><div class="block"><h3>Nutzen im Betrieb</h3><div class="benefits">${benefits}</div></div></div><div class="machine-footer"><div><div class="cta"><b>Direkt anfragen:</b> ${esc(state.settings.contact).replace(/\n/g,' · ')}</div><div class="source-note">${esc(note)}${p.sourceUrl ? ' Quelle: ' + esc(p.sourceUrl) : ''}</div></div><div class="smallqr"><img src="${qrUrl(state.settings.qr)}" alt="QR"><div>${esc(state.settings.qrText)}</div></div></div></div></div><div class="watermark">${esc((p.kicker||'BLOC73').split(' ')[0])}</div></article>`;
-  }
-
-  function flash(msg, type=''){
-    const box = $('importStatus');
-    box.textContent = msg; box.className = 'status ' + (type || ''); box.classList.remove('hidden');
-    clearTimeout(flash.t); flash.t = setTimeout(()=>box.classList.add('hidden'), 3500);
-  }
-  function currentMachine(){ const p = state.pages[state.selected]; return p && p.type === 'machine' ? p : null; }
-  function bindText(id, fn){ $(id).addEventListener('input', e => { fn(e.target.value); render(); persistSoft(); }); }
-  function persistSoft(){ clearTimeout(persistSoft.t); persistSoft.t = setTimeout(storeState, 300); }
-
-  bindText('brandInput', v=>state.settings.brand=v);
-  bindText('accentInput', v=>state.settings.accent=v);
-  bindText('qrInput', v=>state.settings.qr=v);
-  bindText('qrTextInput', v=>state.settings.qrText=v);
-  bindText('contactInput', v=>state.settings.contact=v);
-  bindText('coverCampaign', v=>state.cover.campaign=v);
-  bindText('coverTitle', v=>state.cover.title=v);
-  bindText('coverLead', v=>state.cover.lead=v);
-  bindText('coverAsText', v=>state.cover.asText=v);
-  bindText('coverBlocText', v=>state.cover.blocText=v);
-  ['sourceUrl','imageUrl','imageFit','imageScale','imageX','imageY','kickerInput','titleInput','subtitleInput','descInput','specsInput','benefitsInput','priceInput','availabilityInput','noteInput'].forEach(id=>{
-    const map = {sourceUrl:'sourceUrl',imageUrl:'imageUrl',imageFit:'imageFit',imageScale:'imageScale',imageX:'imageX',imageY:'imageY',kickerInput:'kicker',titleInput:'title',subtitleInput:'subtitle',descInput:'desc',specsInput:'specs',benefitsInput:'benefits',priceInput:'price',availabilityInput:'availability',noteInput:'note'};
-    $(id).addEventListener('input', e => { const p=currentMachine(); if(!p) return; let val=e.target.value; if(['imageScale','imageX','imageY'].includes(id)) val=Number(val); p[map[id]]=val; if(id==='titleInput') p.name=val || 'Maschinen-Seite'; render(); persistSoft(); });
-  });
-
-  $('asLogoInput').addEventListener('change', async e => { const f=e.target.files[0]; if(!f) return; state.settings.asLogo = await fileToData(f, {max:1200, quality:.92, preservePng:true}); render(); save(); });
-  $('blocLogoInput').addEventListener('change', async e => { const f=e.target.files[0]; if(!f) return; state.settings.blocLogo = await fileToData(f, {max:1200, quality:.92, preservePng:true}); render(); save(); });
-  $('imageInput').addEventListener('change', async e => { const p=currentMachine(); const f=e.target.files[0]; if(!p||!f) return; p.image = await fileToData(f, {max:2200, quality:.86, preservePng:false}); p.imageUrl=''; render(); save(); });
-  function readRawFile(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
-  async function fileToData(file, opts={}){
-    if(!file.type || !file.type.startsWith('image/')) return readRawFile(file);
-    const max = opts.max || 1800;
-    const raw = await readRawFile(file);
-    return new Promise(resolve => {
-      const img = new Image();
-      img.onload = () => {
-        const ratio = Math.min(1, max / Math.max(img.width, img.height));
-        const w = Math.max(1, Math.round(img.width * ratio));
-        const h = Math.max(1, Math.round(img.height * ratio));
-        const c = document.createElement('canvas'); c.width = w; c.height = h;
-        const ctx = c.getContext('2d');
-        if(!(opts.preservePng && /png/i.test(file.type))){ ctx.fillStyle = '#ffffff'; ctx.fillRect(0,0,w,h); }
-        ctx.drawImage(img,0,0,w,h);
-        const type = opts.preservePng && /png/i.test(file.type) ? 'image/png' : 'image/jpeg';
-        resolve(c.toDataURL(type, opts.quality || .86));
-      };
-      img.onerror = () => resolve(raw);
-      img.src = raw;
-    });
-  }
-
-  function bindTap(id, handler){ const el=$(id); el.onclick = handler; el.addEventListener('touchend', e => { e.preventDefault(); handler(e); }, {passive:false}); }
-
-  bindTap('addPageBtn', () => { state.pages.push(machineTemplate('Neue Maschinen-Seite')); state.selected = state.pages.length-1; render(); save(); });
-  bindTap('deleteBtn', () => { if(state.selected===0) return; state.pages.splice(state.selected,1); state.selected = Math.max(0,state.selected-1); render(); save(); });
-  bindTap('duplicateBtn', () => { const p=currentMachine(); if(!p) return; const copy = JSON.parse(JSON.stringify(p)); copy.name = (copy.name || copy.title || 'Maschine') + ' Kopie'; state.pages.splice(state.selected+1,0,copy); state.selected++; render(); save(); });
-  bindTap('printBtn', () => window.print());
-  bindTap('printBtn2', () => window.print());
-  bindTap('saveBtn', save);
-  bindTap('resetBtn', () => { if(confirm('Prospekt-App wirklich zurücksetzen?')){ state = defaultState(); render(); save(); } });
-  bindTap('exportBtn', async () => {
-    const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
-    const file = new File([blob], 'BLOC73_Prospekt_Daten.json', {type:'application/json'});
-    if(navigator.canShare && navigator.canShare({files:[file]})){
-      try{ await navigator.share({files:[file], title:'BLOC73 Prospekt Daten'}); return; }catch(e){}
-    }
-    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='BLOC73_Prospekt_Daten.json'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
-  });
-  bindTap('importJsonBtn', () => $('jsonFile').click());
-  $('jsonFile').onchange = async e => { const f=e.target.files[0]; if(!f) return; try{ state = JSON.parse(await f.text()); state.selected = Math.min(state.selected || 0, state.pages.length-1); render(); save(); } catch(err){ alert('JSON konnte nicht gelesen werden.'); } };
-  bindTap('pasteBtn', () => $('pasteBox').classList.toggle('hidden'));
-  bindTap('parseFallbackBtn', () => { const p=currentMachine(); if(!p) return; const data = extractFromText($('fallbackText').value, p.sourceUrl); applyExtracted(p,data); flash('Eingefügter Text wurde ausgewertet.', 'ok'); render(); save(); });
-  bindTap('importBtn', async () => {
-    const p=currentMachine(); if(!p) return;
-    p.sourceUrl = clean($('sourceUrl').value); if(!p.sourceUrl){ flash('Bitte zuerst einen Website-Link einfügen.', 'err'); return; }
-    flash('Website wird analysiert. Bei gesperrten Herstellerseiten greift automatisch ein Proxy oder der Text-Fallback.');
-    try{
-      const html = await fetchReadable(p.sourceUrl);
-      const data = extractFromHtml(html, p.sourceUrl);
-      applyExtracted(p,data);
-      flash('Website-Daten übernommen. Bitte technische Werte kurz prüfen.', 'ok');
-      render(); save();
-    }catch(err){
-      flash('Automatischer Import wurde vom Browser/Server blockiert. Text-Fallback öffnen und Herstellertext einfügen.', 'err');
-      $('pasteBox').classList.remove('hidden');
-    }
-  });
-
-  async function fetchReadable(url){
-    const targets = [
-      url,
-      'https://api.allorigins.win/raw?url=' + encodeURIComponent(url),
-      'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(url)
-    ];
-    let last;
-    for(const t of targets){
-      try{
-        const res = await fetch(t, {mode:'cors'});
-        if(!res.ok) throw new Error('HTTP '+res.status);
-        const text = await res.text();
-        if(text && text.length > 400) return text;
-      }catch(e){ last = e; }
-    }
-    throw last || new Error('Kein Zugriff');
-  }
-
-  function extractFromHtml(html, base){
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    [...doc.querySelectorAll('script,style,noscript,iframe,svg,form,nav,footer,.cookie,.cookies,[class*=cookie],[id*=cookie]')].forEach(el=>el.remove());
-    const getMeta = sel => doc.querySelector(sel)?.getAttribute('content') || '';
-    const title = clean(doc.querySelector('h1')?.innerText || getMeta('meta[property="og:title"]') || doc.title || 'Maschinen-Seite');
-    const desc = clean(getMeta('meta[name="description"]') || getMeta('meta[property="og:description"]') || firstLongText(doc));
-    let img = getMeta('meta[property="og:image"]');
-    if(!img){
-      const candidates = [...doc.images].map(im => im.getAttribute('src') || im.getAttribute('data-src') || '').filter(Boolean).filter(src => !/logo|icon|flag|sprite|cookie/i.test(src));
-      img = candidates[0] || '';
-    }
-    const rows = [];
-    [...doc.querySelectorAll('table tr')].forEach(tr=>{
-      const cells=[...tr.children].map(td=>clean(td.innerText)).filter(Boolean);
-      if(cells.length>=2 && usefulSpec(cells.join(' '))) rows.push([cells[0], cells.slice(1).join(' ')]);
-    });
-    [...doc.querySelectorAll('dt')].forEach(dt=>{
-      const dd=dt.nextElementSibling; if(dd && dd.tagName.toLowerCase()==='dd'){ const k=clean(dt.innerText), v=clean(dd.innerText); if(usefulSpec(k+' '+v)) rows.push([k,v]); }
-    });
-    const text = clean((doc.body && doc.body.innerText) || '').replace(/\s{2,}/g,' ');
-    const textData = extractFromText(text, base);
-    if(rows.length) textData.specs = uniqRows(rows.concat(textData.specRows || [])).slice(0,12).map(r=>`${r[0]}: ${r[1]}`).join('\n');
-    return {title, desc, imageUrl: absUrl(img, base), ...textData};
-  }
-  function firstLongText(doc){
-    return [...doc.querySelectorAll('p,li')].map(p=>clean(p.innerText)).find(t=>t.length>80 && t.length<420) || '';
-  }
-  function extractFromText(raw, base=''){
-    const text = String(raw || '').replace(/\r/g,'\n');
-    const arr = text.split(/\n|(?<=\.)\s+(?=[A-ZÄÖÜ])/).map(clean).filter(Boolean).filter(l=>l.length>3 && l.length<220);
-    const titleLine = arr.find(l=>/^([A-Z0-9ÄÖÜ][\wÄÖÜäöüß\-\/ ]{6,80})$/.test(l) && !/cookie|datenschutz|kontakt|impressum/i.test(l)) || '';
-    const specRows=[];
-    const keyVal = /(.{2,55}?)(?:\s*[:|]\s+|\s[-–—]\s+)(.{1,120})$/;
-    for(const l of arr){
-      if(!usefulSpec(l)) continue;
-      let m = l.match(keyVal);
-      if(m){ specRows.push([clean(m[1]), clean(m[2])]); }
-      else {
-        const unit = l.match(/([A-Za-zÄÖÜäöüß ()\/\-]{2,45})\s+([0-9][0-9., x×\/\-–]+\s?(?:mm|cm|m|kg|g|l|L|kW|W|V|Hz|bar|dB|U\/min|rpm|m³\/h|m3\/h|%|Programme?)[^.;]*)/i);
-        if(unit) specRows.push([clean(unit[1]), clean(unit[2])]);
-      }
-    }
-    const benefitLines = arr.filter(l=>/hygien|edelstahl|reinigung|präzis|schnell|robust|automatisch|programm|einfach|leistung|effizient|wartung|wechsel|sensor|display|touch|service/i.test(l) && l.length<150).slice(0,6);
-    return {
-      title: titleLine,
-      desc: arr.find(l=>l.length>80 && !usefulSpec(l)) || '',
-      specRows: uniqRows(specRows),
-      specs: uniqRows(specRows).slice(0,12).map(r=>`${r[0]}: ${r[1]}`).join('\n'),
-      benefits: benefitLines.join('\n')
-    };
-  }
-  function usefulSpec(s){ return /(\d+[\d., x×\/\-–]*\s?(mm|cm|m|kg|g|l|L|kW|W|V|Hz|bar|dB|U\/min|rpm|m³\/h|m3\/h|%|Programme?)|Abmess|Maße|Gewicht|Leistung|Spannung|Motor|Messer|Schnitt|Kammer|Pumpe|Kapazität|Druckluft|Anschluss|Breite|Höhe|Tiefe|Durchmesser|Volumen|Geschwindigkeit|Takt|Trichter|Edelstahl)/i.test(s) && !/cookie|datenschutz|kontakt|impressum|newsletter|zustimmung/i.test(s); }
-  function uniqRows(rows){
-    const seen = new Set();
-    return rows.map(r=>[clean(r[0]).replace(/[:;]+$/,''), clean(r[1])]).filter(r=>r[0] && r[1]).filter(r=>{ const k=(r[0]+'|'+r[1]).toLowerCase(); if(seen.has(k)) return false; seen.add(k); return true; });
-  }
-  function applyExtracted(p, data){
-    if(data.title && (!p.title || /Maschinenname|Neue Maschinen/i.test(p.title))) { p.title = data.title; p.name = data.title; }
-    if(data.desc) p.desc = data.desc;
-    if(data.imageUrl && !p.image) p.imageUrl = data.imageUrl;
-    if(data.specs) p.specs = data.specs;
-    if(data.benefits) p.benefits = data.benefits;
-    if(p.sourceUrl) p.note = 'Technische Daten laut Herstellerangaben. Quelle wurde aus dem eingefügten Link übernommen und sollte vor Versand fachlich geprüft werden.';
-  }
-
-  function fitPreview(){
-    const coarse = window.matchMedia && window.matchMedia('(pointer:coarse)').matches;
-    const stage = document.querySelector('.stage');
-    if(!coarse || !stage){ document.documentElement.style.setProperty('--preview-scale','1'); return; }
-    const pagePx = 210 * 96 / 25.4;
-    const available = Math.max(320, stage.clientWidth - 12);
-    const scale = Math.min(1, Math.max(.62, available / pagePx));
-    document.documentElement.style.setProperty('--preview-scale', String(scale));
-  }
-  window.addEventListener('resize', fitPreview);
-  window.addEventListener('orientationchange', () => setTimeout(fitPreview, 350));
-  window.addEventListener('beforeprint', () => document.documentElement.style.setProperty('--preview-scale','1'));
-  window.addEventListener('afterprint', fitPreview);
-
-  render();
+(()=>{
+const KEY='bloc73_prospekt_app_complete_v4';
+const DEFAULT_AS_LOGO='https://www.as-technical.de/assets/logo.png';
+const DEFAULT_BLOC_LOGO='https://bloc73machinery.com/wp-content/uploads/go-x/u/32458c7e-821d-4c69-89b0-6514adb4f9bc/image.png';
+const $=id=>document.getElementById(id), clean=s=>String(s||'').replace(/\s+/g,' ').trim(), esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const lines=s=>String(s||'').split(/\n+/).map(v=>v.trim()).filter(Boolean);
+const abs=(u,b)=>{try{return new URL(u,b).href}catch(e){return u||''}};
+const qrUrl=d=>'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data='+encodeURIComponent(d||'https://bloc73machinery.com/kontakt/');
+function machineTemplate(){return{type:'machine',name:'Neue Maschinen-Seite',sourceUrl:'',image:'',imageUrl:'',fit:'contain',zoom:1,imgX:0,imgY:0,kicker:'PROFESSIONELLE LEBENSMITTELTECHNIK',title:'Maschinenname eintragen',subtitle:'Kurzbeschreibung der Maschine, Zielgruppe und Einsatzbereich.',description:'Hier steht die klare vertriebliche Einordnung: Was macht die Maschine, für wen ist sie geeignet und warum ist sie für den Betrieb interessant.',specs:'Leistung: laut Herstellerangaben\nSpannung: laut Herstellerangaben\nAbmessungen: laut Herstellerangaben\nGewicht: laut Herstellerangaben',benefits:'Klare technische Einordnung für die Kaufentscheidung\nSaubere Darstellung der wichtigsten Daten\nDirekte Anfrage über QR-Code / WhatsApp möglich',price:'Preis auf Anfrage',availability:'Verfügbarkeit nach Rücksprache',note:'Technische Daten laut Herstellerangaben. Änderungen und Zwischenverkauf vorbehalten.'}}
+function def(){return{selected:0,settings:{brand:'BLOC73 MACHINERY',asLogo:DEFAULT_AS_LOGO,blocLogo:DEFAULT_BLOC_LOGO,accent:'#c22b2b',qr:'https://bloc73machinery.com/kontakt/',qrText:'SCANNEN & DIREKT ANFRAGEN',contact:'Robert Kutschke · Vertriebsleiter / Head of Sales\nMobil / WhatsApp: +49 160 91658700\nE-Mail: r.kutschke@as-technical.de\nAS Technical Solution GmbH · Industrieweg 13–15 · 48324 Sendenhorst'},cover:{campaign:'BLOC73 MACHINERY · eine Marke der AS Technical Solution GmbH · MONATSANGEBOTE',title:'Technik, Service und Maschinenvertrieb für professionelle Lebensmittelbetriebe.',lead:'AS Technical Solution und BLOC73 Machinery verbinden technischen Service, ehrliche Beratung und praxisnahen Maschinenvertrieb. So entstehen Lösungen, die nicht nur auf dem Papier gut aussehen, sondern im Betrieb funktionieren.',asText:'AS Technical Solution ist ein inhabergeführter Servicedienstleister aus Sendenhorst für die Lebensmittelindustrie. Kernleistungen sind Service, Modernisierung und Retrofit, GRAEF Aufschnittmaschinen, Wölfe, Kutter, Füllmaschinen, DGUV V3 Prüfungen, Reparatur & Wartung sowie Montage & Umzug. Herstellerunabhängig, bundesweit und technisch nah am Betrieb.',blocText:'BLOC73 Machinery steht für professionellen Maschinenvertrieb mit technischem Verständnis. Der Fokus liegt auf Fleischereien, Lebensmittelbetrieben, Produktion, Lebensmittelhandel, Großküchen und Catering – mit passenden Maschinenlösungen, ehrlicher Beratung und direktem Kontakt für Neu- und Gebrauchtmaschinen sowie technische Projekte.'},pages:[{type:'cover',name:'Startseite'},machineTemplate()]}}
+function migrate(d){d.settings=d.settings||{};d.cover=d.cover||def().cover;d.pages=Array.isArray(d.pages)&&d.pages.length?d.pages:def().pages;if(!d.pages[0]||d.pages[0].type!=='cover')d.pages.unshift({type:'cover',name:'Startseite'});if(!d.settings.asLogo)d.settings.asLogo=DEFAULT_AS_LOGO;if(!d.settings.blocLogo)d.settings.blocLogo=DEFAULT_BLOC_LOGO;if(!d.settings.contact)d.settings.contact=def().settings.contact;if(!d.settings.qr)d.settings.qr=def().settings.qr;if(!d.settings.qrText)d.settings.qrText=def().settings.qrText;if(!d.settings.accent)d.settings.accent='#c22b2b'}
+function load(){try{let raw=localStorage.getItem(KEY),d=raw?JSON.parse(raw):def();migrate(d);return d}catch(e){return def()}}
+let state=load();
+function store(){try{localStorage.setItem(KEY,JSON.stringify(state));return true}catch(e){flash('iPad-Speicher voll. Bitte JSON exportieren oder Bilder verkleinern.','err');return false}}
+function save(){if(store())flash('Gespeichert.','ok')}function flash(msg,type=''){let b=$('status');if(!b)return;b.textContent=msg;b.className='status '+type;b.classList.remove('hidden');clearTimeout(flash.t);flash.t=setTimeout(()=>b.classList.add('hidden'),3600)}
+function current(){let p=state.pages[state.selected];return p&&p.type==='machine'?p:null}
+function bindTap(id,fn){let el=$(id);el.onclick=fn;el.addEventListener('touchend',e=>{e.preventDefault();fn(e)},{passive:false})}
+function bindInput(id,fn){$(id).addEventListener('input',e=>{fn(e.target.value);render();clearTimeout(bindInput.t);bindInput.t=setTimeout(store,300)})}
+function render(){document.documentElement.style.setProperty('--accent',state.settings.accent||'#c22b2b');renderList();renderEditors();renderCanvas();fit();$('docTitle').textContent=state.cover.campaign||'BLOC73 Prospekt'}
+function renderList(){$('pageList').innerHTML=state.pages.map((p,i)=>`<button class="pagebtn ${state.selected===i?'active':''}" data-i="${i}"><b>${i+1}. ${esc(p.name||p.title||'Seite')}</b><span>${p.type==='cover'?'Start':'Maschine'}</span></button>`).join('');document.querySelectorAll('.pagebtn').forEach(btn=>{let go=()=>{state.selected=+btn.dataset.i;render()};btn.onclick=go;btn.addEventListener('touchend',e=>{e.preventDefault();go()},{passive:false})});$('delPage').disabled=state.selected===0;$('dupPage').disabled=state.selected===0}
+function renderEditors(){let s=state.settings,c=state.cover,p=state.pages[state.selected];$('brand').value=s.brand||'';$('accent').value=s.accent||'#c22b2b';$('contact').value=s.contact||'';$('qr').value=s.qr||'';$('qrText').value=s.qrText||'';$('asLogoUrl').value=s.asLogo||'';$('blocLogoUrl').value=s.blocLogo||'';$('campaign').value=c.campaign||'';$('coverTitle').value=c.title||'';$('coverLead').value=c.lead||'';$('asText').value=c.asText||'';$('blocText').value=c.blocText||'';$('coverEditor').classList.toggle('hidden',p.type!=='cover');$('machineEditor').classList.toggle('hidden',p.type!=='machine');if(p.type==='machine'){['sourceUrl','imageUrl','fit','zoom','imgX','imgY','kicker','title','subtitle','description','specs','benefits','price','availability','note'].forEach(id=>{$(id).value=p[id]??''})}}
+function logoHeader(){let s=state.settings;return`<div class="logos"><div class="logobox"><img class="aslogo" src="${esc(s.asLogo)}" alt="AS Technical Solution"></div><div class="logobox"><img class="bloclogo" src="${esc(s.blocLogo)}" alt="BLOC73"></div><div class="subbrand">Service · Modernisierung · Retrofit · Maschinenvertrieb</div></div>`}
+function header(){let s=state.settings;return`<div class="pagehead">${logoHeader()}<div class="headcontact">${esc(s.contact).replace(/\n/g,'<br>')}</div></div>`}
+function coverPage(){let c=state.cover,s=state.settings;return`<article class="page"><div class="safe">${header()}<div class="covermain"><div class="brandband"><div class="logos"><div class="logobox"><img class="aslogo" src="${esc(s.asLogo)}"></div><div class="logobox"><img class="bloclogo" src="${esc(s.blocLogo)}"></div></div><div class="brandbandtxt"><b>AS Technical Solution</b> steht für Service, Wartung, Modernisierung und Retrofit. <b>BLOC73 Machinery</b> ist der Bereich für professionellen Maschinenvertrieb.</div></div><div><div class="campaign">${esc(c.campaign)}</div><h1 class="covertitle">${esc(c.title)}</h1><p class="coverlead">${esc(c.lead)}</p></div><div class="covergrid"><div class="card"><h2>AS Technical Solution</h2><p>${esc(c.asText)}</p><div class="pillgrid"><div class="pill"><b>Service & Wartung</b><span>Praxisnah für Lebensmitteltechnik.</span></div><div class="pill"><b>Modernisierung & Retrofit</b><span>Umbau statt unnötiger Neuanschaffung.</span></div><div class="pill"><b>DGUV V3</b><span>Prüfung und Dokumentation.</span></div><div class="pill"><b>Bundesweit</b><span>Aus Sendenhorst für ganz Deutschland.</span></div></div></div><div class="card"><h2>BLOC73 Machinery</h2><p>${esc(c.blocText)}</p><div class="pillgrid"><div class="pill"><b>Maschinenvertrieb</b><span>Technisch fundiert statt reiner Preisverkauf.</span></div><div class="pill"><b>Beratung</b><span>Passende Einordnung nach Betrieb und Bedarf.</span></div><div class="pill"><b>Zielgruppen</b><span>Metzgerei, Produktion, LEH, Großküche und Catering.</span></div><div class="pill"><b>Direktanfrage</b><span>Per QR-Code, Telefon oder WhatsApp.</span></div></div></div></div><div class="coverfoot"><div class="contactblock"><b>Direkter Kontakt für Maschinen und Projekte</b><br>${esc(s.contact).replace(/\n/g,'<br>')}</div><div class="qrwrap"><img class="qr" src="${qrUrl(s.qr)}"><div class="qrtext">${esc(s.qrText)}</div></div></div></div></div><div class="watermark">MACHINERY</div></article>`}
+function parseSpecs(txt){let a=lines(txt).map(l=>{let p=l.split(/[:;|]\s*/);if(p.length<2)p=l.split(/\s[-–—]\s/);return p.length>=2?{k:clean(p.shift()),v:clean(p.join(' '))}:{k:'Daten',v:clean(l)}}).filter(r=>r.k&&r.v).slice(0,13);return a.length?a:[{k:'Technische Daten',v:'laut Herstellerangaben'}]}
+function machinePage(p,i){let img=p.image||p.imageUrl;let specs=parseSpecs(p.specs).map(r=>`<tr><td>${esc(r.k)}</td><td>${esc(r.v)}</td></tr>`).join('');let bens=lines(p.benefits).slice(0,6).map(b=>`<div class="benefit">${esc(b)}</div>`).join('')||'<div class="benefit">Fachliche Einordnung und direkte Anfrage möglich.</div>';return`<article class="page"><div class="safe">${header()}<div class="badge">Seite ${i+1}</div><div class="machine"><div class="hero"><div class="imagecard">${img?`<img class="mimg ${p.fit==='cover'?'cover':''}" style="--x:${+p.imgX||0}px;--y:${+p.imgY||0}px;--z:${+p.zoom||1}" src="${esc(img)}">`:'<div class="placeholder">Maschinenbild hochladen oder Bild-URL einfügen.<br>Der Rahmen bleibt immer gleich.</div>'}</div><div><div class="kicker">${esc(p.kicker)}</div><h1 class="mtitle">${esc(p.title)}</h1><p class="msub">${esc(p.subtitle)}</p><p class="desc">${esc(p.description)}</p><div class="chips">${p.availability?`<span class="chip">${esc(p.availability)}</span>`:''}${p.sourceUrl?'<span class="chip">Quelle: Herstellerlink</span>':''}<span class="chip">Technische Daten laut Hersteller</span></div>${p.price?`<div class="price"><b>Preis / Aktion</b><strong>${esc(p.price)}</strong></div>`:''}</div></div><div class="bodygrid"><div class="block"><h3>Technische Daten</h3><table class="spec">${specs}</table></div><div class="block"><h3>Nutzen im Betrieb</h3><div class="benefits">${bens}</div></div></div><div class="mfoot"><div><div class="cta"><b>Direkt anfragen:</b> ${esc(state.settings.contact).replace(/\n/g,' · ')}</div><div class="source">${esc(p.note||'Technische Daten laut Herstellerangaben.')}${p.sourceUrl?' Quelle: '+esc(p.sourceUrl):''}</div></div><div class="smallqr"><img src="${qrUrl(state.settings.qr)}"><div>${esc(state.settings.qrText)}</div></div></div></div></div><div class="watermark">BLOC73</div></article>`}
+function renderCanvas(){$('canvas').innerHTML=state.pages.map((p,i)=>`<div class="pagewrap">${p.type==='cover'?coverPage():machinePage(p,i)}</div>`).join('')}
+function fit(){let coarse=matchMedia('(pointer:coarse)').matches||innerWidth<1100;let pagePx=210*96/25.4;let available=Math.max(320,document.querySelector('.stage').clientWidth-12);let scale=coarse?Math.min(1,Math.max(.58,available/pagePx)):1;document.documentElement.style.setProperty('--scale',scale)}
+async function readFile(file){return new Promise((res,rej)=>{let r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
+async function imgData(file,opt={}){if(!file.type.startsWith('image/'))return readFile(file);let raw=await readFile(file);return new Promise(resolve=>{let img=new Image();img.onload=()=>{let max=opt.max||1800,ratio=Math.min(1,max/Math.max(img.width,img.height)),w=Math.max(1,Math.round(img.width*ratio)),h=Math.max(1,Math.round(img.height*ratio)),c=document.createElement('canvas');c.width=w;c.height=h;let ctx=c.getContext('2d');if(!(opt.png&&/png/i.test(file.type))){ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h)}ctx.drawImage(img,0,0,w,h);resolve(c.toDataURL(opt.png&&/png/i.test(file.type)?'image/png':'image/jpeg',opt.quality||.86))};img.onerror=()=>resolve(raw);img.src=raw})}
+function useful(s){return /(\d+[\d., x×\/\-–]*\s?(mm|cm|m|kg|g|l|L|kW|W|V|Hz|bar|dB|U\/min|rpm|m³\/h|m3\/h|%|Programme?)|Abmess|Maße|Gewicht|Leistung|Spannung|Motor|Messer|Schnitt|Kammer|Pumpe|Kapazität|Druckluft|Anschluss|Breite|Höhe|Tiefe|Durchmesser|Volumen|Geschwindigkeit|Takt|Trichter|Edelstahl)/i.test(s)&&!/cookie|datenschutz|kontakt|impressum|newsletter/i.test(s)}
+function unique(rows){let seen=new Set();return rows.map(r=>[clean(r[0]).replace(/[:;]+$/,''),clean(r[1])]).filter(r=>r[0]&&r[1]).filter(r=>{let k=(r[0]+'|'+r[1]).toLowerCase();if(seen.has(k))return false;seen.add(k);return true})}
+function extractText(raw){let arr=String(raw||'').replace(/\r/g,'\n').split(/\n|(?<=\.)\s+(?=[A-ZÄÖÜ])/).map(clean).filter(l=>l.length>3&&l.length<240),rows=[];for(let l of arr){if(!useful(l))continue;let m=l.match(/(.{2,55}?)(?:\s*[:|]\s+|\s[-–—]\s+)(.{1,140})$/);if(m)rows.push([m[1],m[2]]);else{let u=l.match(/([A-Za-zÄÖÜäöüß ()\/\-]{2,45})\s+([0-9][0-9., x×\/\-–]+\s?(?:mm|cm|m|kg|g|l|L|kW|W|V|Hz|bar|dB|U\/min|rpm|m³\/h|m3\/h|%|Programme?)[^.;]*)/i);if(u)rows.push([u[1],u[2]])}}let benefits=arr.filter(l=>/hygien|edelstahl|reinigung|präzis|schnell|robust|automatisch|programm|einfach|leistung|effizient|wartung|wechsel|sensor|display|touch|service/i.test(l)).slice(0,6);return{specs:unique(rows).slice(0,13).map(r=>r[0]+': '+r[1]).join('\n'),benefits:benefits.join('\n'),description:arr.find(l=>l.length>80&&!useful(l))||''}}
+async function fetchReadable(url){let targets=[url,'https://api.allorigins.win/raw?url='+encodeURIComponent(url),'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(url)];let last;for(let t of targets){try{let r=await fetch(t,{mode:'cors'});if(!r.ok)throw new Error(r.status);let txt=await r.text();if(txt&&txt.length>400)return txt}catch(e){last=e}}throw last||new Error('blocked')}
+function extractHtml(html,base){let doc=new DOMParser().parseFromString(html,'text/html');doc.querySelectorAll('script,style,noscript,iframe,svg,form,nav,footer,.cookie,[class*=cookie],[id*=cookie]').forEach(e=>e.remove());let meta=s=>doc.querySelector(s)?.getAttribute('content')||'';let title=clean(doc.querySelector('h1')?.innerText||meta('meta[property="og:title"]')||doc.title||'');let desc=clean(meta('meta[name="description"]')||meta('meta[property="og:description"]')||'');let img=meta('meta[property="og:image"]')||[...doc.images].map(i=>i.getAttribute('src')||i.getAttribute('data-src')||'').find(s=>s&&!/logo|icon|flag|sprite|cookie/i.test(s))||'';let rows=[];doc.querySelectorAll('table tr').forEach(tr=>{let c=[...tr.children].map(td=>clean(td.innerText)).filter(Boolean);if(c.length>=2&&useful(c.join(' ')))rows.push([c[0],c.slice(1).join(' ')])});let text=clean(doc.body?.innerText||'');let ex=extractText(text);if(rows.length)ex.specs=unique(rows).slice(0,13).map(r=>r[0]+': '+r[1]).join('\n');return{title,description:desc||ex.description,imageUrl:abs(img,base),specs:ex.specs,benefits:ex.benefits}}
+function apply(p,d){if(d.title&&/Maschinenname|Neue Maschinen/i.test(p.title)){p.title=d.title;p.name=d.title}if(d.description)p.description=d.description;if(d.imageUrl&&!p.image)p.imageUrl=d.imageUrl;if(d.specs)p.specs=d.specs;if(d.benefits)p.benefits=d.benefits;if(p.sourceUrl)p.note='Technische Daten laut Herstellerangaben. Quelle wurde aus dem Link übernommen und muss vor Versand fachlich geprüft werden.'}
+['brand','accent','contact','qr','qrText'].forEach(id=>bindInput(id,v=>state.settings[id]=v));bindInput('asLogoUrl',v=>state.settings.asLogo=v);bindInput('blocLogoUrl',v=>state.settings.blocLogo=v);bindInput('campaign',v=>state.cover.campaign=v);bindInput('coverTitle',v=>state.cover.title=v);bindInput('coverLead',v=>state.cover.lead=v);bindInput('asText',v=>state.cover.asText=v);bindInput('blocText',v=>state.cover.blocText=v);
+['sourceUrl','imageUrl','fit','zoom','imgX','imgY','kicker','title','subtitle','description','specs','benefits','price','availability','note'].forEach(id=>bindInput(id,v=>{let p=current();if(!p)return;p[id]=['zoom','imgX','imgY'].includes(id)?+v:v;if(id==='title')p.name=v||'Maschine'}));
+$('asLogoFile').addEventListener('change',async e=>{let f=e.target.files[0];if(f){state.settings.asLogo=await imgData(f,{max:900,quality:.9,png:true});render();save()}});$('blocLogoFile').addEventListener('change',async e=>{let f=e.target.files[0];if(f){state.settings.blocLogo=await imgData(f,{max:900,quality:.9,png:true});render();save()}});$('machineImage').addEventListener('change',async e=>{let p=current(),f=e.target.files[0];if(p&&f){p.image=await imgData(f,{max:2200,quality:.86});p.imageUrl='';render();save()}});
+bindTap('resetLogos',()=>{state.settings.asLogo=DEFAULT_AS_LOGO;state.settings.blocLogo=DEFAULT_BLOC_LOGO;render();save()});bindTap('addPage',()=>{state.pages.push(machineTemplate());state.selected=state.pages.length-1;render();save()});bindTap('delPage',()=>{if(state.selected===0)return;state.pages.splice(state.selected,1);state.selected=Math.max(0,state.selected-1);render();save()});bindTap('dupPage',()=>{let p=current();if(!p)return;let c=JSON.parse(JSON.stringify(p));c.name=(c.name||c.title||'Maschine')+' Kopie';state.pages.splice(state.selected+1,0,c);state.selected++;render();save()});bindTap('saveBtn',save);bindTap('print1',()=>print());bindTap('print2',()=>print());bindTap('resetAll',()=>{if(confirm('Wirklich alles zurücksetzen?')){state=def();render();save()}});bindTap('openFallback',()=>$('fallbackBox').classList.toggle('hidden'));bindTap('parseFallback',()=>{let p=current();if(!p)return;apply(p,extractText($('fallbackText').value));flash('Text ausgewertet. Bitte Daten kurz prüfen.','ok');render();save()});bindTap('importLink',async()=>{let p=current();if(!p)return;p.sourceUrl=clean($('sourceUrl').value);if(!p.sourceUrl){flash('Bitte erst Website-Link einfügen.','err');return}flash('Website wird analysiert. Wenn iPad/Safari blockiert, Text-Fallback nutzen.');try{let html=await fetchReadable(p.sourceUrl);apply(p,extractHtml(html,p.sourceUrl));flash('Website-Daten übernommen. Bitte technische Werte prüfen.','ok');render();save()}catch(e){flash('Import blockiert. Text-Fallback öffnen und Herstellertext einfügen.','err');$('fallbackBox').classList.remove('hidden')}});bindTap('exportJson',async()=>{let blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});let file=new File([blob],'BLOC73_Prospekt_Daten.json',{type:'application/json'});if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'BLOC73 Prospekt Daten'});return}catch(e){}}let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='BLOC73_Prospekt_Daten.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)});bindTap('importJsonBtn',()=>$('importJson').click());$('importJson').addEventListener('change',async e=>{let f=e.target.files[0];if(!f)return;try{let d=JSON.parse(await f.text());migrate(d);state=d;state.selected=Math.min(state.selected||0,state.pages.length-1);render();save()}catch(err){alert('JSON konnte nicht gelesen werden.')}});
+addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,350));addEventListener('beforeprint',()=>document.documentElement.style.setProperty('--scale','1'));addEventListener('afterprint',fit);render();
 })();
 </script>
 </body>
