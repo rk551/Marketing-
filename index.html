@@ -450,18 +450,82 @@ function bind(id,fn){$(id).addEventListener('input',e=>{fn(e.target.value);rende
 bind('coverHeadline',v=>state.cover.headline=v);bind('coverSubline',v=>state.cover.subline=v);bind('qrTarget',v=>state.cover.qr=v);bind('coverContact',v=>state.cover.contact=v);
 ['category','productTitle','intro','benefits','specs','price','availability','cta','mainZoom','mainX','mainY'].forEach(id=>bind(id,v=>{let m=curM();if(!m)return;m[id]=['mainZoom','mainX','mainY'].includes(id)?+v:v}));
 $('imgMain').onchange=e=>setImg('main',e.target);$('imgD1').onchange=e=>setImg('d1',e.target);$('imgD2').onchange=e=>setImg('d2',e.target);$('imgD3').onchange=e=>setImg('d3',e.target);
+// ISOLIERTER_DRUCK_FENSTER_FIX
 function doPrint(){
   renderCanvas();
+  const pages=[coverPage(),...state.machines.map((m,i)=>machinePage(m,i+1))];
+  const styleText=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');
+  const extraStyle=`
+    html,body{
+      width:210mm!important;
+      margin:0!important;
+      padding:0!important;
+      background:#fff!important;
+      display:block!important;
+      overflow:visible!important;
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;}
+    .side,.preview,.bar,#canvas,#printOnly{display:none!important}
+    .printWrap{
+      display:block!important;
+      width:210mm!important;
+      height:297mm!important;
+      margin:0!important;
+      padding:0!important;
+      overflow:hidden!important;
+      position:relative!important;
+      break-after:page!important;
+      page-break-after:always!important;
+      background:#fff!important;
+    }
+    .printWrap:last-child{
+      break-after:auto!important;
+      page-break-after:auto!important;
+    }
+    .sheet{
+      display:block!important;
+      position:relative!important;
+      width:210mm!important;
+      height:297mm!important;
+      margin:0!important;
+      padding:0!important;
+      overflow:hidden!important;
+      transform:none!important;
+      transform-origin:top left!important;
+      box-shadow:none!important;
+      border:0!important;
+    }
+    .cover{
+      background:linear-gradient(112deg,#ffffff 0%,#e8eef2 23%,#ffffff 43%,#dfe8ee 66%,#ffffff 100%)!important;
+      color:#101923!important;
+    }
+    .cover:before,.cover:after{
+      display:none!important;
+      content:none!important;
+      background:none!important;
+    }
+    .cover .machinery{color:rgba(12,28,44,.075)!important}
+    .coverTitle,.coverCenter h1,.qrLabel{color:#101923!important}
+    .coverSub,.coverContact div{color:#4d5f70!important}
+    .coverContact{border-top:1px solid rgba(16,31,44,.22)!important}
+    .machinePage{background:#fff!important}
+    *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;box-sizing:border-box!important}
+    @page{size:A4;margin:0}
+  `;
+  const doc=`<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>BLOC73 Druckausgabe</title><style>${styleText}\n${extraStyle}</style></head><body>${pages.map(p=>`<div class="printWrap">${p}</div>`).join('')}<script>setTimeout(()=>{window.focus();window.print();},650);<\/script></body></html>`;
+  const w=window.open('','_blank');
+  if(w){
+    w.document.open();
+    w.document.write(doc);
+    w.document.close();
+    return;
+  }
   buildPrintOnly();
   document.documentElement.classList.add('printMode');
   document.documentElement.style.setProperty('--scale','1');
-  window.scrollTo(0,0);
   setTimeout(()=>window.print(),220);
 }
-$('printBtn').onclick=$('printBtn2').onclick=doPrint;
-$('resetAll').onclick=()=>{if(confirm('Alles zurücksetzen?')){localStorage.removeItem(DATA_KEY);state=def();render();save()}};
-$('clearPage').onclick=()=>{if(state.selected===0)state.cover=def().cover;else state.machines[state.selected-1]=blankMachine(state.selected);render();save()};
-$('resetImg').onclick=()=>{let m=curM();if(m){m.mainZoom=1;m.mainX=0;m.mainY=0;render();save()}};
+
 function briefingText(m){return `Erstelle ein hochwertiges, fotorealistisches Maschinenbild für einen B2B-Verkaufsprospekt. Maschine technisch unverändert lassen. Edelstahl, sauberes Licht, professionelle Umgebung, keine erfundenen Logos oder Funktionen. Motiv: ${m.productTitle}. Einsatzbereich: ${m.category}.`}
 $('copyBriefing').onclick=async()=>{let t=briefingText(curM());try{await navigator.clipboard.writeText(t);alert('Briefing kopiert.')}catch(e){$('briefing').value=t;}}
 addEventListener('resize',fit);
