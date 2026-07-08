@@ -6,41 +6,326 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>BLOC73 Prospekt App</title>
 <style>
-:root{--blue:#0b5e86;--blue2:#083b57;--red:#c4212b;--ink:#102235;--txt:#42556a;--muted:#6f8092;--line:#dfe7ee;--paper:#fffdf8;--scale:1}*{box-sizing:border-box}html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#f7fafc,#e8eef4)}body{display:grid;grid-template-columns:385px 1fr}button,input,textarea,select{font:inherit}button{border:0;border-radius:13px;padding:10px 13px;min-height:40px;background:linear-gradient(180deg,var(--blue),var(--blue2));color:white;font-weight:850;box-shadow:0 8px 20px rgba(11,94,134,.18)}button.sec{background:#f3f7fa;color:#17304a;border:1px solid #d8e2ea;box-shadow:none}button.danger{background:#fff1f1;color:#a21018;border:1px solid #ffd0d2;box-shadow:none}button.sm{font-size:12px;min-height:35px;padding:8px 10px}label{display:block;margin:12px 0 6px;color:#68788a;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:950}input,textarea,select{width:100%;border:1px solid #d4dee7;border-radius:13px;background:white;padding:10px 11px;min-height:42px;font-size:16px;color:#17283a;outline:none}textarea{min-height:78px;line-height:1.42;resize:vertical}.side{height:100vh;overflow:auto;position:sticky;top:0;background:rgba(252,253,254,.98);border-right:1px solid #d4dfe8;padding:16px;z-index:10}.top{display:flex;gap:12px;align-items:center;margin-bottom:10px}.mark{width:46px;height:46px;border-radius:15px;background:white;border:1px solid #dce6ef;display:grid;place-items:center;font-weight:1000;color:var(--blue);box-shadow:0 8px 20px rgba(18,32,51,.06)}.top h1{font-size:18px;margin:0 0 3px}.top p,.hint{font-size:12px;line-height:1.35;margin:0;color:#718294}.box{border:1px solid var(--line);background:white;border-radius:20px;padding:13px;margin:13px 0;box-shadow:0 8px 22px rgba(18,32,51,.035)}.box h2{font-size:13px;margin:0 0 9px;text-transform:uppercase;letter-spacing:.08em;color:#18324b}.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.hidden{display:none!important}.pages{display:grid;gap:8px}.pbtn{display:flex;justify-content:space-between;align-items:center;text-align:left;background:white;color:#18324b;border:1px solid #d9e3ec;box-shadow:none;border-radius:13px;padding:9px 10px}.pbtn.active{background:#edf8fc;border-color:#86bdd8}.pbtn b{font-size:12px}.pbtn span{font-size:11px;color:#718294}.preview{min-height:100vh;overflow:auto;padding:22px 28px 80px}.bar{max-width:1180px;margin:0 auto 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}.canvas{display:grid;gap:24px;justify-content:center}.wrap{width:calc(210mm * var(--scale));height:calc(297mm * var(--scale));margin:0 auto 24px}.a4{width:210mm;height:297mm;position:relative;overflow:hidden;background:var(--paper);border:1px solid rgba(18,32,51,.08);box-shadow:0 24px 72px rgba(18,32,51,.16);transform:scale(var(--scale));transform-origin:top left}.a4:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#fffdf8,#fbfcfd 58%,#f4f8fb),radial-gradient(circle at 9% 7%,rgba(11,94,134,.09),transparent 31%),radial-gradient(circle at 94% 8%,rgba(184,150,84,.15),transparent 27%)}.safe{position:absolute;inset:9mm 10mm 8mm;display:flex;flex-direction:column;z-index:1}.head{height:20mm;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8mm}.logos{display:flex;align-items:center;gap:4mm}.logoCard{background:rgba(255,255,255,.96);border:1px solid #dfe8ef;border-radius:13px;padding:1.4mm 2.4mm;box-shadow:0 6px 18px rgba(18,32,51,.055);display:flex;align-items:center;justify-content:center}.asLogo{width:32mm;max-height:16mm;object-fit:contain;display:block}.blocLogo{width:17mm;height:17mm;object-fit:contain;display:block}.sub{font-size:7.7pt;line-height:1.22;color:#657687;font-weight:800}.hContact{max-width:74mm;text-align:right;font-size:7.8pt;line-height:1.3;color:#607286;font-weight:640}.water{position:absolute;left:10mm;right:10mm;bottom:10mm;text-align:right;font-size:34pt;line-height:1;letter-spacing:-.045em;font-weight:1000;color:rgba(11,94,134,.035);z-index:0;white-space:nowrap;overflow:hidden}.cover{flex:1;display:grid;grid-template-rows:auto auto 1fr auto;gap:6mm;padding-top:7mm}.band{padding:5.5mm 6.5mm;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(248,251,253,.93));border:1px solid #dfe8ef;border-radius:24px;box-shadow:0 16px 44px rgba(18,32,51,.07)}.bandTitle{font-size:12.2pt;font-weight:1000;letter-spacing:.075em;text-transform:uppercase;color:#102235;margin:0 0 2mm}.bandTitle span,.eye,.kicker{color:var(--red)}.bandText{font-size:10.2pt;line-height:1.45;color:#46586b;max-width:165mm}.eye{font-size:10.8pt;line-height:1.3;font-weight:1000;letter-spacing:.085em;text-transform:uppercase}.coverTitle{font-size:31pt;line-height:1.03;letter-spacing:-.045em;margin:3.5mm 0 3mm;color:#102235;max-width:170mm}.lead{font-size:12.3pt;line-height:1.45;color:#42546a;max-width:168mm;margin:0}.coverGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:7mm}.card,.block{background:rgba(255,255,255,.9);border:1px solid #dfe8ef;border-radius:22px;padding:6mm;box-shadow:0 14px 36px rgba(18,32,51,.06)}.card h2{font-size:16.8pt;margin:0 0 3mm;letter-spacing:-.035em}.card p{font-size:9.7pt;line-height:1.48;color:#4c5e72;margin:0}.pillGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:3.1mm;margin-top:4.6mm}.pill{border:1px solid #dfe7ee;background:#f8fbfd;border-radius:14px;padding:3.1mm}.pill b{display:block;font-size:8.9pt}.pill span{display:block;font-size:7.9pt;color:#66778a;margin-top:1mm;line-height:1.28}.foot,.mFoot{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:end;border-top:1px solid var(--line);padding-top:4.4mm}.contactBlock,.cta{font-size:8.8pt;color:#526579;line-height:1.42}.qr{width:22mm;height:22mm;border:1px solid #d8e3eb;border-radius:8px;background:white;padding:1.7mm}.qrText{font-size:7pt;font-weight:1000;color:#354b61;letter-spacing:.08em;margin-top:1.2mm;text-transform:uppercase;text-align:center}.machine{flex:1;display:grid;grid-template-rows:auto 1fr auto;gap:6mm;padding-top:7mm}.hero{display:grid;grid-template-columns:92mm 1fr;gap:7mm;min-height:88mm}.imageBox{position:relative;overflow:hidden;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#f4f8fb);border:1px solid #dfe8ef;border-radius:24px;box-shadow:0 14px 38px rgba(18,32,51,.08)}.machineImg{width:100%;height:100%;object-fit:contain;object-position:center;transform:translate(var(--x,0),var(--y,0)) scale(var(--z,1));padding:4mm}.machineImg.cover{object-fit:cover;padding:0}.placeholder{text-align:center;color:#708195;font-size:10pt;line-height:1.4;padding:9mm}.kicker{font-size:8.6pt;font-weight:1000;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3mm}.mTitle{font-size:25.2pt;line-height:1.05;letter-spacing:-.045em;margin:0 0 3mm}.mSub{font-size:11.3pt;color:#526579;line-height:1.36;margin:0 0 4.5mm}.desc{font-size:10pt;color:#3d5065;line-height:1.44;margin:0}.chips{display:flex;flex-wrap:wrap;gap:2.2mm;margin-top:4.3mm}.chip{font-size:7.9pt;font-weight:900;color:#16324a;background:#eef6fa;border:1px solid #d6e7ef;border-radius:999px;padding:1.75mm 2.7mm}.bodyGrid{display:grid;grid-template-columns:1fr 70mm;gap:7mm;align-items:start}.block{padding:4.6mm;border-radius:20px}.block h3{font-size:11.2pt;text-transform:uppercase;letter-spacing:.08em;margin:0 0 3mm;color:#16324a}.spec{width:100%;border-collapse:collapse;font-size:8.9pt}.spec tr{border-bottom:1px solid #e6edf3}.spec tr:last-child{border-bottom:0}.spec td{padding:1.65mm 0;vertical-align:top}.spec td:first-child{font-weight:850;color:#33485e;width:42%;padding-right:4mm}.benefits{display:grid;gap:2.6mm}.benefit{display:grid;grid-template-columns:5.4mm 1fr;gap:2.6mm;font-size:9pt;line-height:1.34;color:#42556a}.benefit:before{content:"";width:5.4mm;height:5.4mm;border-radius:999px;background:linear-gradient(135deg,#e5f1f7,#fff);border:1.4px solid #9bc4d8}.price{margin-top:4.3mm;background:#f8fafc;border:1px solid #dce6ee;border-radius:16px;padding:3.5mm}.price b{display:block;font-size:8.5pt;text-transform:uppercase;letter-spacing:.08em;color:#627489}.price strong{display:block;font-size:14.8pt;margin-top:1mm}.source{font-size:7.1pt;color:#6f8092;line-height:1.32}.smallQr{display:flex;gap:3.5mm;align-items:center}.smallQr img{width:18mm;height:18mm;border:1px solid #d8e3eb;border-radius:7px;padding:1.3mm;background:white}.smallQr div{font-size:6.9pt;font-weight:1000;letter-spacing:.08em;text-transform:uppercase;color:#354b61;line-height:1.2}.badge{position:absolute;right:10mm;top:29mm;background:white;border:1px solid #dce6ee;border-radius:999px;padding:1.7mm 2.7mm;font-size:7.2pt;font-weight:900;color:#637386;z-index:2}
-@media(max-width:1100px){body{display:block}.side{height:auto;position:relative;border-right:0;border-bottom:1px solid #d7e1ea}.row{grid-template-columns:1fr}.preview{padding:10px 6px 80px}.bar{position:sticky;top:0;z-index:20;background:rgba(238,243,247,.94);backdrop-filter:blur(12px);border:1px solid #d6e0e8;border-radius:16px;padding:9px}.bar .hint{display:none}}
-@media print{html,body{width:210mm;background:white!important;display:block!important;margin:0!important;padding:0!important}.side,.bar{display:none!important}.preview,.canvas{display:block!important;padding:0!important;margin:0!important;overflow:visible!important;background:white!important}.wrap{display:block!important;width:210mm!important;height:297mm!important;margin:0!important;padding:0!important;overflow:hidden!important;break-after:page;page-break-after:always}.wrap:last-child{break-after:auto;page-break-after:auto}.a4{width:210mm!important;height:297mm!important;transform:none!important;box-shadow:none!important;border:0!important;margin:0!important;overflow:hidden!important}.a4:before,*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}@page{size:A4;margin:0}
+:root{--blue:#0b5e86;--blue2:#083b57;--red:#c4212b;--ink:#102235;--muted:#6f8092;--line:#dfe7ee;--paper:#fffdf8;--scale:1}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#f7fafc,#e8eef4)}
+body{display:grid;grid-template-columns:385px 1fr}
+button,input,textarea,select{font:inherit}
+button{border:0;border-radius:13px;padding:10px 13px;min-height:40px;background:linear-gradient(180deg,var(--blue),var(--blue2));color:white;font-weight:850;box-shadow:0 8px 20px rgba(11,94,134,.18)}
+button.sec{background:#f3f7fa;color:#17304a;border:1px solid #d8e2ea;box-shadow:none}
+button.danger{background:#fff1f1;color:#a21018;border:1px solid #ffd0d2;box-shadow:none}
+button.sm{font-size:12px;min-height:35px;padding:8px 10px}
+label{display:block;margin:12px 0 6px;color:#68788a;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:950}
+input,textarea,select{width:100%;border:1px solid #d4dee7;border-radius:13px;background:white;padding:10px 11px;min-height:42px;font-size:16px;color:#17283a;outline:none}
+textarea{min-height:78px;line-height:1.42;resize:vertical}
+.side{height:100vh;overflow:auto;position:sticky;top:0;background:rgba(252,253,254,.98);border-right:1px solid #d4dfe8;padding:16px;z-index:10}
+.top{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+.mark{width:46px;height:46px;border-radius:15px;background:white;border:1px solid #dce6ef;display:grid;place-items:center;font-weight:1000;color:var(--blue);box-shadow:0 8px 20px rgba(18,32,51,.06)}
+.top h1{font-size:18px;margin:0 0 3px}
+.top p,.hint{font-size:12px;line-height:1.35;margin:0;color:#718294}
+.box{border:1px solid var(--line);background:white;border-radius:20px;padding:13px;margin:13px 0;box-shadow:0 8px 22px rgba(18,32,51,.035)}
+.box h2{font-size:13px;margin:0 0 9px;text-transform:uppercase;letter-spacing:.08em;color:#18324b}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.hidden{display:none!important}
+.pages{display:grid;gap:8px}
+.pbtn{display:flex;justify-content:space-between;align-items:center;text-align:left;background:white;color:#18324b;border:1px solid #d9e3ec;box-shadow:none;border-radius:13px;padding:9px 10px}
+.pbtn.active{background:#edf8fc;border-color:#86bdd8}
+.pbtn b{font-size:12px}
+.pbtn span{font-size:11px;color:#718294}
+.preview{min-height:100vh;overflow:auto;padding:22px 28px 80px}
+.bar{max-width:1180px;margin:0 auto 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.canvas{display:grid;gap:24px;justify-content:center}
+.wrap{width:calc(210mm * var(--scale));height:calc(297mm * var(--scale));margin:0 auto 24px}
+.a4{width:210mm;height:297mm;position:relative;overflow:hidden;background:var(--paper);border:1px solid rgba(18,32,51,.08);box-shadow:0 24px 72px rgba(18,32,51,.16);transform:scale(var(--scale));transform-origin:top left}
+.a4:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#fffdf8,#fbfcfd 58%,#f4f8fb),radial-gradient(circle at 9% 7%,rgba(11,94,134,.09),transparent 31%),radial-gradient(circle at 94% 8%,rgba(184,150,84,.15),transparent 27%)}
+.safe{position:absolute;inset:9mm 10mm 8mm;display:flex;flex-direction:column;z-index:1}
+.head{height:20mm;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8mm}
+.logos{display:flex;align-items:center;gap:4mm}
+.logoCard{background:rgba(255,255,255,.96);border:1px solid #dfe8ef;border-radius:13px;padding:1.4mm 2.4mm;box-shadow:0 6px 18px rgba(18,32,51,.055);display:flex;align-items:center;justify-content:center}
+.asLogo{width:34mm;height:auto;display:block}
+.blocLogo{width:18mm;height:18mm;display:block}
+.sub{font-size:7.7pt;line-height:1.22;color:#657687;font-weight:800}
+.hContact{max-width:74mm;text-align:right;font-size:7.8pt;line-height:1.3;color:#607286;font-weight:640}
+.water{position:absolute;left:10mm;right:10mm;bottom:10mm;text-align:right;font-size:34pt;line-height:1;letter-spacing:-.045em;font-weight:1000;color:rgba(11,94,134,.035);z-index:0;white-space:nowrap;overflow:hidden}
+.cover{flex:1;display:grid;grid-template-rows:auto auto 1fr auto;gap:6mm;padding-top:7mm}
+.band{padding:5.5mm 6.5mm;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(248,251,253,.93));border:1px solid #dfe8ef;border-radius:24px;box-shadow:0 16px 44px rgba(18,32,51,.07)}
+.bandTitle{font-size:12.2pt;font-weight:1000;letter-spacing:.075em;text-transform:uppercase;color:#102235;margin:0 0 2mm}
+.bandTitle span,.eye,.kicker{color:var(--red)}
+.bandText{font-size:10.2pt;line-height:1.45;color:#46586b;max-width:165mm}
+.eye{font-size:10.8pt;line-height:1.3;font-weight:1000;letter-spacing:.085em;text-transform:uppercase}
+.coverTitle{font-size:31pt;line-height:1.03;letter-spacing:-.045em;margin:3.5mm 0 3mm;color:#102235;max-width:170mm}
+.lead{font-size:12.3pt;line-height:1.45;color:#42546a;max-width:168mm;margin:0}
+.coverGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:7mm}
+.card,.block{background:rgba(255,255,255,.9);border:1px solid #dfe8ef;border-radius:22px;padding:6mm;box-shadow:0 14px 36px rgba(18,32,51,.06)}
+.card h2{font-size:16.8pt;margin:0 0 3mm;letter-spacing:-.035em}
+.card p{font-size:9.7pt;line-height:1.48;color:#4c5e72;margin:0}
+.pillGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:3.1mm;margin-top:4.6mm}
+.pill{border:1px solid #dfe7ee;background:#f8fbfd;border-radius:14px;padding:3.1mm}
+.pill b{display:block;font-size:8.9pt}
+.pill span{display:block;font-size:7.9pt;color:#66778a;margin-top:1mm;line-height:1.28}
+.foot,.mFoot{display:grid;grid-template-columns:1fr auto;gap:8mm;align-items:end;border-top:1px solid var(--line);padding-top:4.4mm}
+.contactBlock,.cta{font-size:8.8pt;color:#526579;line-height:1.42}
+.qr{width:22mm;height:22mm;border:1px solid #d8e3eb;border-radius:8px;background:white;padding:1.7mm}
+.qrText{font-size:7pt;font-weight:1000;color:#354b61;letter-spacing:.08em;margin-top:1.2mm;text-transform:uppercase;text-align:center}
+.machine{flex:1;display:grid;grid-template-rows:auto 1fr auto;gap:6mm;padding-top:7mm}
+.hero{display:grid;grid-template-columns:92mm 1fr;gap:7mm;min-height:88mm}
+.imageBox{position:relative;overflow:hidden;display:grid;place-items:center;background:linear-gradient(145deg,#fff,#f4f8fb);border:1px solid #dfe8ef;border-radius:24px;box-shadow:0 14px 38px rgba(18,32,51,.08)}
+.machineImg{width:100%;height:100%;object-fit:contain;object-position:center;transform:translate(var(--x,0),var(--y,0)) scale(var(--z,1));padding:4mm}
+.machineImg.cover{object-fit:cover;padding:0}
+.placeholder{text-align:center;color:#708195;font-size:10pt;line-height:1.4;padding:9mm}
+.kicker{font-size:8.6pt;font-weight:1000;letter-spacing:.1em;text-transform:uppercase;margin-bottom:3mm}
+.mTitle{font-size:25.2pt;line-height:1.05;letter-spacing:-.045em;margin:0 0 3mm}
+.mSub{font-size:11.3pt;color:#526579;line-height:1.36;margin:0 0 4.5mm}
+.desc{font-size:10pt;color:#3d5065;line-height:1.44;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:2.2mm;margin-top:4.3mm}
+.chip{font-size:7.9pt;font-weight:900;color:#16324a;background:#eef6fa;border:1px solid #d6e7ef;border-radius:999px;padding:1.75mm 2.7mm}
+.bodyGrid{display:grid;grid-template-columns:1fr 70mm;gap:7mm;align-items:start}
+.block{padding:4.6mm;border-radius:20px}
+.block h3{font-size:11.2pt;text-transform:uppercase;letter-spacing:.08em;margin:0 0 3mm;color:#16324a}
+.spec{width:100%;border-collapse:collapse;font-size:8.9pt}
+.spec tr{border-bottom:1px solid #e6edf3}
+.spec tr:last-child{border-bottom:0}
+.spec td{padding:1.65mm 0;vertical-align:top}
+.spec td:first-child{font-weight:850;color:#33485e;width:42%;padding-right:4mm}
+.benefits{display:grid;gap:2.6mm}
+.benefit{display:grid;grid-template-columns:5.4mm 1fr;gap:2.6mm;font-size:9pt;line-height:1.34;color:#42556a}
+.benefit:before{content:"";width:5.4mm;height:5.4mm;border-radius:999px;background:linear-gradient(135deg,#e5f1f7,#fff);border:1.4px solid #9bc4d8}
+.price{margin-top:4.3mm;background:#f8fafc;border:1px solid #dce6ee;border-radius:16px;padding:3.5mm}
+.price b{display:block;font-size:8.5pt;text-transform:uppercase;letter-spacing:.08em;color:#627489}
+.price strong{display:block;font-size:14.8pt;margin-top:1mm}
+.source{font-size:7.1pt;color:#6f8092;line-height:1.32}
+.smallQr{display:flex;gap:3.5mm;align-items:center}
+.smallQr img{width:18mm;height:18mm;border:1px solid #d8e3eb;border-radius:7px;padding:1.3mm;background:white}
+.smallQr div{font-size:6.9pt;font-weight:1000;letter-spacing:.08em;text-transform:uppercase;color:#354b61;line-height:1.2}
+.badge{position:absolute;right:10mm;top:29mm;background:white;border:1px solid #dce6ee;border-radius:999px;padding:1.7mm 2.7mm;font-size:7.2pt;font-weight:900;color:#637386;z-index:2}
+@media(max-width:1100px){
+body{display:block}
+.side{height:auto;position:relative;border-right:0;border-bottom:1px solid #d7e1ea}
+.row{grid-template-columns:1fr}
+.preview{padding:10px 6px 80px}
+.bar{position:sticky;top:0;z-index:20;background:rgba(238,243,247,.94);backdrop-filter:blur(12px);border:1px solid #d6e0e8;border-radius:16px;padding:9px}
+.bar .hint{display:none}
+}
+@media print{
+html,body{width:210mm;background:white!important;display:block!important;margin:0!important;padding:0!important}
+.side,.bar{display:none!important}
+.preview,.canvas{display:block!important;padding:0!important;margin:0!important;overflow:visible!important;background:white!important}
+.wrap{display:block!important;width:210mm!important;height:297mm!important;margin:0!important;padding:0!important;overflow:hidden!important;break-after:page;page-break-after:always}
+.wrap:last-child{break-after:auto;page-break-after:auto}
+.a4{width:210mm!important;height:297mm!important;transform:none!important;box-shadow:none!important;border:0!important;margin:0!important;overflow:hidden!important}
+.a4:before,*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+@page{size:A4;margin:0}
 </style>
 </head>
 <body>
 <aside class="side">
- <div class="top"><div class="mark">B73</div><div><h1>Prospekt App</h1><p>Ein-Datei-Index Â· Logos fest eingebettet Â· Druck A4.</p></div></div>
- <div class="box"><h2>Seiten</h2><div class="btns"><button class="sm" id="add">+ Maschinen-Seite</button><button class="sm sec" id="dup">Duplizieren</button><button class="sm danger" id="del">LÃ¶schen</button></div><div class="pages" id="pages"></div></div>
- <div class="box"><h2>Grunddaten</h2><label>Kontakt / FuÃzeile</label><textarea id="contact"></textarea><label>QR-Code Ziel</label><input id="qr"><label>QR Text</label><input id="qrText"><div class="row"><div><label>Marke</label><input id="brand"></div><div><label>Akzentfarbe</label><input id="accent" type="color"></div></div></div>
- <div class="box" id="coverEd"><h2>Startseite</h2><label>Werbung / Monat / Jahr</label><input id="campaign"><label>HauptÃ¼berschrift</label><textarea id="coverTitle"></textarea><label>Einleitung</label><textarea id="coverLead"></textarea><label>AS ErklÃ¤rung</label><textarea id="asText"></textarea><label>BLOC73 ErklÃ¤rung</label><textarea id="blocText"></textarea></div>
- <div class="box hidden" id="machineEd"><h2>Maschinen-Seite</h2><label>Maschinenbild hochladen</label><input type="file" id="machineImage" accept="image/*"><label>Oder Bild-URL</label><input id="imageUrl"><div class="row"><div><label>Bildmodus</label><select id="fit"><option value="contain">Einpassen</option><option value="cover">FÃ¼llen</option></select></div><div><label>BildgrÃ¶Ãe</label><input id="zoom" type="range" min="0.75" max="1.5" step="0.01"></div></div><div class="row"><div><label>Bild X</label><input id="imgX" type="range" min="-35" max="35" step="1"></div><div><label>Bild Y</label><input id="imgY" type="range" min="-35" max="35" step="1"></div></div><label>Kategorie / Hersteller</label><input id="kicker"><label>Maschinenname</label><input id="title"><label>Unterzeile</label><textarea id="subtitle"></textarea><label>Beschreibung</label><textarea id="description"></textarea><label>Technische Daten â Bezeichnung: Wert</label><textarea id="specs"></textarea><label>Nutzen im Betrieb â eine Zeile pro Nutzen</label><textarea id="benefits"></textarea><div class="row"><div><label>Preis / Aktion</label><input id="price"></div><div><label>VerfÃ¼gbarkeit</label><input id="availability"></div></div><label>Hinweis / Quelle</label><textarea id="note"></textarea></div>
- <div class="box"><h2>Speichern / Ausgabe</h2><div class="btns"><button class="sm" id="print1">PDF/Druck</button><button class="sm sec" id="save">Speichern</button><button class="sm sec" id="exportJson">JSON Export</button><button class="sm sec" id="importJsonBtn">JSON Import</button><button class="sm danger" id="reset">Reset</button><input type="file" id="importJson" class="hidden" accept="application/json"></div><p class="hint">iPad: Safari â Teilen â Drucken â Vorschau auseinanderziehen â In Dateien sichern.</p></div>
+ <div class="top"><div class="mark">B73</div><div><h1>Prospekt App</h1><p>Ein-Datei-Index · Druck A4.</p></div></div>
+
+ <div class="box">
+  <h2>Seiten</h2>
+  <div class="btns">
+   <button class="sm" id="add">+ Maschinen-Seite</button>
+   <button class="sm sec" id="dup">Duplizieren</button>
+   <button class="sm danger" id="del">Löschen</button>
+  </div>
+  <div class="pages" id="pages"></div>
+ </div>
+
+ <div class="box">
+  <h2>Grunddaten</h2>
+  <label>Kontakt / Fußzeile</label><textarea id="contact"></textarea>
+  <label>QR-Code Ziel</label><input id="qr">
+  <label>QR Text</label><input id="qrText">
+  <div class="row">
+   <div><label>Marke</label><input id="brand"></div>
+   <div><label>Akzentfarbe</label><input id="accent" type="color"></div>
+  </div>
+ </div>
+
+ <div class="box" id="coverEd">
+  <h2>Startseite</h2>
+  <label>Werbung / Monat / Jahr</label><input id="campaign">
+  <label>Hauptüberschrift</label><textarea id="coverTitle"></textarea>
+  <label>Einleitung</label><textarea id="coverLead"></textarea>
+  <label>AS Erklärung</label><textarea id="asText"></textarea>
+  <label>BLOC73 Erklärung</label><textarea id="blocText"></textarea>
+ </div>
+
+ <div class="box hidden" id="machineEd">
+  <h2>Maschinen-Seite</h2>
+  <label>Maschinenbild hochladen</label><input type="file" id="machineImage" accept="image/*">
+  <label>Oder Bild-URL</label><input id="imageUrl">
+  <div class="row">
+   <div><label>Bildmodus</label><select id="fit"><option value="contain">Einpassen</option><option value="cover">Füllen</option></select></div>
+   <div><label>Bildgröße</label><input id="zoom" type="range" min="0.75" max="1.5" step="0.01"></div>
+  </div>
+  <div class="row">
+   <div><label>Bild X</label><input id="imgX" type="range" min="-35" max="35" step="1"></div>
+   <div><label>Bild Y</label><input id="imgY" type="range" min="-35" max="35" step="1"></div>
+  </div>
+  <label>Kategorie / Hersteller</label><input id="kicker">
+  <label>Maschinenname</label><input id="title">
+  <label>Unterzeile</label><textarea id="subtitle"></textarea>
+  <label>Beschreibung</label><textarea id="description"></textarea>
+  <label>Technische Daten — Bezeichnung: Wert</label><textarea id="specs"></textarea>
+  <label>Nutzen im Betrieb — eine Zeile pro Nutzen</label><textarea id="benefits"></textarea>
+  <div class="row">
+   <div><label>Preis / Aktion</label><input id="price"></div>
+   <div><label>Verfügbarkeit</label><input id="availability"></div>
+  </div>
+  <label>Hinweis / Quelle</label><textarea id="note"></textarea>
+ </div>
+
+ <div class="box">
+  <h2>Speichern / Ausgabe</h2>
+  <div class="btns">
+   <button class="sm" id="print1">PDF/Druck</button>
+   <button class="sm sec" id="save">Speichern</button>
+   <button class="sm sec" id="exportJson">JSON Export</button>
+   <button class="sm sec" id="importJsonBtn">JSON Import</button>
+   <button class="sm danger" id="reset">Reset</button>
+   <input type="file" id="importJson" class="hidden" accept="application/json">
+  </div>
+  <p class="hint">iPad: Safari → Teilen → Drucken → Vorschau auseinanderziehen → In Dateien sichern.</p>
+ </div>
 </aside>
-<main class="preview"><div class="bar"><div class="left"><b id="docTitle">BLOC73 Prospekt</b> <span class="hint">helle A4-Vorschau Â· keine Leerseiten</span></div><button class="sm sec" id="print2">PDF/Druck</button></div><div class="canvas" id="canvas"></div></main>
+
+<main class="preview">
+ <div class="bar">
+  <div class="left"><b id="docTitle">BLOC73 Prospekt</b> <span class="hint">helle A4-Vorschau · keine Leerseiten</span></div>
+  <button class="sm sec" id="print2">PDF/Druck</button>
+ </div>
+ <div class="canvas" id="canvas"></div>
+</main>
+
 <script>
-const AS='data:image/webp;base64,UklGRk4DAABXRUJQVlA4IEIDAADwEQCdASp4ADoAPok8mUmlIyIhKBQLUKARCUAacDIP8dnr0I7ZTnp9OA3o3IuU88b12INMbvbCPSas5egOYm6HtcXvmr/QUYU1hXMo7smQa/bjn834bXVWD8zmHUg257bYQjDVMa31WMjmElVFSjET4JJowsaA92brO5k/4Nl0gsiLD/DXOrsepj4b7u+NJAzw6Crt6eWMAAD++nlfqWxUeAYWrYf6gR2ne//5FE4RvQj+wMAc5k33IGF/v9vhb1dT8909NdF/tBi+1bsTrq1wOV+64IBlH2/kidYLYnqpNtillUB+++WETJ5hz+PAw7L9On+s2JVv2tkn9jzY3isf9mnrczm/GdQFTXsnXvjYWyLvvxGH0h2GHNPzfiB/iAi5iH9BeXWMe/Ugl5X6KtWQjPX5BALNJ70xc2EHJVTu6sTwRwdLqPUpy83cEHG9rtFVNh2qNQhkY9lDnFEDze0PNxXBNBn8EMpKhyYRsrmNiR2RkO+qqG2nWYANs6Z7Q5LlewV3l1lf4dtBIvmunuvCQ39JtA+V3GrIP7ngNnvhK3rD3rqFE0B4b+eIomD34nKe0TebOpfAmZ1aLS0eODVLlA0Xy0MYkNnneFanRrowSQI5xVyfxCEVZaW6Gv4zlu+hFdUP0W9babeS7+rQDpl0HJfMIlrz3eoCNZk/1e2efa0Qyu41TQnjlTIs8yKmlyvuCCuoGCWwA9nifgQ4y2YVOkgIpzMdZIaHckz430N/ljtgCzfPBPJnNrwh4Xf2QCqev62wnA3jmB4YWonsBRIiAXQqr0S567mIwNAA5W6Z5SYIjd9fqEsKHH/s6gkotUVKxs0KfYUWCnen4g6IBXE9s2IqufkUbFdrmMJJBzLxJM+Scixo3kG79jxcoReG+ThIHdPYZSlOYR1KqD1mXfffsSjD4/H6319PtFK3VDAcd8tjy2g5DQwwMbO5U2X66BttY/zzADCnAAj68x3uqfxb0iFliJvsHgC8a5drKLgMiOYE9SbzenoMDTVPEXxTVGIpwlKud61dMTRLVgBKfrpF0olKLcXqTfr3CWazQgKsj5aGLD9CGSzusFLs+bke51B6DL0OLhL7+OTqzGz/6cAAAAA=',BLOC='data:image/webp;base64,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',KEY='bloc73_final_copy_v1';
-const $=id=>document.getElementById(id),clean=s=>String(s||'').replace(/\s+/g,' ').trim(),esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])),lines=s=>String(s||'').split(/\n+/).map(x=>x.trim()).filter(Boolean),qrUrl=d=>'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data='+encodeURIComponent(d||'https://bloc73machinery.com/kontakt/');
-function mt(){return{type:'machine',name:'Neue Maschinen-Seite',image:'',imageUrl:'',fit:'contain',zoom:1,imgX:0,imgY:0,kicker:'PROFESSIONELLE LEBENSMITTELTECHNIK',title:'Maschinenname eintragen',subtitle:'Kurzbeschreibung der Maschine, Zielgruppe und Einsatzbereich.',description:'Hier steht die klare vertriebliche Einordnung: Was macht die Maschine, fÃ¼r wen ist sie geeignet und warum ist sie fÃ¼r den Betrieb interessant.',specs:'Leistung: laut Herstellerangaben\nSpannung: laut Herstellerangaben\nAbmessungen: laut Herstellerangaben\nGewicht: laut Herstellerangaben',benefits:'Klare technische Einordnung fÃ¼r die Kaufentscheidung\nSaubere Darstellung der wichtigsten Daten\nDirekte Anfrage Ã¼ber QR-Code / WhatsApp mÃ¶glich',price:'Preis auf Anfrage',availability:'VerfÃ¼gbarkeit nach RÃ¼cksprache',note:'Technische Daten laut Herstellerangaben. Ãnderungen und Zwischenverkauf vorbehalten.'}}
-function def(){return{selected:0,settings:{brand:'BLOC73 MACHINERY',accent:'#c4212b',qr:'https://bloc73machinery.com/kontakt/',qrText:'SCANNEN & DIREKT ANFRAGEN',contact:'Robert Kutschke Â· Vertriebsleiter / Head of Sales\nMobil / WhatsApp: +49 160 91658700\nE-Mail: r.kutschke@as-technical.de\nAS Technical Solution GmbH Â· Industrieweg 13â15 Â· 48324 Sendenhorst'},cover:{campaign:'BLOC73 MACHINERY Â· eine Marke der AS Technical Solution GmbH Â· MONATSANGEBOTE',title:'Technik, Service und Maschinenvertrieb fÃ¼r professionelle Lebensmittelbetriebe.',lead:'AS Technical Solution und BLOC73 Machinery verbinden technischen Service, ehrliche Beratung und praxisnahen Maschinenvertrieb. So entstehen LÃ¶sungen, die nicht nur auf dem Papier gut aussehen, sondern im Betrieb funktionieren.',asText:'AS Technical Solution ist ein inhabergefÃ¼hrter Servicedienstleister aus Sendenhorst fÃ¼r die Lebensmittelindustrie. Kernleistungen sind Service, Modernisierung und Retrofit, GRAEF Aufschnittmaschinen, WÃ¶lfe, Kutter, FÃ¼llmaschinen, DGUV V3 PrÃ¼fungen, Reparatur & Wartung sowie Montage & Umzug. HerstellerunabhÃ¤ngig, bundesweit und technisch nah am Betrieb.',blocText:'BLOC73 Machinery steht fÃ¼r professionellen Maschinenvertrieb mit technischem VerstÃ¤ndnis. Der Fokus liegt auf Fleischereien, Lebensmittelbetrieben, Produktion, Lebensmittelhandel, GroÃkÃ¼chen und Catering â mit passenden MaschinenlÃ¶sungen, ehrlicher Beratung und direktem Kontakt fÃ¼r Neu- und Gebrauchtmaschinen sowie technische Projekte.'},pages:[{type:'cover',name:'Startseite'},mt()]}}
+const AS=`<svg class="asLogo" viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg">
+<rect width="420" height="150" rx="18" fill="#fff"/>
+<path d="M28 112 80 30l52 82h-25l-9-17H62l-9 17H28zm45-37h15l-8-15-7 15z" fill="#c4212b"/>
+<text x="150" y="66" font-family="Arial" font-size="42" font-weight="900" fill="#1f2b38">TECHNICAL</text>
+<text x="152" y="108" font-family="Arial" font-size="34" font-weight="700" fill="#c4212b">Solution</text>
+</svg>`;
+const BLOC=`<svg class="blocLogo" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+<circle cx="150" cy="150" r="138" fill="#f7f7f7" stroke="#bfc8cf" stroke-width="8"/>
+<circle cx="150" cy="150" r="105" fill="#fff" stroke="#c4212b" stroke-width="10"/>
+<text x="150" y="142" text-anchor="middle" font-family="Arial" font-size="58" font-weight="900" fill="#111820">BLOC</text>
+<text x="150" y="198" text-anchor="middle" font-family="Arial" font-size="76" font-weight="900" fill="#c4212b">73</text>
+</svg>`;
+const KEY='bloc73_final_copy_v2';
+const $=id=>document.getElementById(id);
+const clean=s=>String(s||'').replace(/\s+/g,' ').trim();
+const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+const lines=s=>String(s||'').split(/\n+/).map(x=>x.trim()).filter(Boolean);
+const qrUrl=d=>'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data='+encodeURIComponent(d||'https://bloc73machinery.com/kontakt/');
+
+function mt(){return{type:'machine',name:'Neue Maschinen-Seite',image:'',imageUrl:'',fit:'contain',zoom:1,imgX:0,imgY:0,kicker:'PROFESSIONELLE LEBENSMITTELTECHNIK',title:'Maschinenname eintragen',subtitle:'Kurzbeschreibung der Maschine, Zielgruppe und Einsatzbereich.',description:'Hier steht die klare vertriebliche Einordnung: Was macht die Maschine, für wen ist sie geeignet und warum ist sie für den Betrieb interessant.',specs:'Leistung: laut Herstellerangaben\nSpannung: laut Herstellerangaben\nAbmessungen: laut Herstellerangaben\nGewicht: laut Herstellerangaben',benefits:'Klare technische Einordnung für die Kaufentscheidung\nSaubere Darstellung der wichtigsten Daten\nDirekte Anfrage über QR-Code / WhatsApp möglich',price:'Preis auf Anfrage',availability:'Verfügbarkeit nach Rücksprache',note:'Technische Daten laut Herstellerangaben. Änderungen und Zwischenverkauf vorbehalten.'}}
+
+function def(){return{selected:0,settings:{brand:'BLOC73 MACHINERY',accent:'#c4212b',qr:'https://bloc73machinery.com/kontakt/',qrText:'SCANNEN & DIREKT ANFRAGEN',contact:'Robert Kutschke · Vertriebsleiter / Head of Sales\nMobil / WhatsApp: +49 160 91658700\nE-Mail: r.kutschke@as-technical.de\nAS Technical Solution GmbH · Industrieweg 13–15 · 48324 Sendenhorst'},cover:{campaign:'BLOC73 MACHINERY · eine Marke der AS Technical Solution GmbH · MONATSANGEBOTE',title:'Technik, Service und Maschinenvertrieb für professionelle Lebensmittelbetriebe.',lead:'AS Technical Solution und BLOC73 Machinery verbinden technischen Service, ehrliche Beratung und praxisnahen Maschinenvertrieb. So entstehen Lösungen, die nicht nur auf dem Papier gut aussehen, sondern im Betrieb funktionieren.',asText:'AS Technical Solution ist ein inhabergeführter Servicedienstleister aus Sendenhorst für die Lebensmittelindustrie. Kernleistungen sind Service, Modernisierung und Retrofit, GRAEF Aufschnittmaschinen, Wölfe, Kutter, Füllmaschinen, DGUV V3 Prüfungen, Reparatur & Wartung sowie Montage & Umzug. Herstellerunabhängig, bundesweit und technisch nah am Betrieb.',blocText:'BLOC73 Machinery steht für professionellen Maschinenvertrieb mit technischem Verständnis. Der Fokus liegt auf Fleischereien, Lebensmittelbetrieben, Produktion, Lebensmittelhandel, Großküchen und Catering – mit passenden Maschinenlösungen, ehrlicher Beratung und direktem Kontakt für Neu- und Gebrauchtmaschinen sowie technische Projekte.'},pages:[{type:'cover',name:'Startseite'},mt()]}}
+
 function migrate(d){d=d||def();d.settings=d.settings||def().settings;d.cover=d.cover||def().cover;d.pages=Array.isArray(d.pages)&&d.pages.length?d.pages:def().pages;if(!d.pages[0]||d.pages[0].type!=='cover')d.pages.unshift({type:'cover',name:'Startseite'});return d}
 let state;try{state=migrate(JSON.parse(localStorage.getItem(KEY)))}catch(e){state=def()}
-function save(){localStorage.setItem(KEY,JSON.stringify(state))}function current(){let p=state.pages[state.selected];return p&&p.type==='machine'?p:null}function tap(id,fn){$(id).onclick=fn;$(id).addEventListener('touchend',e=>{e.preventDefault();fn()},{passive:false})}function inp(id,fn){$ (id)}
+
+function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+function current(){let p=state.pages[state.selected];return p&&p.type==='machine'?p:null}
+function tap(id,fn){$(id).onclick=fn;$(id).addEventListener('touchend',e=>{e.preventDefault();fn()},{passive:false})}
 function bind(id,fn){$(id).addEventListener('input',e=>{fn(e.target.value);render();clearTimeout(bind.t);bind.t=setTimeout(save,250)})}
+
 function render(){document.documentElement.style.setProperty('--red',state.settings.accent);renderList();renderEditors();renderCanvas();fit();$('docTitle').textContent=state.cover.campaign||'BLOC73 Prospekt'}
-function renderList(){$('pages').innerHTML=state.pages.map((p,i)=>`<button class="pbtn ${state.selected===i?'active':''}" data-i="${i}"><b>${i+1}. ${esc(p.name||p.title||'Seite')}</b><span>${p.type==='cover'?'Start':'Maschine'}</span></button>`).join('');document.querySelectorAll('.pbtn').forEach(b=>{b.onclick=()=>{state.selected=+b.dataset.i;render()}});$('del').disabled=state.selected===0;$('dup').disabled=state.selected===0}
-function renderEditors(){let s=state.settings,c=state.cover,p=state.pages[state.selected];['brand','accent','contact','qr','qrText'].forEach(id=>$(id).value=s[id]||'');$('campaign').value=c.campaign||'';$('coverTitle').value=c.title||'';$('coverLead').value=c.lead||'';$('asText').value=c.asText||'';$('blocText').value=c.blocText||'';$('coverEd').classList.toggle('hidden',p.type!=='cover');$('machineEd').classList.toggle('hidden',p.type!=='machine');if(p.type==='machine')['imageUrl','fit','zoom','imgX','imgY','kicker','title','subtitle','description','specs','benefits','price','availability','note'].forEach(id=>$(id).value=p[id]??'')}
-function logoBlock(){return`<div class="logos"><div class="logoCard"><img class="asLogo" src="${AS}"></div><div class="logoCard"><img class="blocLogo" src="${BLOC}"></div><div class="sub">Service Â· Modernisierung Â· Retrofit<br>Maschinenvertrieb</div></div>`}
+
+function renderList(){
+ $('pages').innerHTML=state.pages.map((p,i)=>`<button class="pbtn ${state.selected===i?'active':''}" data-i="${i}"><b>${i+1}. ${esc(p.name||p.title||'Seite')}</b><span>${p.type==='cover'?'Start':'Maschine'}</span></button>`).join('');
+ document.querySelectorAll('.pbtn').forEach(b=>{b.onclick=()=>{state.selected=+b.dataset.i;render()}});
+ $('del').disabled=state.selected===0;$('dup').disabled=state.selected===0;
+}
+
+function renderEditors(){
+ let s=state.settings,c=state.cover,p=state.pages[state.selected];
+ ['brand','accent','contact','qr','qrText'].forEach(id=>$(id).value=s[id]||'');
+ $('campaign').value=c.campaign||'';$('coverTitle').value=c.title||'';$('coverLead').value=c.lead||'';$('asText').value=c.asText||'';$('blocText').value=c.blocText||'';
+ $('coverEd').classList.toggle('hidden',p.type!=='cover');
+ $('machineEd').classList.toggle('hidden',p.type!=='machine');
+ if(p.type==='machine')['imageUrl','fit','zoom','imgX','imgY','kicker','title','subtitle','description','specs','benefits','price','availability','note'].forEach(id=>$(id).value=p[id]??'');
+}
+
+function logoBlock(){return`<div class="logos"><div class="logoCard">${AS}</div><div class="logoCard">${BLOC}</div><div class="sub">Service · Modernisierung · Retrofit<br>Maschinenvertrieb</div></div>`}
 function header(){let s=state.settings;return`<div class="head">${logoBlock()}<div class="hContact">${esc(s.contact).replace(/\n/g,'<br>')}</div></div>`}
-function coverPage(){let c=state.cover,s=state.settings;return`<section class="a4"><div class="safe">${header()}<div class="cover"><div class="band"><div class="bandTitle">AS Technical Solution <span>Ã</span> BLOC73 Machinery</div><div class="bandText"><b>AS Technical Solution</b> steht fÃ¼r Service, Wartung, Modernisierung und Retrofit. <b>BLOC73 Machinery</b> ist der Bereich fÃ¼r professionellen Maschinenvertrieb.</div></div><div><div class="eye">${esc(c.campaign)}</div><h1 class="coverTitle">${esc(c.title)}</h1><p class="lead">${esc(c.lead)}</p></div><div class="coverGrid"><div class="card"><h2>AS Technical Solution</h2><p>${esc(c.asText)}</p><div class="pillGrid"><div class="pill"><b>Service & Wartung</b><span>Praxisnah fÃ¼r Lebensmitteltechnik.</span></div><div class="pill"><b>Modernisierung & Retrofit</b><span>Umbau statt Neuanschaffung.</span></div><div class="pill"><b>DGUV V3</b><span>PrÃ¼fung und Dokumentation.</span></div><div class="pill"><b>Bundesweit</b><span>Aus Sendenhorst fÃ¼r Deutschland.</span></div></div></div><div class="card"><h2>BLOC73 Machinery</h2><p>${esc(c.blocText)}</p><div class="pillGrid"><div class="pill"><b>Maschinenvertrieb</b><span>Technisch fundiert.</span></div><div class="pill"><b>Beratung</b><span>Passend zum Betrieb.</span></div><div class="pill"><b>Zielgruppen</b><span>Metzgerei, LEH, Produktion.</span></div><div class="pill"><b>Direktanfrage</b><span>QR, Telefon oder WhatsApp.</span></div></div></div></div><div class="foot"><div class="contactBlock"><b>Direkter Kontakt fÃ¼r Maschinen und Projekte</b><br>${esc(s.contact).replace(/\n/g,'<br>')}</div><div><img class="qr" src="${qrUrl(s.qr)}"><div class="qrText">${esc(s.qrText)}</div></div></div></div></div><div class="water">MACHINERY</div></section>`}
-function parseSpecs(t){let a=lines(t).map(l=>{let p=l.split(/[:;|]\s*/);if(p.length<2)p=l.split(/\s[-ââ]\s/);return p.length>=2?{k:clean(p.shift()),v:clean(p.join(' '))}:{k:'Daten',v:clean(l)}}).filter(r=>r.k&&r.v).slice(0,12);return a.length?a:[{k:'Technische Daten',v:'laut Herstellerangaben'}]}
-function machinePage(p,i){let img=p.image||p.imageUrl;let specs=parseSpecs(p.specs).map(r=>`<tr><td>${esc(r.k)}</td><td>${esc(r.v)}</td></tr>`).join('');let bens=lines(p.benefits).slice(0,6).map(b=>`<div class="benefit">${esc(b)}</div>`).join('');return`<section class="a4"><div class="safe">${header()}<div class="badge">Seite ${i+1}</div><div class="machine"><div class="hero"><div class="imageBox">${img?`<img class="machineImg ${p.fit==='cover'?'cover':''}" style="--x:${+p.imgX||0}px;--y:${+p.imgY||0}px;--z:${+p.zoom||1}" src="${esc(img)}">`:'<div class="placeholder">Maschinenbild hochladen oder Bild-URL einfÃ¼gen.<br>Der Rahmen bleibt gleich.</div>'}</div><div><div class="kicker">${esc(p.kicker)}</div><h1 class="mTitle">${esc(p.title)}</h1><p class="mSub">${esc(p.subtitle)}</p><p class="desc">${esc(p.description)}</p><div class="chips"><span class="chip">Technische Daten laut Hersteller</span>${p.availability?`<span class="chip">${esc(p.availability)}</span>`:''}</div>${p.price?`<div class="price"><b>Preis / Aktion</b><strong>${esc(p.price)}</strong></div>`:''}</div></div><div class="bodyGrid"><div class="block"><h3>Technische Daten</h3><table class="spec">${specs}</table></div><div class="block"><h3>Nutzen im Betrieb</h3><div class="benefits">${bens}</div></div></div><div class="mFoot"><div><div class="cta"><b>Direkt anfragen:</b> ${esc(state.settings.contact).replace(/\n/g,' Â· ')}</div><div class="source">${esc(p.note||'Technische Daten laut Herstellerangaben.')}</div></div><div class="smallQr"><img src="${qrUrl(state.settings.qr)}"><div>${esc(state.settings.qrText)}</div></div></div></div></div><div class="water">BLOC73</div></section>`}
-function renderCanvas(){$('canvas').innerHTML=state.pages.map((p,i)=>`<div class="wrap">${p.type==='cover'?coverPage():machinePage(p,i)}</div>`).join('')}function fit(){let small=matchMedia('(pointer:coarse)').matches||innerWidth<1100,pagePx=210*96/25.4,avail=Math.max(320,document.querySelector('.preview').clientWidth-12),sc=small?Math.min(1,Math.max(.58,avail/pagePx)):1;document.documentElement.style.setProperty('--scale',sc)}
-async function imgData(f){let raw=await new Promise(r=>{let fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});return new Promise(r=>{let im=new Image();im.onload=()=>{let max=2100,ra=Math.min(1,max/Math.max(im.width,im.height)),w=Math.round(im.width*ra),h=Math.round(im.height*ra),c=document.createElement('canvas');c.width=w;c.height=h;let x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);r(c.toDataURL('image/jpeg',.86))};im.onerror=()=>r(raw);im.src=raw})}
-['brand','accent','contact','qr','qrText'].forEach(id=>bind(id,v=>state.settings[id]=v));bind('campaign',v=>state.cover.campaign=v);bind('coverTitle',v=>state.cover.title=v);bind('coverLead',v=>state.cover.lead=v);bind('asText',v=>state.cover.asText=v);bind('blocText',v=>state.cover.blocText=v);['imageUrl','fit','zoom','imgX','imgY','kicker','title','subtitle','description','specs','benefits','price','availability','note'].forEach(id=>bind(id,v=>{let p=current();if(!p)return;p[id]=['zoom','imgX','imgY'].includes(id)?+v:v;if(id==='title')p.name=v}));$('machineImage').onchange=async e=>{let p=current(),f=e.target.files[0];if(p&&f){p.image=await imgData(f);p.imageUrl='';render();save()}};tap('add',()=>{state.pages.push(mt());state.selected=state.pages.length-1;render();save()});tap('del',()=>{if(state.selected){state.pages.splice(state.selected,1);state.selected=Math.max(0,state.selected-1);render();save()}});tap('dup',()=>{let p=current();if(p){let c=JSON.parse(JSON.stringify(p));c.name=(c.name||c.title||'Maschine')+' Kopie';state.pages.splice(state.selected+1,0,c);state.selected++;render();save()}});tap('save',save);tap('print1',()=>print());tap('print2',()=>print());tap('reset',()=>{if(confirm('Alles zurÃ¼cksetzen?')){localStorage.removeItem(KEY);state=def();render();save()}});tap('exportJson',()=>{let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='BLOC73_Prospekt_Daten.json';a.click()});tap('importJsonBtn',()=>$('importJson').click());$('importJson').onchange=async e=>{let f=e.target.files[0];if(!f)return;state=migrate(JSON.parse(await f.text()));render();save()};addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));addEventListener('beforeprint',()=>document.documentElement.style.setProperty('--scale','1'));addEventListener('afterprint',fit);render();
+
+function coverPage(){
+ let c=state.cover,s=state.settings;
+ return`<section class="a4"><div class="safe">${header()}<div class="cover"><div class="band"><div class="bandTitle">AS Technical Solution <span>×</span> BLOC73 Machinery</div><div class="bandText"><b>AS Technical Solution</b> steht für Service, Wartung, Modernisierung und Retrofit. <b>BLOC73 Machinery</b> ist der Bereich für professionellen Maschinenvertrieb.</div></div><div><div class="eye">${esc(c.campaign)}</div><h1 class="coverTitle">${esc(c.title)}</h1><p class="lead">${esc(c.lead)}</p></div><div class="coverGrid"><div class="card"><h2>AS Technical Solution</h2><p>${esc(c.asText)}</p><div class="pillGrid"><div class="pill"><b>Service & Wartung</b><span>Praxisnah für Lebensmitteltechnik.</span></div><div class="pill"><b>Modernisierung & Retrofit</b><span>Umbau statt Neuanschaffung.</span></div><div class="pill"><b>DGUV V3</b><span>Prüfung und Dokumentation.</span></div><div class="pill"><b>Bundesweit</b><span>Aus Sendenhorst für Deutschland.</span></div></div></div><div class="card"><h2>BLOC73 Machinery</h2><p>${esc(c.blocText)}</p><div class="pillGrid"><div class="pill"><b>Maschinenvertrieb</b><span>Technisch fundiert.</span></div><div class="pill"><b>Beratung</b><span>Passend zum Betrieb.</span></div><div class="pill"><b>Zielgruppen</b><span>Metzgerei, LEH, Produktion.</span></div><div class="pill"><b>Direktanfrage</b><span>QR, Telefon oder WhatsApp.</span></div></div></div></div><div class="foot"><div class="contactBlock"><b>Direkter Kontakt für Maschinen und Projekte</b><br>${esc(s.contact).replace(/\n/g,'<br>')}</div><div><img class="qr" src="${qrUrl(s.qr)}"><div class="qrText">${esc(s.qrText)}</div></div></div></div></div><div class="water">MACHINERY</div></section>`;
+}
+
+function parseSpecs(t){let a=lines(t).map(l=>{let p=l.split(/[:;|]\s*/);if(p.length<2)p=l.split(/\s[-–—]\s/);return p.length>=2?{k:clean(p.shift()),v:clean(p.join(' '))}:{k:'Daten',v:clean(l)}}).filter(r=>r.k&&r.v).slice(0,12);return a.length?a:[{k:'Technische Daten',v:'laut Herstellerangaben'}]}
+
+function machinePage(p,i){
+ let img=p.image||p.imageUrl;
+ let specs=parseSpecs(p.specs).map(r=>`<tr><td>${esc(r.k)}</td><td>${esc(r.v)}</td></tr>`).join('');
+ let bens=lines(p.benefits).slice(0,6).map(b=>`<div class="benefit">${esc(b)}</div>`).join('');
+ return`<section class="a4"><div class="safe">${header()}<div class="badge">Seite ${i+1}</div><div class="machine"><div class="hero"><div class="imageBox">${img?`<img class="machineImg ${p.fit==='cover'?'cover':''}" style="--x:${+p.imgX||0}px;--y:${+p.imgY||0}px;--z:${+p.zoom||1}" src="${esc(img)}">`:'<div class="placeholder">Maschinenbild hochladen oder Bild-URL einfügen.<br>Der Rahmen bleibt gleich.</div>'}</div><div><div class="kicker">${esc(p.kicker)}</div><h1 class="mTitle">${esc(p.title)}</h1><p class="mSub">${esc(p.subtitle)}</p><p class="desc">${esc(p.description)}</p><div class="chips"><span class="chip">Technische Daten laut Hersteller</span>${p.availability?`<span class="chip">${esc(p.availability)}</span>`:''}</div>${p.price?`<div class="price"><b>Preis / Aktion</b><strong>${esc(p.price)}</strong></div>`:''}</div></div><div class="bodyGrid"><div class="block"><h3>Technische Daten</h3><table class="spec">${specs}</table></div><div class="block"><h3>Nutzen im Betrieb</h3><div class="benefits">${bens}</div></div></div><div class="mFoot"><div><div class="cta"><b>Direkt anfragen:</b> ${esc(state.settings.contact).replace(/\n/g,' · ')}</div><div class="source">${esc(p.note||'Technische Daten laut Herstellerangaben.')}</div></div><div class="smallQr"><img src="${qrUrl(state.settings.qr)}"><div>${esc(state.settings.qrText)}</div></div></div></div></div><div class="water">BLOC73</div></section>`;
+}
+
+function renderCanvas(){$('canvas').innerHTML=state.pages.map((p,i)=>`<div class="wrap">${p.type==='cover'?coverPage():machinePage(p,i)}</div>`).join('')}
+
+function fit(){
+ let small=matchMedia('(pointer:coarse)').matches||innerWidth<1100;
+ let pagePx=210*96/25.4;
+ let avail=Math.max(320,document.querySelector('.preview').clientWidth-12);
+ let sc=small?Math.min(1,Math.max(.58,avail/pagePx)):1;
+ document.documentElement.style.setProperty('--scale',sc);
+}
+
+async function imgData(f){
+ let raw=await new Promise(r=>{let fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(f)});
+ return new Promise(r=>{
+  let im=new Image();
+  im.onload=()=>{
+   let max=2100,ra=Math.min(1,max/Math.max(im.width,im.height)),w=Math.round(im.width*ra),h=Math.round(im.height*ra),c=document.createElement('canvas');
+   c.width=w;c.height=h;
+   let x=c.getContext('2d');
+   x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);
+   r(c.toDataURL('image/jpeg',.86));
+  };
+  im.onerror=()=>r(raw);
+  im.src=raw;
+ });
+}
+
+['brand','accent','contact','qr','qrText'].forEach(id=>bind(id,v=>state.settings[id]=v));
+bind('campaign',v=>state.cover.campaign=v);
+bind('coverTitle',v=>state.cover.title=v);
+bind('coverLead',v=>state.cover.lead=v);
+bind('asText',v=>state.cover.asText=v);
+bind('blocText',v=>state.cover.blocText=v);
+
+['imageUrl','fit','zoom','imgX','imgY','kicker','title','subtitle','description','specs','benefits','price','availability','note'].forEach(id=>bind(id,v=>{
+ let p=current();if(!p)return;
+ p[id]=['zoom','imgX','imgY'].includes(id)?+v:v;
+ if(id==='title')p.name=v;
+}));
+
+$('machineImage').onchange=async e=>{
+ let p=current(),f=e.target.files[0];
+ if(p&&f){p.image=await imgData(f);p.imageUrl='';render();save()}
+};
+
+tap('add',()=>{state.pages.push(mt());state.selected=state.pages.length-1;render();save()});
+tap('del',()=>{if(state.selected){state.pages.splice(state.selected,1);state.selected=Math.max(0,state.selected-1);render();save()}});
+tap('dup',()=>{let p=current();if(p){let c=JSON.parse(JSON.stringify(p));c.name=(c.name||c.title||'Maschine')+' Kopie';state.pages.splice(state.selected+1,0,c);state.selected++;render();save()}});
+tap('save',save);
+tap('print1',()=>print());
+tap('print2',()=>print());
+tap('reset',()=>{if(confirm('Alles zurücksetzen?')){localStorage.removeItem(KEY);state=def();render();save()}});
+tap('exportJson',()=>{let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='BLOC73_Prospekt_Daten.json';a.click()});
+tap('importJsonBtn',()=>$('importJson').click());
+$('importJson').onchange=async e=>{let f=e.target.files[0];if(!f)return;state=migrate(JSON.parse(await f.text()));render();save()};
+
+addEventListener('resize',fit);
+addEventListener('orientationchange',()=>setTimeout(fit,300));
+addEventListener('beforeprint',()=>document.documentElement.style.setProperty('--scale','1'));
+addEventListener('afterprint',fit);
+render();
 </script>
 </body>
 </html>
