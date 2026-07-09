@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>BLOC73 Flyer Studio V19 Premium</title>
+<title>BLOC73 Flyer Studio V20 Premium Stabil</title>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>if(!window.jspdf){document.write('<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"><\/script>')}</script>
 <style>
-/* V19_PREMIUM_DIREKT_PDF_FUNKTIONSCHECK */
+/* V20_PREMIUM_STABIL_NUR_EINE_VORSCHAU_DIRECT_PDF */
 :root{--red:#c91f2d;--dark:#0d1117;--ink:#151b22;--muted:#66717d;--line:#d8dee5;--scale:1}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#e9eef3}
@@ -24,7 +24,7 @@ textarea{min-height:86px;line-height:1.42;resize:vertical}
 .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.hidden{display:none!important}.hint{font-size:11px;color:#72808e;line-height:1.4}
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px}.tab{background:#fff;color:#142130;border:1px solid #d7e0e8;box-shadow:none;border-radius:12px;font-size:11px;padding:8px 6px;min-height:36px}.tab.active{background:#111820;color:white;border-color:#111820}
 .preview{min-height:100vh;overflow:auto;padding:20px 28px 80px}.bar{max-width:1180px;margin:0 auto 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}.canvas{display:grid;gap:24px;justify-content:center}
-.pageCanvas{display:block;width:calc(210mm * var(--scale));height:calc(297mm * var(--scale));background:#fff;box-shadow:0 22px 70px rgba(13,25,38,.18)}
+.pageCanvas{display:block;width:calc(210mm * var(--scale));height:calc(297mm * var(--scale));background:#fff;box-shadow:0 22px 70px rgba(13,25,38,.18)}.canvas{min-height:calc(297mm * var(--scale));align-content:start}
 .status{font-size:12px;color:#657382;margin-top:8px;line-height:1.4}.status.ok{color:#126a36;font-weight:800}.status.warn{color:#a15a00;font-weight:800}.status.err{color:#a20d16;font-weight:800}
 @media(max-width:1100px){#app{display:block}.side{height:auto;position:relative;border-right:0;border-bottom:1px solid #d4dfe8}.preview{padding:10px 6px 80px}.bar{position:sticky;top:0;z-index:10;background:rgba(232,238,243,.94);backdrop-filter:blur(10px);border:1px solid #d2dce5;border-radius:16px;padding:9px}}
 @media print{body:before{content:"Bitte nicht über Safari drucken. Den roten Button PDF DIREKT ERSTELLEN benutzen.";font:20px Arial;display:block;padding:30px}}
@@ -33,9 +33,10 @@ textarea{min-height:86px;line-height:1.42;resize:vertical}
 <body>
 <div id="app">
   <aside class="side">
-    <div class="top"><div class="mark">V19</div><div><h1>BLOC73 Marketing Studio</h1><p>Direkte PDF-Erstellung · 5 feste Seiten · Funktionscheck</p></div></div>
+    <div class="top"><div class="mark">V20</div><div><h1>BLOC73 Marketing Studio</h1><p>Direkte PDF-Erstellung · stabile Einzelvorschau · 5 Seiten</p></div></div>
     <div class="btns"><button class="red sm" id="pdfBtn">PDF direkt erstellen</button><button class="light sm" id="checkBtn">Systemcheck</button><button class="light sm" id="clearPage">Seite leeren</button><button class="danger sm" id="resetAll">Reset</button></div>
-    <div class="status" id="status">Die Vorschau wird als Canvas gerendert. Genau diese 5 Seiten werden als PDF gespeichert.</div>
+    <div class="status" id="status">Stabile Einzelvorschau aktiv. Das PDF wird direkt aus 5 festen Seiten erzeugt.</div>
+    <div class="status" id="previewInfo">Aktuelle Seite wird geladen …</div>
     <div class="tabs" id="tabs"></div>
     <div class="box" id="coverEditor">
       <h2>Startseite</h2>
@@ -64,7 +65,7 @@ textarea{min-height:86px;line-height:1.42;resize:vertical}
       <textarea id="briefing" readonly></textarea>
     </div>
   </aside>
-  <main class="preview"><div class="bar"><b>Vorschau = PDF-Ausgabe · V19</b><button class="red sm" id="pdfBtn2">PDF direkt erstellen</button></div><div id="previewPages" class="canvas"></div></main>
+  <main class="preview"><div class="bar"><b>Einzelvorschau · PDF-Ausgabe V20</b><button class="red sm" id="pdfBtn2">PDF direkt erstellen</button></div><div id="previewPages" class="canvas"></div></main>
 </div>
 <script>
 const DATA_KEY='bloc73_v14_edelstahl_geprueft_20260708';
@@ -91,16 +92,142 @@ function placeholder(ctx,x,y,w,h,t){ctx.fillStyle='#8895a2';ctx.font='18px Arial
 function caption(ctx,x,y,w,text){ctx.fillStyle='rgba(17,24,32,.92)';ctx.fillRect(x,y+118,w,28);ctx.fillStyle='#fff';ctx.font='bold 13px Arial';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText(text,x+12,y+132);ctx.textBaseline='alphabetic'}
 function wrapText(ctx,text,x,y,maxW,lineH,maxLines){const words=String(text||'').split(/\s+/).filter(Boolean);let line='',n=0;for(const w of words){const test=(line+' '+w).trim();if(ctx.measureText(test).width<=maxW)line=test;else{if(line){ctx.fillText(line,x,y+n*lineH);n++;if(maxLines&&n>=maxLines)return y+n*lineH}line=w}}if(line&&(!maxLines||n<maxLines)){ctx.fillText(line,x,y+n*lineH);n++}return y+n*lineH}
 function drawMain(ctx,img,x,y,w,h,m){ctx.fillStyle='#f5f7f9';ctx.fillRect(x,y,w,h);ctx.fillStyle='#c91f2d';ctx.fillRect(x,y,10,h);if(!img){placeholder(ctx,x,y,w,h,'Hauptmotiv\nOriginalbild in das Raster einsetzen');return}const s=Math.min((w-22)/img.width,(h-14)/img.height)*(m.mainZoom||1);const dw=img.width*s,dh=img.height*s;ctx.save();ctx.beginPath();ctx.rect(x+10,y,w-10,h);ctx.clip();ctx.drawImage(img,x+10+(w-10-dw)/2+(m.mainX||0),y+(h-dh)/2+(m.mainY||0),dw,dh);ctx.restore()}
-function drawCoverPage(ctx,imgs){ctx.clearRect(0,0,W,H);drawSteelBg(ctx,0,0,W,H);const L=90,R=1150;ctx.fillStyle='#111820';ctx.fillRect(60,45,1120,12);ctx.fillStyle='#c91f2d';ctx.fillRect(60,120,18,1485);drawContain(ctx,imgs.logo,505,105,230,210);drawContain(ctx,imgs.as,880,120,185,80);ctx.textAlign='center';ctx.fillStyle='#4f5e6a';ctx.font='900 18px Arial';ctx.fillText('BLOC73 MACHINERY · EINE MARKE DER AS TECHNICAL SOLUTION GMBH',W/2,350);ctx.fillStyle='#c91f2d';ctx.font='900 18px Arial';ctx.fillText('PROFESSIONELLE LEBENSMITTELTECHNIK',W/2,405);ctx.fillStyle='#111820';ctx.font='900 68px Arial';ctx.fillText((state.cover.headline||'Mehr entdecken').toUpperCase(),W/2,535);ctx.fillStyle='#53636f';ctx.font='32px Arial';ctx.fillText('Maschinen, Service und Lösungen für Ihren Betrieb.',W/2,600);fillRound(ctx,W/2-110,665,220,10,5,'#c91f2d',null);fillRound(ctx,W/2-125,720,250,58,28,'#ffffff','rgba(201,31,45,.25)');ctx.fillStyle='#c91f2d';ctx.font='900 14px Arial';ctx.fillText('ZERTIFIZIERTER GRAEF PARTNER',W/2,756);fillRound(ctx,W/2-130,850,260,260,18,'#ffffff','rgba(17,24,32,.08)');drawContain(ctx,imgs.qr,W/2-105,875,210,210);ctx.fillStyle='#111820';ctx.font='900 20px Arial';ctx.fillText('MEHR ENTDECKEN',W/2,1150);ctx.fillStyle='#4d5c68';ctx.font='16px Arial';ctx.fillText('www.bloc73machinery.com',W/2,1184);ctx.strokeStyle='rgba(17,24,32,.14)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(145,1468);ctx.lineTo(1095,1468);ctx.stroke();ctx.fillStyle='#111820';ctx.font='900 22px Arial';ctx.fillText('Direkter Kontakt für Maschinen und Projekte',W/2,1530);ctx.fillStyle='#40505d';ctx.font='18px Arial';String(state.cover.contact||'').split('\n').forEach((l,i)=>ctx.fillText(l,W/2,1568+i*26))}
+function drawCoverPage(ctx,imgs){
+  ctx.clearRect(0,0,W,H);
+  drawSteelBg(ctx,0,0,W,H);
+  const L=86,R=1154,C=W/2;
+
+  // premium frame
+  ctx.fillStyle='rgba(255,255,255,.56)';
+  ctx.fillRect(78,68,1084,1612);
+  ctx.strokeStyle='rgba(17,24,32,.10)';
+  ctx.lineWidth=1;
+  ctx.strokeRect(78,68,1084,1612);
+
+  // brand lines
+  ctx.fillStyle='#111820';
+  ctx.fillRect(92,88,1056,10);
+  ctx.fillStyle='#c91f2d';
+  ctx.fillRect(92,118,18,1500);
+
+  // AS logo top, visible but clean
+  drawContain(ctx,imgs.as,C-190,122,380,120);
+
+  // BLOC73 mark
+  drawContain(ctx,imgs.logo,C-105,278,210,200);
+  ctx.textAlign='center';
+  ctx.fillStyle='#111820';
+  ctx.font='900 58px Arial';
+  ctx.fillText('BLOC73',C,540);
+  ctx.fillText('MACHINERY',C,602);
+
+  ctx.fillStyle='#56636f';
+  ctx.font='900 17px Arial';
+  ctx.fillText('EINE MARKE DER AS TECHNICAL SOLUTION GMBH',C,652);
+
+  // subtle machinery word
+  ctx.fillStyle='rgba(17,24,32,.055)';
+  ctx.font='900 112px Arial';
+  ctx.fillText('MACHINERY',C,780);
+
+  // main headline
+  ctx.fillStyle='#c91f2d';
+  ctx.font='900 18px Arial';
+  ctx.fillText('PROFESSIONELLE LEBENSMITTELTECHNIK',C,835);
+
+  ctx.fillStyle='#111820';
+  ctx.font='900 70px Arial';
+  const h=(state.cover.headline||'Mehr entdecken').toUpperCase();
+  if(ctx.measureText(h).width>920) ctx.font='900 58px Arial';
+  ctx.fillText(h,C,925);
+
+  ctx.fillStyle='#53636f';
+  ctx.font='28px Arial';
+  wrapText(ctx,state.cover.subline||'Maschinen, Service und Lösungen für Ihren Betrieb.',C-420,985,840,38,2);
+
+  // proof pills
+  const pills=['MASCHINEN','SERVICE','BERATUNG'];
+  pills.forEach((p,i)=>{
+    const x=C-315+i*210;
+    fillRound(ctx,x,1090,170,46,23,'#ffffff','rgba(17,24,32,.10)');
+    ctx.fillStyle=i===1?'#c91f2d':'#111820';
+    ctx.font='900 16px Arial';
+    ctx.fillText(p,x+85,1120);
+  });
+
+  fillRound(ctx,C-150,1188,300,52,26,'#ffffff','rgba(201,31,45,.25)');
+  ctx.fillStyle='#c91f2d';
+  ctx.font='900 14px Arial';
+  ctx.fillText('ZERTIFIZIERTER GRAEF PARTNER',C,1221);
+
+  // QR block
+  fillRound(ctx,C-105,1292,210,210,18,'#ffffff','rgba(17,24,32,.10)');
+  drawContain(ctx,imgs.qr,C-82,1315,164,164);
+  ctx.fillStyle='#111820';
+  ctx.font='900 14px Arial';
+  ctx.fillText('SCANNEN & DIREKT ANFRAGEN',C,1532);
+
+  // footer contact
+  ctx.strokeStyle='rgba(17,24,32,.18)';
+  ctx.beginPath();ctx.moveTo(150,1588);ctx.lineTo(1090,1588);ctx.stroke();
+  ctx.fillStyle='#111820';
+  ctx.font='900 22px Arial';
+  ctx.fillText('Direkter Kontakt für Maschinen und Projekte',C,1628);
+  ctx.fillStyle='#40505d';
+  ctx.font='17px Arial';
+  String(state.cover.contact||'').split('\n').forEach((l,i)=>ctx.fillText(l,C,1662+i*24));
+}
 function drawCompanyPage(ctx,imgs){ctx.clearRect(0,0,W,H);drawSteelBg(ctx,0,0,W,H);const L=90,R=1150;ctx.fillStyle='#111820';ctx.fillRect(60,45,1120,12);ctx.fillStyle='#c91f2d';ctx.fillRect(60,120,18,1485);drawContain(ctx,imgs.as,L,90,260,105);drawContain(ctx,imgs.logo,930,82,150,150);ctx.textAlign='left';ctx.fillStyle='#c91f2d';ctx.font='900 16px Arial';ctx.fillText('UNTERNEHMENSVORSTELLUNG',L,245);ctx.fillStyle='#111820';ctx.font='900 48px Arial';ctx.fillText('AS TECHNICAL SOLUTION',L,305);ctx.font='300 42px Arial';ctx.fillText('und BLOC73 Machinery',L,358);ctx.fillStyle='#56636f';ctx.font='22px Arial';wrapText(ctx,'Technischer Service, Wartung, Modernisierung und Maschinenvertrieb für professionelle Lebensmittelbetriebe – klar eingeordnet, praxisnah erklärt und direkt anfragbar.',L,410,980,31,4);const boxY=555;fillRound(ctx,L,boxY,500,275,24,'rgba(255,255,255,.78)','rgba(17,24,32,.08)');fillRound(ctx,650,boxY,500,275,24,'rgba(255,255,255,.78)','rgba(17,24,32,.08)');ctx.fillStyle='#111820';ctx.font='900 25px Arial';ctx.fillText('AS Technical Solution',L+30,610);ctx.fillText('BLOC73 Machinery',680,610);ctx.fillStyle='#4f5c68';ctx.font='19px Arial';wrapText(ctx,'AS Technical Solution steht für technischen Service, Wartung, Prüfung, Ersatzteile, Modernisierung und die praktische Umsetzung technischer Aufgaben im Betrieb.',L+30,660,430,28,6);wrapText(ctx,'BLOC73 Machinery bündelt ausgewählte Maschinenlösungen, Verkaufsunterlagen und technische Beratung für Fleischerei, Produktion, Handel und Großküche.',680,660,430,28,6);fillRound(ctx,L,890,1060,270,24,'rgba(255,255,255,.78)','rgba(17,24,32,.08)');ctx.fillStyle='#111820';ctx.font='900 26px Arial';ctx.fillText('Was der Kunde bekommt',L+30,950);const cols=[['01','Klare technische Einordnung','Maschinen werden nicht nur gezeigt, sondern verständlich und kaufrelevant eingeordnet.'],['02','Serviceorientierter Vertrieb','Vertrieb, technische Fragen und praktische Umsetzung greifen sauber ineinander.'],['03','Direkter Kontakt','Kurze Wege, schnelle Rückmeldung und ein fester Ansprechpartner für Maschinen und Projekte.']];cols.forEach((c,i)=>{const x=L+30+i*340;ctx.fillStyle='#c91f2d';ctx.font='900 17px Arial';ctx.fillText(c[0],x,1007);ctx.fillStyle='#111820';ctx.font='900 21px Arial';wrapText(ctx,c[1],x+42,1007,250,26,2);ctx.fillStyle='#53616d';ctx.font='17px Arial';wrapText(ctx,c[2],x,1070,292,24,3)});fillRound(ctx,L,1230,510,260,24,'rgba(255,255,255,.78)','rgba(17,24,32,.08)');ctx.fillStyle='#111820';ctx.font='900 25px Arial';ctx.fillText('Leistungsbereiche',L+30,1285);ctx.fillStyle='#4d5b67';ctx.font='19px Arial';['Service & Wartung','Modernisierung & Retrofit','Maschinenvertrieb','Projekt- und Angebotsbegleitung'].forEach((b,i)=>{ctx.fillStyle='#c91f2d';ctx.beginPath();ctx.arc(L+42,1330+i*43,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#4d5b67';ctx.fillText(b,L+62,1337+i*43)});fillRound(ctx,640,1230,510,260,24,'rgba(255,255,255,.78)','rgba(17,24,32,.08)');ctx.fillStyle='#111820';ctx.font='900 25px Arial';ctx.fillText('Direkter Kontakt',670,1285);ctx.fillStyle='#4d5b67';ctx.font='19px Arial';wrapText(ctx,'Robert Kutschke\nVertriebsleiter / Head of Sales\nMobil / WhatsApp: +49 160 91658700\nr.kutschke@as-technical.de\nwww.as-technical.de\nwww.bloc73machinery.com',670,1330,330,29,8);drawContain(ctx,imgs.qr,1010,1330,110,110);ctx.strokeStyle='rgba(17,24,32,.16)';ctx.beginPath();ctx.moveTo(L,1605);ctx.lineTo(R,1605);ctx.stroke();ctx.fillStyle='#5e6d7b';ctx.font='13px Arial';ctx.fillText('AS Technical Solution GmbH · BLOC73 Machinery · Professionelle Lebensmitteltechnik',L,1645)}
 function drawMachinePage(ctx,m,index,imgs){ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';ctx.fillRect(0,0,W,H);const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(.35,'rgba(236,244,248,.72)');g.addColorStop(.6,'rgba(255,255,255,.98)');g.addColorStop(1,'rgba(225,236,242,.7)');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);const L=90,R=1150;ctx.fillStyle='#111820';ctx.fillRect(L,45,R-L,12);drawContain(ctx,imgs.logo,L,72,58,58);ctx.fillStyle='#111820';ctx.font='900 18px Arial';ctx.textAlign='left';ctx.fillText('BLOC73 MACHINERY',L+70,108);ctx.fillStyle='#c91f2d';ctx.font='900 14px Arial';ctx.textAlign='right';ctx.fillText('MASCHINENANGEBOT',R,108);ctx.strokeStyle='#cfd6dd';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(L,140);ctx.lineTo(R,140);ctx.stroke();ctx.textAlign='left';ctx.fillStyle='#c91f2d';ctx.font='900 15px Arial';ctx.fillText((m.category||'MASCHINENANGEBOT').toUpperCase(),L,205);ctx.fillStyle='#111820';ctx.font='300 52px Arial';let title=(m.productTitle||'Maschinenangebot').toUpperCase();if(ctx.measureText(title).width>1000)ctx.font='300 44px Arial';ctx.fillText(title,L,265);ctx.fillStyle='#5a6672';ctx.font='18px Arial';wrapText(ctx,m.intro,L,310,1010,26,3);const imgY=392;drawMain(ctx,imgs.main,L,imgY,780,530,m);const dx=900,dw=250,dh=158,gap=28;drawCover(ctx,imgs.d1,dx,imgY,dw,dh,'#f5f7f9');if(!imgs.d1)placeholder(ctx,dx,imgY,dw,dh,'Detail 1');caption(ctx,dx,imgY,dw,'Maschine im Detail');drawCover(ctx,imgs.d2,dx,imgY+dh+gap,dw,dh,'#f5f7f9');if(!imgs.d2)placeholder(ctx,dx,imgY+dh+gap,dw,dh,'Detail 2');caption(ctx,dx,imgY+dh+gap,dw,'Anwendung im Betrieb');drawCover(ctx,imgs.d3,dx,imgY+(dh+gap)*2,dw,dh,'#f5f7f9');if(!imgs.d3)placeholder(ctx,dx,imgY+(dh+gap)*2,dw,dh,'Detail 3');caption(ctx,dx,imgY+(dh+gap)*2,dw,'Produkt und Ergebnis');ctx.strokeStyle='#111820';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(L,960);ctx.lineTo(R,960);ctx.stroke();ctx.strokeStyle='#d9e0e6';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(L,1065);ctx.lineTo(R,1065);ctx.stroke();const bens=lines(m.benefits).slice(0,3);while(bens.length<3)bens.push('Nutzenargument eintragen');const bw=(R-L-60)/3;for(let i=0;i<3;i++){const x=L+i*(bw+30);ctx.fillStyle='#c91f2d';ctx.font='300 26px Arial';ctx.fillText(String(i+1).padStart(2,'0'),x,1000);ctx.fillStyle='#4c5a67';ctx.font='18px Arial';wrapText(ctx,bens[i],x+58,998,bw-58,24,3)}ctx.fillStyle='#111820';ctx.font='900 28px Arial';ctx.fillText('Daten & Fakten',L,1126);ctx.textAlign='right';ctx.fillStyle='#8d98a4';ctx.font='13px Arial';ctx.fillText('laut Herstellerangaben',R,1126);ctx.textAlign='left';const specs=lines(m.specs).slice(0,14).map(l=>{let p=l.split('|');if(p.length<2)p=l.split(':');return [(p[0]||'').trim(),(p.slice(1).join(' ')||'').trim()]});const mid=Math.ceil(specs.length/2);function specCol(arr,x,y){arr.forEach((r,i)=>{const yy=y+i*30;ctx.fillStyle='#8c97a3';ctx.font='900 16px Arial';ctx.fillText(r[0],x,yy);ctx.fillStyle='#111820';ctx.font='900 16px Arial';wrapText(ctx,r[1],x+210,yy,280,21,2)})}specCol(specs.slice(0,mid),L,1170);specCol(specs.slice(mid),665,1170);ctx.fillStyle='#0d1117';ctx.fillRect(L,1390,R-L,142);ctx.fillStyle='#c91f2d';ctx.fillRect(L,1390,12,142);ctx.strokeStyle='rgba(255,255,255,.14)';ctx.beginPath();ctx.moveTo(620,1390);ctx.lineTo(620,1532);ctx.stroke();ctx.fillStyle='#8894a2';ctx.font='900 13px Arial';ctx.fillText('PREIS / AKTION',130,1435);ctx.fillStyle='#fff';ctx.font='300 37px Arial';ctx.fillText(m.price||'Preis auf Anfrage',130,1480);ctx.fillStyle='#aeb7c1';ctx.font='15px Arial';ctx.fillText(m.availability||'',130,1515);ctx.fillStyle='#8894a2';ctx.font='900 13px Arial';ctx.fillText('DIREKT ANFRAGEN',660,1435);ctx.fillStyle='#fff';ctx.font='900 20px Arial';wrapText(ctx,m.cta||'',660,1480,420,28,2);ctx.strokeStyle='#d6dde4';ctx.beginPath();ctx.moveTo(L,1630);ctx.lineTo(R,1630);ctx.stroke();ctx.fillStyle='#5e6d7b';ctx.font='13px Arial';ctx.fillText('Robert Kutschke · +49 160 91658700 · r.kutschke@as-technical.de',L,1672);ctx.textAlign='right';ctx.fillStyle='#c91f2d';ctx.font='900 16px Arial';ctx.fillText(String(index+1).padStart(2,'0'),R,1672);ctx.textAlign='left'}
 async function renderCanvasPage(canvas,pageIndex){const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';if(pageIndex===0){const imgs=await imageSet(null);drawCoverPage(ctx,imgs)}else if(pageIndex===1){const imgs=await imageSet(null);drawCompanyPage(ctx,imgs)}else{const m=state.machines[pageIndex-2];const imgs=await imageSet(m);drawMachinePage(ctx,m,pageIndex,imgs)}}
-let renderRun=0;async function renderPreview(){const run=++renderRun;const holder=$('previewPages');if(!holder)return;holder.innerHTML='';const canv=[];for(let i=0;i<5;i++){const c=document.createElement('canvas');c.width=W;c.height=H;c.className='pageCanvas';holder.appendChild(c);canv.push(c)}for(let i=0;i<5;i++){if(run!==renderRun)return;await renderCanvasPage(canv[i],i)}}
+let renderRun=0;async function renderPreview(){
+  const run=++renderRun;
+  const holder=$('previewPages');
+  if(!holder)return;
+  holder.innerHTML='';
+  const names=['Startseite','Unternehmensseite','Maschine 1','Maschine 2','Maschine 3'];
+  const pageIndex=Math.max(0,Math.min(4,state.selected||0));
+  const info=$('previewInfo');
+  if(info)info.textContent='Vorschau: '+names[pageIndex]+' · PDF bleibt 5 Seiten.';
+  const c=document.createElement('canvas');
+  c.width=W;c.height=H;c.className='pageCanvas';
+  holder.appendChild(c);
+  try{
+    await renderCanvasPage(c,pageIndex);
+    if(run!==renderRun)return;
+  }catch(e){
+    console.error(e);
+    status('Vorschaufehler: '+(e&&e.message?e.message:e));
+  }
+}
 function fit(){let pagePx=210*96/25.4;let avail=Math.max(320,document.querySelector('.preview')?.clientWidth||pagePx);let small=matchMedia('(pointer:coarse)').matches||innerWidth<1100;document.documentElement.style.setProperty('--scale',small?Math.min(1,Math.max(.58,(avail-12)/pagePx)):1)}
-function renderTabs(){const names=['1 · Startseite','2 · Unternehmen','3 · Maschine 1','4 · Maschine 2','5 · Maschine 3'];$('tabs').innerHTML=names.map((n,i)=>`<button class="tab ${state.selected===i?'active':''}" data-i="${i}">${n}</button>`).join('');document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{state.selected=+b.dataset.i;renderEditors();renderTabs();save()})}
+function renderTabs(){const names=['1 · Startseite','2 · Unternehmen','3 · Maschine 1','4 · Maschine 2','5 · Maschine 3'];$('tabs').innerHTML=names.map((n,i)=>`<button class="tab ${state.selected===i?'active':''}" data-i="${i}">${n}</button>`).join('');document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{state.selected=+b.dataset.i;renderEditors();renderTabs();save();renderPreview()})}
 function curM(){return state.selected>=2?state.machines[state.selected-2]:null}function renderEditors(){if(!$('coverEditor'))return;$('coverEditor').classList.toggle('hidden',state.selected!==0);$('companyEditor').classList.toggle('hidden',state.selected!==1);$('machineEditor').classList.toggle('hidden',state.selected<2);if(state.selected===0){$('coverHeadline').value=state.cover.headline||'';$('coverSubline').value=state.cover.subline||'';$('coverContact').value=state.cover.contact||''}else if(state.selected>=2){let m=curM();$('machineTitle').textContent='Maschinenseite '+(state.selected-1);['category','productTitle','intro','benefits','specs','price','availability','cta','mainZoom','mainX','mainY'].forEach(id=>$(id).value=m[id]??'');$('briefing').value=briefingText(m)}}
 function render(){renderTabs();renderEditors();renderPreview();fit()}function bind(id,fn){let el=$(id);if(el)el.addEventListener('input',e=>{fn(e.target.value);save();renderPreview()})}
-bind('coverHeadline',v=>state.cover.headline=v);bind('coverSubline',v=>state.cover.subline=v);bind('coverContact',v=>state.cover.contact=v);['category','productTitle','intro','benefits','specs','price','availability','cta','mainZoom','mainX','mainY'].forEach(id=>bind(id,v=>{let m=curM();if(!m)return;m[id]=['mainZoom','mainX','mainY'].includes(id)?+v:v}));async function fileToData(f){return new Promise(res=>{let r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(f)})}async function setImg(key,input){let f=input.files&&input.files[0];if(!f)return;curM().imgs[key]=await fileToData(f);save();renderPreview()}['imgMain','imgD1','imgD2','imgD3'].forEach((id,ix)=>{let keys=['main','d1','d2','d3'];let el=$(id);if(el)el.onchange=e=>setImg(keys[ix],e.target)});
+bind('coverHeadline',v=>state.cover.headline=v);bind('coverSubline',v=>state.cover.subline=v);bind('coverContact',v=>state.cover.contact=v);['category','productTitle','intro','benefits','specs','price','availability','cta','mainZoom','mainX','mainY'].forEach(id=>bind(id,v=>{let m=curM();if(!m)return;m[id]=['mainZoom','mainX','mainY'].includes(id)?+v:v}));async function fileToData(f){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      const im=new Image();
+      im.onload=()=>{
+        const max=1800;
+        let w=im.width,h=im.height;
+        const s=Math.min(1,max/Math.max(w,h));
+        w=Math.round(w*s);h=Math.round(h*s);
+        const c=document.createElement('canvas');
+        c.width=w;c.height=h;
+        const cx=c.getContext('2d');
+        cx.imageSmoothingEnabled=true;
+        cx.imageSmoothingQuality='high';
+        cx.drawImage(im,0,0,w,h);
+        res(c.toDataURL('image/jpeg',0.88));
+      };
+      im.onerror=()=>res(r.result);
+      im.src=r.result;
+    };
+    r.readAsDataURL(f);
+  })
+}async function setImg(key,input){let f=input.files&&input.files[0];if(!f)return;curM().imgs[key]=await fileToData(f);save();renderPreview()}['imgMain','imgD1','imgD2','imgD3'].forEach((id,ix)=>{let keys=['main','d1','d2','d3'];let el=$(id);if(el)el.onchange=e=>setImg(keys[ix],e.target)});
 function briefingText(m){return `Erstelle ein hochwertiges, fotorealistisches Maschinenbild für einen B2B-Verkaufsprospekt. Maschine technisch unverändert lassen. Edelstahl, sauberes Licht, professionelle Umgebung, keine erfundenen Logos oder Funktionen. Motiv: ${m.productTitle}. Einsatzbereich: ${m.category}.`}
 $('copyBriefing').onclick=async()=>{let t=briefingText(curM());try{await navigator.clipboard.writeText(t);alert('Briefing kopiert.')}catch(e){$('briefing').value=t}};$('resetImg').onclick=()=>{let m=curM();if(m){m.mainZoom=1;m.mainX=0;m.mainY=0;save();renderEditors();renderPreview()}};$('clearPage').onclick=()=>{if(state.selected===0)state.cover=defaults().cover;else if(state.selected>=2)state.machines[state.selected-2]=blankMachine(state.selected-1);save();render()};$('resetAll').onclick=()=>{if(confirm('Alles zurücksetzen?')){localStorage.removeItem(DATA_KEY);state=defaults();save();render()}};
 
@@ -111,7 +238,7 @@ async function runSystemCheck(showAlert=false){
   add('Datenstruktur',!!state.cover&&Array.isArray(state.machines)&&state.machines.length===3);
   add('PDF-Bibliothek',!!(window.jspdf&&window.jspdf.jsPDF));
   add('Canvas-Unterstützung',!!document.createElement('canvas').getContext);
-  add('PDF-Seitenlogik',true);
+  add('PDF-Seitenlogik 5 Seiten',true);add('Stabile Einzelvorschau',!!$('previewPages'));
   try{
     const c=document.createElement('canvas');c.width=W;c.height=H;
     await renderCanvasPage(c,0);await renderCanvasPage(c,1);await renderCanvasPage(c,2);
@@ -125,7 +252,7 @@ async function runSystemCheck(showAlert=false){
   return ok;
 }
 
-async function createPdf(){save();const ok=await runSystemCheck(false);if(!window.jspdf||!window.jspdf.jsPDF){alert('PDF-Bibliothek konnte nicht geladen werden. Internetverbindung prüfen und Seite neu laden.');return}status(ok?'PDF wird direkt erstellt. Alle Prüfungen OK.':'PDF wird erstellt, aber bitte Warnung prüfen.');const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});for(let i=0;i<5;i++){status('PDF-Seite '+(i+1)+' von 5 wird erstellt ...');const c=document.createElement('canvas');c.width=W;c.height=H;await renderCanvasPage(c,i);const img=c.toDataURL('image/jpeg',0.92);if(i>0)pdf.addPage('a4','portrait');pdf.addImage(img,'JPEG',0,0,210,297,undefined,'FAST')}pdf.save('BLOC73_Marketing_Studio.pdf');status('PDF erstellt: BLOC73_Marketing_Studio.pdf · 5 Seiten')}
+async function createPdf(){save();const ok=await runSystemCheck(false);if(!window.jspdf||!window.jspdf.jsPDF){alert('PDF-Bibliothek konnte nicht geladen werden. Internetverbindung prüfen und Seite neu laden.');return}status(ok?'PDF wird direkt erstellt. Alle Prüfungen OK.':'PDF wird erstellt, aber bitte Warnung prüfen.');const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});for(let i=0;i<5;i++){status('PDF-Seite '+(i+1)+' von 5 wird erstellt ...');const c=document.createElement('canvas');c.width=W;c.height=H;await renderCanvasPage(c,i);const img=c.toDataURL('image/jpeg',0.92);if(i>0)pdf.addPage('a4','portrait');pdf.addImage(img,'JPEG',0,0,210,297,undefined,'FAST')}pdf.save('BLOC73_Marketing_Studio.pdf');status('PDF erstellt: BLOC73_Marketing_Studio.pdf · 5 feste Seiten')}
 $('pdfBtn').onclick=createPdf;$('pdfBtn2').onclick=createPdf;$('checkBtn').onclick=()=>runSystemCheck(true);addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));render();save();setTimeout(()=>runSystemCheck(false),1200);
 </script>
 </body>
