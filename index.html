@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>BLOC73 Akquise-App · Serienbriefe & Nachtelefonie</title>
+  <title>BLOC73 Akquise-App · Serienbriefe & Nachtelefonie · STABIL</title>
   <style>
     :root{
       --navy:#061b33;--blue:#0b5fae;--blue2:#0a7bd1;--red:#b4171f;--ink:#0b1422;--muted:#64748b;
@@ -215,11 +215,35 @@
       <div class="field"><label>Werbe-Fokus</label><select id="cAdFocus"></select></div>
       <div class="field" style="grid-column:1/-1"><label>Notiz</label><textarea id="cNotiz" placeholder="Maschinenbestand, Bedarf, Telefonnotiz, Wiedervorlage..."></textarea></div>
     </div>
+    <div class="toolbar" style="margin-top:12px;border-top:1px solid #e2e8f0;padding-top:12px">
+      <button class="btn secondary" onclick="openGoogleForCurrentCustomer()">Google-Suche</button>
+      <button class="btn secondary" onclick="openMapsForCurrentCustomer()">Google Maps</button>
+      <button class="btn secondary" onclick="openWebsiteForCurrentCustomer()">Website öffnen</button>
+      <button class="btn warn" onclick="openWebsiteImportModal()">Website-Daten einfügen</button>
+    </div>
+    <div class="alert blue" style="margin-top:8px">Schnellrecherche: Google/Maps öffnen, Website oder Impressum kopieren und hier einfügen. Die App liest Telefon, E-Mail, Website, Adresse und mögliche Ansprechpartner automatisch aus.</div>
     <div id="customerValidation" style="margin-top:12px"></div>
     <div class="toolbar" style="justify-content:flex-end;margin-top:14px">
       <button class="btn secondary" onclick="closeCustomerModal()">Abbrechen</button>
       <button class="btn danger" id="deleteCustomerBtn" onclick="deleteCustomer()">Löschen</button>
       <button class="btn ok" onclick="saveCustomer()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="websiteImportModal">
+  <div class="modal-panel" style="width:min(980px,96vw)">
+    <div class="modal-head"><h2>Website- / Impressumsdaten übernehmen</h2><button class="x" onclick="closeWebsiteImportModal()">×</button></div>
+    <div class="alert blue">Text von der Website, aus dem Impressum oder aus Google kopieren und hier einfügen. Bestehende Felder werden nur überschrieben, wenn unten Werte erkannt werden und Sie die Übernahme bestätigen.</div>
+    <div class="field" style="margin-top:12px"><label>Website- oder Impressumstext</label><textarea id="websiteRawText" placeholder="Hier kopierten Text einfügen: Firmenname, Adresse, Telefon, E-Mail, Geschäftsführer/Inhaber, Website..."></textarea></div>
+    <div class="toolbar" style="margin-top:10px">
+      <button class="btn" onclick="previewWebsiteImport()">Daten erkennen</button>
+      <button class="btn secondary" onclick="clearWebsiteImport()">Leeren</button>
+    </div>
+    <div id="websiteImportPreview" style="margin-top:12px"></div>
+    <div class="toolbar" style="justify-content:flex-end;margin-top:14px">
+      <button class="btn secondary" onclick="closeWebsiteImportModal()">Abbrechen</button>
+      <button class="btn ok" onclick="applyWebsiteImport()">Erkannte Daten übernehmen</button>
     </div>
   </div>
 </div>
@@ -335,19 +359,91 @@ function fillSelects(){
 function renderDashboard(){const total=state.customers.length;const ready=state.customers.filter(isReady).length;const blocked=state.customers.filter(c=>!isReady(c)).length;const calls=state.customers.filter(c=>c.followUp&&c.followUp<=today()&&['Nachtelefonieren','Nicht erreicht','Später wieder melden','Angeschrieben'].includes(statusFor(c))).length;$('mTotal').textContent=total;$('mReady').textContent=ready;$('mBlocked').textContent=blocked;$('mCalls').textContent=calls;const due=state.customers.filter(c=>c.followUp&&c.followUp<=today()).slice(0,6);$('todayList').innerHTML=due.length?due.map(c=>`<div class="history-item"><b>${esc(c.firma)}</b><br><span class="mini">${esc(c.ansprechpartner)} · ${esc(c.plz)} ${esc(c.ort)} · ${esc(c.telefon)}</span><br><span class="pill warn">Nachfassen ${esc(c.followUp)}</span></div>`).join(''):'<div class="empty">Keine fällige Nachtelefonie.</div>';}
 function filteredCustomers(base=state.customers){const q=($('filterSearch')?.value||'').toLowerCase();const plz=$('filterPlz')?.value||'';const st=$('filterStatus')?.value||'';const br=$('filterBranch')?.value||'';return base.filter(c=>{const hay=[c.firma,c.ansprechpartner,c.ort,c.plz,c.telefon,c.email,c.website,c.branche].join(' ').toLowerCase();return (!q||hay.includes(q))&&(!plz||String(c.plz||'').startsWith(plz))&&(!st||statusFor(c)===st)&&(!br||c.branche===br);});}
 function statusPill(c){const st=statusFor(c);const cls=st==='Unvollständig'||st==='Gesperrt'?'bad':st==='Bereit für Kampagne'||st==='Interesse'||st==='Angebot'||st==='Termin'?'ok':st==='Nachtelefonieren'||st==='Nicht erreicht'||st==='Später wieder melden'?'warn':'dark';return `<span class="pill ${cls}">${esc(st)}</span>`}
-function renderCustomers(){const rows=filteredCustomers();$('customerTable').innerHTML=rows.length?`<table><thead><tr><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Telefon</th><th>Branche</th><th>Status</th><th>Aktion</th></tr></thead><tbody>${rows.map(c=>{const issues=validateCustomer(c);return `<tr><td><div class="customer-name">${esc(c.firma)}</div><div class="mini muted">Quelle: ${esc(c.quelle||'-')}</div>${issues.length?`<div class="danger-text mini">${issues.map(esc).join(', ')}</div>`:''}</td><td>${esc(c.ansprechpartner||'')} ${!c.ansprechpartner?'<div class="danger-text">Pflichtfeld</div>':''}</td><td>${esc(c.strasse)}<br>${esc(c.plz)} ${esc(c.ort)}</td><td class="nowrap">${esc(c.telefon)}<br><span class="mini muted">${esc(c.email||'')}</span></td><td>${esc(c.branche||'')}</td><td>${statusPill(c)}${c.followUp?`<br><span class="mini">WV: ${esc(c.followUp)}</span>`:''}</td><td class="nowrap"><button class="btn small secondary" onclick="openCustomerModalById('${c.id}')">Bearbeiten</button> <button class="btn small" onclick="openCallModal('${c.id}')">Telefon</button></td></tr>`}).join('')}</tbody></table>`:'<div class="empty">Keine Kunden gefunden.</div>';}
+function renderCustomers(){const rows=filteredCustomers();$('customerTable').innerHTML=rows.length?`<table><thead><tr><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Telefon</th><th>Branche</th><th>Status</th><th>Aktion</th></tr></thead><tbody>${rows.map(c=>{const issues=validateCustomer(c);return `<tr><td><div class="customer-name">${esc(c.firma)}</div><div class="mini muted">Quelle: ${esc(c.quelle||'-')}</div>${issues.length?`<div class="danger-text mini">${issues.map(esc).join(', ')}</div>`:''}</td><td>${esc(c.ansprechpartner||'')} ${!c.ansprechpartner?'<div class="danger-text">Pflichtfeld</div>':''}</td><td>${esc(c.strasse)}<br>${esc(c.plz)} ${esc(c.ort)}</td><td class="nowrap">${esc(c.telefon)}<br><span class="mini muted">${esc(c.email||'')}</span></td><td>${esc(c.branche||'')}</td><td>${statusPill(c)}${c.followUp?`<br><span class="mini">WV: ${esc(c.followUp)}</span>`:''}</td><td class="nowrap"><button class="btn small secondary" onclick="openCustomerModalById('${c.id}')">Bearbeiten</button> <button class="btn small secondary" onclick="openGoogleForCustomer('${c.id}')">Google</button> <button class="btn small" onclick="openCallModal('${c.id}')">Telefon</button></td></tr>`}).join('')}</tbody></table>`:'<div class="empty">Keine Kunden gefunden.</div>';}
 function openCustomerModal(prefill={}){['Id','Firma','Ansprechpartner','Strasse','Plz','Ort','Telefon','Email','Website','Branche','Quelle','Notiz'].forEach(k=>{$('c'+k).value=''});$('cId').value=prefill.id||'';$('cFirma').value=prefill.firma||'';$('cAnsprechpartner').value=prefill.ansprechpartner||'';$('cStrasse').value=prefill.strasse||'';$('cPlz').value=prefill.plz||'';$('cOrt').value=prefill.ort||'';$('cTelefon').value=prefill.telefon||'';$('cEmail').value=prefill.email||'';$('cWebsite').value=prefill.website||'';$('cBranche').value=prefill.branche||'';$('cQuelle').value=prefill.quelle||'Manuell';$('cStatus').value=prefill.status||'Recherche offen';$('cAdFocus').value=prefill.adFocus||'full';$('cNotiz').value=prefill.notiz||'';$('deleteCustomerBtn').style.display=prefill.id?'inline-flex':'none';$('customerModalTitle').textContent=prefill.id?'Kunde bearbeiten':'Kunde anlegen';$('customerValidation').innerHTML='';$('customerModal').classList.add('active');}
 function openCustomerModalById(id){const c=state.customers.find(x=>x.id===id);if(c)openCustomerModal(c)}
 function closeCustomerModal(){$('customerModal').classList.remove('active')}
 function formCustomer(){return {id:$('cId').value||uid(),firma:$('cFirma').value.trim(),ansprechpartner:$('cAnsprechpartner').value.trim(),strasse:$('cStrasse').value.trim(),plz:$('cPlz').value.trim(),ort:$('cOrt').value.trim(),telefon:$('cTelefon').value.trim(),email:$('cEmail').value.trim(),website:$('cWebsite').value.trim(),branche:$('cBranche').value.trim(),quelle:$('cQuelle').value.trim()||'Manuell',status:$('cStatus').value,adFocus:$('cAdFocus').value||'full',notiz:$('cNotiz').value.trim()};}
-function saveCustomer(){const c=formCustomer();const issues=validateCustomer(c);if(issues.length){c.status='Unvollständig';$('customerValidation').innerHTML=`<div class="alert bad">${issues.map(esc).join(' · ')}. Der Kunde wird gespeichert, bleibt aber für Kampagnen gesperrt.</div>`;}else if(c.status==='Unvollständig'){c.status='Bereit für Kampagne'}const old=state.customers.find(x=>x.id===c.id);const merged={...(old||{}),...c,updatedAt:new Date().toISOString(),createdAt:old?.createdAt||new Date().toISOString()};const idx=state.customers.findIndex(x=>x.id===c.id);if(idx>=0)state.customers[idx]=merged;else state.customers.unshift(merged);save();renderAll();setTimeout(closeCustomerModal,issues.length?650:0);}
+function saveCustomer(){const c=formCustomer();const issues=validateCustomer(c);if(issues.length){c.status='Unvollständig';$('customerValidation').innerHTML=`<div class="alert bad">${issues.map(esc).join(' · ')}. Der Kunde wird gespeichert, bleibt aber für Kampagnen gesperrt. Bitte fehlende Daten ergänzen.</div>`;}else if(c.status==='Unvollständig'||c.status==='Recherche offen'){c.status='Bereit für Kampagne'}const oldCustomer=state.customers.find(x=>x.id===c.id);const merged={...(oldCustomer||{}),...c,updatedAt:new Date().toISOString(),createdAt:oldCustomer?.createdAt||new Date().toISOString()};const idx=state.customers.findIndex(x=>x.id===c.id);if(idx>=0)state.customers[idx]=merged;else state.customers.unshift(merged);save();renderAll();if(!issues.length)closeCustomerModal();}
 function deleteCustomer(){const id=$('cId').value;if(!id)return;if(confirm('Kunden wirklich löschen?')){state.customers=state.customers.filter(c=>c.id!==id);save();renderAll();closeCustomerModal();}}
-function parseCsv(text){const rows=[];let row=[],cell='',q=false;for(let i=0;i<text.length;i++){const ch=text[i],next=text[i+1];if(ch==='"'){if(q&&next==='"'){cell+='"';i++;}else q=!q;}else if(ch===','&&!q){row.push(cell);cell='';}else if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&next==='\n')i++;row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);row=[];cell='';}else cell+=ch;}row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);if(!rows.length)return[];const headers=rows[0].map(h=>h.trim().toLowerCase());const map={firma:['firma','unternehmen','name','company'],ansprechpartner:['ansprechpartner','kontakt','inhaber','geschäftsführer','geschaeftsfuehrer','contact'],strasse:['strasse','straße','adresse','address'],plz:['plz','zip','postal code'],ort:['ort','stadt','city'],telefon:['telefon','tel','phone'],email:['email','e-mail','mail'],website:['website','web','url'],branche:['branche','category','kategorie'],notiz:['notiz','note','bemerkung']};function val(r,key){const names=map[key];const idx=headers.findIndex(h=>names.includes(h));return idx>=0?(r[idx]||'').trim():''}return rows.slice(1).map(r=>({id:uid(),firma:val(r,'firma'),ansprechpartner:val(r,'ansprechpartner'),strasse:val(r,'strasse'),plz:val(r,'plz'),ort:val(r,'ort'),telefon:val(r,'telefon'),email:val(r,'email'),website:val(r,'website'),branche:val(r,'branche'),notiz:val(r,'notiz'),quelle:'CSV-Import',adFocus:'full',status:'Recherche offen',createdAt:new Date().toISOString()}));}
+function detectDelimiter(line){const semi=(line.match(/;/g)||[]).length;const comma=(line.match(/,/g)||[]).length;return semi>comma?';':',';}
+function parseCsv(text){
+  text=String(text||'').replace(/^\ufeff/,'');
+  const first=(text.split(/\r?\n/).find(l=>l.trim())||'');
+  const delim=detectDelimiter(first);
+  const rows=[];let row=[],cell='',q=false;
+  for(let i=0;i<text.length;i++){
+    const ch=text[i],next=text[i+1];
+    if(ch==='"'){if(q&&next==='"'){cell+='"';i++;}else q=!q;}
+    else if(ch===delim&&!q){row.push(cell);cell='';}
+    else if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&next==='\n')i++;row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);row=[];cell='';}
+    else cell+=ch;
+  }
+  row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);
+  if(!rows.length)return[];
+  const normalize=h=>String(h||'').trim().toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss');
+  const headers=rows[0].map(normalize);
+  const map={
+    firma:['firma','unternehmen','name','company','betrieb'],
+    ansprechpartner:['ansprechpartner','kontakt','inhaber','inhaberin','geschaeftsfuehrer','geschaeftsfuehrerin','geschaftsfuhrer','contact','person'],
+    strasse:['strasse','straße','adresse','anschrift','address'],
+    plz:['plz','zip','postal code','postleitzahl'],
+    ort:['ort','stadt','city'],
+    telefon:['telefon','tel','phone','mobil','mobile'],
+    email:['email','e-mail','mail'],
+    website:['website','web','url','homepage'],
+    branche:['branche','category','kategorie'],
+    notiz:['notiz','note','bemerkung']
+  };
+  function val(r,key){const names=map[key].map(normalize);const idx=headers.findIndex(h=>names.includes(h));return idx>=0?String(r[idx]||'').trim():''}
+  return rows.slice(1).map(r=>({id:uid(),firma:val(r,'firma'),ansprechpartner:val(r,'ansprechpartner'),strasse:val(r,'strasse'),plz:val(r,'plz'),ort:val(r,'ort'),telefon:val(r,'telefon'),email:val(r,'email'),website:val(r,'website'),branche:val(r,'branche'),notiz:val(r,'notiz'),quelle:'CSV-Import',adFocus:'full',status:'Recherche offen',createdAt:new Date().toISOString()}));
+}
 function previewImport(list){if(!list.length){$('importPreview').innerHTML='<div class="empty">Keine gültigen CSV-Zeilen erkannt.</div>';return}const bad=list.filter(c=>validateCustomer(c).length).length;$('importPreview').innerHTML=`<div class="alert ${bad?'bad':'ok'}">${list.length} Kontakte erkannt · ${bad} unvollständig / gesperrt</div><div style="margin-top:12px;max-height:420px;overflow:auto"><table><thead><tr><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Telefon</th><th>Status</th></tr></thead><tbody>${list.slice(0,80).map(c=>`<tr><td>${esc(c.firma)}</td><td>${esc(c.ansprechpartner)||'<span class="danger-text">fehlt</span>'}</td><td>${esc(c.plz)} ${esc(c.ort)}</td><td>${esc(c.telefon)}</td><td>${validateCustomer(c).length?'<span class="pill bad">Unvollständig</span>':'<span class="pill ok">Bereit</span>'}</td></tr>`).join('')}</tbody></table></div><div class="toolbar" style="margin-top:12px"><button class="btn ok" onclick="commitImport()">${list.length} Kontakte importieren</button></div>`;window.pendingImport=list;}
 function importCsvText(){const list=parseCsv($('csvText').value);previewImport(list)}
 function handleCsvFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{ $('csvText').value=r.result; previewImport(parseCsv(r.result));};r.readAsText(f,'utf-8');}
 function commitImport(){const list=window.pendingImport||[];list.forEach(c=>{c.status=validateCustomer(c).length?'Unvollständig':'Bereit für Kampagne';});state.customers=[...list,...state.customers];save();window.pendingImport=[];renderAll();$('importPreview').innerHTML=`<div class="alert ok">${list.length} Kontakte importiert.</div>`;}
 function loadSampleCsv(){$('csvText').value='Firma,Ansprechpartner,Strasse,PLZ,Ort,Telefon,Email,Website,Branche,Notiz\nMetzgerei Müller GmbH,Herr Thomas Müller,Musterstraße 12,09111,Chemnitz,0371 123456,info@mueller.de,www.mueller.de,Metzgerei,Interesse Schneidtechnik\nFleischerei Beispiel,,Hauptstraße 8,09599,Freiberg,03731 000000,,,Fleischerei,Ansprechpartner fehlt';importCsvText();}
+
+function modalCustomerDraft(){return {firma:$('cFirma')?.value.trim()||'',ansprechpartner:$('cAnsprechpartner')?.value.trim()||'',strasse:$('cStrasse')?.value.trim()||'',plz:$('cPlz')?.value.trim()||'',ort:$('cOrt')?.value.trim()||'',telefon:$('cTelefon')?.value.trim()||'',email:$('cEmail')?.value.trim()||'',website:$('cWebsite')?.value.trim()||'',branche:$('cBranche')?.value.trim()||'',quelle:$('cQuelle')?.value.trim()||'Manuell',status:$('cStatus')?.value||'Recherche offen',adFocus:$('cAdFocus')?.value||'full',notiz:$('cNotiz')?.value.trim()||''};}
+function customerSearchQuery(c,mode='google'){const parts=[c.firma,c.branche,c.plz,c.ort].filter(Boolean);if(mode==='impressum')parts.push('Impressum Geschäftsführer Inhaber Telefon');return parts.join(' ').trim()||'Metzgerei';}
+function openGoogleForCustomer(id){const c=state.customers.find(x=>x.id===id);if(!c)return;window.open('https://www.google.com/search?q='+encodeURIComponent(customerSearchQuery(c,'impressum')),'_blank','noopener');}
+function openGoogleForCurrentCustomer(){const c=modalCustomerDraft();window.open('https://www.google.com/search?q='+encodeURIComponent(customerSearchQuery(c,'impressum')),'_blank','noopener');}
+function openMapsForCurrentCustomer(){const c=modalCustomerDraft();window.open('https://www.google.com/maps/search/'+encodeURIComponent(customerSearchQuery(c,'maps')),'_blank','noopener');}
+function normalizeUrl(u){u=String(u||'').trim();if(!u)return '';if(!/^https?:\/\//i.test(u))u='https://'+u;return u;}
+function openWebsiteForCurrentCustomer(){const u=normalizeUrl($('cWebsite')?.value);if(!u){alert('Noch keine Website eingetragen. Erst Google/Maps nutzen oder Website eintragen.');return}window.open(u,'_blank','noopener');}
+function openWebsiteImportModal(){if(!$('customerModal').classList.contains('active'))return;$('websiteRawText').value='';$('websiteImportPreview').innerHTML='<div class="empty">Noch keine Daten erkannt.</div>';$('websiteImportModal').classList.add('active');}
+function closeWebsiteImportModal(){$('websiteImportModal').classList.remove('active')}
+function clearWebsiteImport(){$('websiteRawText').value='';$('websiteImportPreview').innerHTML='<div class="empty">Noch keine Daten erkannt.</div>';}
+function cleanPhone(s){return String(s||'').replace(/\s+/g,' ').replace(/^[^+0-9]*/,'').trim();}
+function cleanLine(s){return String(s||'').replace(/\s+/g,' ').replace(/[|•·]+/g,' ').trim();}
+function extractWebsiteData(text){
+  const raw=String(text||'').replace(/\r/g,'');
+  const compact=raw.replace(/[\t ]+/g,' ');
+  const lines=raw.split('\n').map(cleanLine).filter(Boolean);
+  const data={};
+  const email=(compact.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[])[0];if(email)data.email=email;
+  const web=(compact.match(/https?:\/\/[^\s<>"']+|www\.[^\s<>"']+/i)||[])[0];if(web)data.website=web.replace(/[),.;]+$/,'');
+  const telLine=lines.find(l=>/(telefon|tel\.?|fon|phone|mobil|mobile)/i.test(l)&&/(\+?\d[\d\s\/().-]{5,})/.test(l));
+  const telMatch=(telLine||compact).match(/(?:telefon|tel\.?|fon|phone|mobil|mobile)?\s*[:\-]?\s*(\+?\d[\d\s\/().-]{6,}\d)/i);if(telMatch)data.telefon=cleanPhone(telMatch[1]);
+  const personKeywords=/(geschäftsführer|geschaeftsfuehrer|geschäftsführerin|geschaeftsfuehrerin|inhaber|inhaberin|vertretungsberechtigt|vertreten durch|ansprechpartner|kontakt)/i;
+  const personLine=lines.find(l=>personKeywords.test(l)&&/[A-ZÄÖÜ][a-zäöüß]+\s+[A-ZÄÖÜ][a-zäöüß]+/.test(l));
+  if(personLine){
+    let p=personLine.replace(/.*?(geschäftsführer|geschaeftsfuehrer|geschäftsführerin|geschaeftsfuehrerin|inhaberin|inhaber|vertretungsberechtigt|vertreten durch|ansprechpartner|kontakt)\s*[:\-]?\s*/i,'').replace(/\b(GmbH|UG|KG|OHG|e\.K\.|eK|HRB|Amtsgericht|USt|Register).*$/i,'').trim();
+    const pm=p.match(/(?:Herr|Frau)?\s*[A-ZÄÖÜ][a-zäöüß]+(?:\s+[A-ZÄÖÜ][a-zäöüß]+){1,3}/);
+    if(pm)data.ansprechpartner=/^(Herr|Frau)\b/i.test(pm[0].trim())?pm[0].trim():'Herr/Frau '+pm[0].trim();
+  }
+  const streetLine=lines.find(l=>/\b(str\.?|straße|strasse|weg|gasse|platz|allee|ring|damm|chaussee|markt)\b/i.test(l)&&/\d/.test(l));
+  if(streetLine)data.strasse=streetLine.replace(/^(adresse|anschrift|sitz)\s*[:\-]?\s*/i,'').replace(/,?\s*\d{5}.*$/,'').trim();
+  const zipLine=lines.find(l=>/\b\d{5}\b/.test(l));
+  if(zipLine){const zm=zipLine.match(/\b(\d{5})\b\s*([A-ZÄÖÜ][A-Za-zÄÖÜäöüß\- ]{2,})?/);if(zm){data.plz=zm[1];if(zm[2])data.ort=zm[2].replace(/\bDeutschland\b|Germany/ig,'').trim();}}
+  if(!data.plz){const zm=compact.match(/\b(\d{5})\b\s*([A-ZÄÖÜ][A-Za-zÄÖÜäöüß\- ]{2,})/);if(zm){data.plz=zm[1];data.ort=zm[2].replace(/\bDeutschland\b|Germany/ig,'').trim();}}
+  const firmaLine=lines.find(l=>/(GmbH|UG|KG|OHG|e\.K\.|Fleischerei|Metzgerei|Räucherei|Partyservice|Catering|Lebensmittel|Manufaktur)/i.test(l)&&l.length<100&&!/(telefon|email|@|http|datenschutz)/i.test(l));
+  if(firmaLine)data.firma=firmaLine.replace(/^(impressum|anbieter|firma)\s*[:\-]?\s*/i,'').trim();
+  return data;
+}
+let lastWebsiteExtract={};
+function previewWebsiteImport(){lastWebsiteExtract=extractWebsiteData($('websiteRawText').value);const fields=[['firma','Firma'],['ansprechpartner','Ansprechpartner'],['strasse','Straße'],['plz','PLZ'],['ort','Ort'],['telefon','Telefon'],['email','E-Mail'],['website','Website']];const rows=fields.map(([k,l])=>`<tr><th>${esc(l)}</th><td>${esc(lastWebsiteExtract[k]||'—')}</td></tr>`).join('');const missing=!lastWebsiteExtract.ansprechpartner?'<div class="alert bad" style="margin-top:10px">Kein Ansprechpartner erkannt. Für die Kampagne bleibt der Kontakt gesperrt, bis Inhaber/Geschäftsführung/Ansprechpartner manuell eingetragen ist.</div>':'';$('websiteImportPreview').innerHTML=`<table>${rows}</table>${missing}`;}
+function applyWebsiteImport(){if(!Object.keys(lastWebsiteExtract).length)previewWebsiteImport();const map={firma:'cFirma',ansprechpartner:'cAnsprechpartner',strasse:'cStrasse',plz:'cPlz',ort:'cOrt',telefon:'cTelefon',email:'cEmail',website:'cWebsite'};Object.entries(map).forEach(([k,id])=>{if(lastWebsiteExtract[k])$(id).value=lastWebsiteExtract[k];});const note=$('cNotiz').value.trim();const add='Daten aus Website/Impressum übernommen und geprüft werden.';$('cNotiz').value=[note,add].filter(Boolean).join('\n');$('cQuelle').value='Website / Google-Recherche';closeWebsiteImportModal();const issues=validateCustomer(modalCustomerDraft());$('customerValidation').innerHTML=issues.length?`<div class="alert bad">${issues.map(esc).join(' · ')}. Erst vervollständigen, dann Kampagne möglich.</div>`:'<div class="alert ok">Kontakt ist vollständig und kampagnenfähig.</div>';}
 function renderSearchLinks(){const branch=$('rBranch').value.trim();const city=$('rCity').value.trim();const plz=$('rPlz').value.trim();const extra=$('rExtra').value.trim();const q=[branch,city,plz,extra].filter(Boolean).join(' ');const enc=encodeURIComponent(q);const queries=[['Google Suche',`https://www.google.com/search?q=${enc}`],['Google Maps',`https://www.google.com/maps/search/${enc}`],['Impressum suchen',`https://www.google.com/search?q=${encodeURIComponent(q+' Impressum Geschäftsführer Inhaber')}`],['Telefon / Ansprechpartner',`https://www.google.com/search?q=${encodeURIComponent(q+' Telefon Ansprechpartner')}`],['Branche + PLZ',`https://www.google.com/search?q=${encodeURIComponent(branch+' '+plz+' '+city)}`],['Website-Liste',`https://www.google.com/search?q=${encodeURIComponent(branch+' '+city+' Website')}`]];$('searchLinks').innerHTML=queries.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)}<br><span class="mini muted">${esc(q)}</span></a>`).join('');}
 function campaignPool(){const plz=$('campPlz').value.trim();const br=$('campBranch').value;return state.customers.filter(c=>isReady(c)&&(!plz||String(c.plz||'').startsWith(plz))&&(!br||c.branche===br));}
 function renderCampaignSelection(){if(!$('campaignSelection'))return;const pool=campaignPool();pool.forEach(c=>{if(!selectedCampaignIds.size)selectedCampaignIds.add(c.id)});selectedCampaignIds=new Set([...selectedCampaignIds].filter(id=>pool.some(c=>c.id===id)));const blocked=state.customers.filter(c=>!isReady(c)).length;const campName=$('campaignName');if(campName&&!campName.value){const plz=$('campPlz')?.value||'';const l=LETTERS[$('letterType')?.value||'intro'];campName.value=`${l?l.name.split('·').pop().trim():'Kampagne'} ${plz?'PLZ '+plz:''} ${today()}`.trim();}$('campaignInfo').innerHTML=`<div class="taglist"><span class="pill ok">${pool.length} kampagnenfähig</span><span class="pill bad">${blocked} gesperrt/unvollständig</span><span class="pill dark">${selectedCampaignIds.size} ausgewählt</span><span class="pill red">Werbeimpuls Pflicht</span></div>`;$('campaignSelection').innerHTML=pool.length?`<table><thead><tr><th><input type="checkbox" ${selectedCampaignIds.size===pool.length?'checked':''} onchange="toggleAllCampaign(this.checked)"></th><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Briefhistorie</th></tr></thead><tbody>${pool.map(c=>`<tr><td><input type="checkbox" ${selectedCampaignIds.has(c.id)?'checked':''} onchange="toggleCampaignId('${c.id}',this.checked)"></td><td><b>${esc(c.firma)}</b><br><span class="mini muted">${esc(c.branche)}</span></td><td>${esc(c.ansprechpartner)}</td><td>${esc(c.strasse)}<br>${esc(c.plz)} ${esc(c.ort)}</td><td><span class="mini">${esc(c.lastBrief||'noch kein Brief')}</span><br><span class="mini muted">${esc(c.lastSent||'')}</span></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Keine kampagnenfähigen Kunden im gewählten Filter. Prüfe Ansprechpartner und Pflichtfelder.</div>';}
