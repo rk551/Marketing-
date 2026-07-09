@@ -1,306 +1,376 @@
 <!doctype html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BLOC73 Akquise-App · Serienbriefe & Nachtelefonie</title>
-<style>
-:root{--navy:#061b33;--blue:#0b63b6;--red:#b4171f;--ink:#111827;--muted:#667085;--line:#d4dce7;--bg:#f4f7fb;--ok:#087443;--warn:#b54708;--bad:#b42318;--soft:#eef5fb;--white:#fff;}
-*{box-sizing:border-box}
-body{margin:0;font-family:Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(90deg,rgba(255,255,255,.94),rgba(255,255,255,.82)),repeating-linear-gradient(90deg,#d1d7df 0,#f9fafb 2px,#b9c2ce 4px,#eef2f7 8px);min-height:100vh}
-.app{display:grid;grid-template-columns:284px minmax(0,1fr);min-height:100vh}
-aside{background:linear-gradient(180deg,#061b33,#082c50 58%,#041426);color:white;padding:20px 15px;position:sticky;top:0;height:100vh;overflow:auto}
-.brand{border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:16px;background:rgba(255,255,255,.06);margin-bottom:14px}
-.brand .as{font-size:36px;font-weight:950;color:#45b7ff;letter-spacing:-2px;line-height:1}
-.brand .sub{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#dce8f6;margin-top:4px}
-.brand .bloc{font-size:22px;font-weight:950;margin-top:12px;line-height:1}
-.brand .bloc span{color:#ff3442}
-nav button{display:block;width:100%;border:0;background:transparent;color:#dbeafe;padding:12px 13px;border-radius:13px;text-align:left;font-weight:850;cursor:pointer;margin:3px 0;font-size:14px}
-nav button.active,nav button:hover{background:linear-gradient(90deg,#0878d8,#063a70)}
-.sidebox{font-size:12px;line-height:1.45;color:#c8d7e8;margin-top:18px;border-top:1px solid rgba(255,255,255,.18);padding-top:14px}
-main{padding:26px;min-width:0}
-.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}
-.top h1{margin:0;color:var(--navy);font-size:30px}
-.top p{margin:6px 0 0;color:#475467}
-.actions,.toolbar{display:flex;gap:9px;flex-wrap:wrap;align-items:flex-end}
-.btn{border:0;border-radius:12px;padding:10px 13px;font-weight:850;cursor:pointer;background:linear-gradient(90deg,var(--blue),#0a7bd1);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;justify-content:center}
-.btn.secondary{background:#fff;color:var(--navy);border:1px solid var(--line)}
-.btn.danger{background:linear-gradient(90deg,#991b1b,#dc2626)}
-.btn.ok{background:linear-gradient(90deg,#047857,#0f766e)}
-.btn.warn{background:linear-gradient(90deg,#b45309,#f59e0b)}
-.btn.small{font-size:12px;padding:7px 9px;border-radius:9px}
-.btn:disabled{opacity:.45;cursor:not-allowed}
-.view{display:none}.view.active{display:block}
-.card{background:rgba(255,255,255,.95);border:1px solid rgba(200,212,225,.9);border-radius:18px;padding:17px;box-shadow:0 14px 34px rgba(2,8,23,.12);margin-bottom:16px}
-.card h2{margin:0 0 12px;color:var(--navy);font-size:20px}
-.card h3{margin:0 0 10px;color:var(--navy)}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.metric{font-size:34px;font-weight:950;color:var(--blue)}.metric-label{font-size:13px;color:#475467;font-weight:750}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}.wide-split{display:grid;grid-template-columns:420px 1fr;gap:16px;align-items:start}
-.field{display:flex;flex-direction:column;gap:5px;min-width:150px;flex:1}
-.field label{font-size:12px;text-transform:uppercase;letter-spacing:.05em;font-weight:900;color:#334155}
-input,select,textarea{border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit;background:white;color:var(--ink);width:100%}
-textarea{min-height:110px;resize:vertical}
-table{width:100%;border-collapse:collapse;background:white;border-radius:14px;overflow:hidden}
-th,td{border-bottom:1px solid #e6edf5;text-align:left;padding:10px;font-size:13px;vertical-align:top}
-th{background:#eef5fb;color:#0f2742;text-transform:uppercase;font-size:11px;letter-spacing:.05em}
-tr:hover td{background:#fafcff}
-.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:12px;font-weight:850;border:1px solid transparent}
-.pill.ok{background:#e7f8ef;color:#067647;border-color:#b7ebcf}
-.pill.bad{background:#fff1f0;color:#b42318;border-color:#fecdc9}
-.pill.warn{background:#fff7e8;color:#b54708;border-color:#fedf89}
-.pill.blue{background:#e9f3ff;color:#0b63b6;border-color:#bfdcff}
-.alert{border-radius:14px;padding:11px 13px;margin:8px 0;font-weight:650;font-size:13px;line-height:1.42}
-.alert.blue{background:#e9f3ff;border:1px solid #bfdcff;color:#073763}
-.alert.bad{background:#fff1f0;border:1px solid #fecdc9;color:#912018}
-.alert.ok{background:#e7f8ef;border:1px solid #b7ebcf;color:#075e3b}
-.empty{border:1px dashed #cbd5e1;border-radius:14px;padding:16px;text-align:center;color:#667085;background:#fff}
-.mini{font-size:12px;color:#667085}
-.search-links a{display:inline-flex;margin:6px 8px 6px 0}
-.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.quick-card{border:1px solid #d8e3ef;border-radius:16px;background:#fff;padding:14px}
-.quick-card b{color:var(--navy)}
-.modal{position:fixed;inset:0;background:rgba(2,8,23,.55);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:22px;overflow:auto}
-.modal.active{display:flex}
-.dialog{background:white;border-radius:20px;box-shadow:0 24px 80px rgba(0,0,0,.35);width:min(1120px,100%);padding:18px}
-.dialog-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #e6edf5;padding-bottom:12px;margin-bottom:12px}
-.dialog-head h2{margin:0;color:var(--navy)}
-.x{border:0;background:#eef2f7;width:38px;height:38px;border-radius:50%;font-size:24px;cursor:pointer;color:#0f2742}
-.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.form-grid .span2{grid-column:span 2}.form-grid .span4{grid-column:span 4}
-.preview{background:#fff;border:1px solid #d8e3ef;border-radius:14px;padding:12px;max-height:410px;overflow:auto}
-
-.print-wrap{display:none}
-.letter{width:210mm;height:297mm;background:#fff;margin:0 auto 14px;padding:12mm 15mm 12mm;font-family:Arial,Helvetica,sans-serif;color:#111827;position:relative;page-break-after:always;border:1px solid #e5e7eb;overflow:hidden}
-.letter:last-child{page-break-after:auto;break-after:auto}
-.letter:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(248,250,252,.94),rgba(255,255,255,.98)),repeating-linear-gradient(90deg,#dbe2ea 0,#f8fafc 2px,#c8d1dc 4px,#eef2f7 8px);opacity:.28;z-index:0;pointer-events:none}
-.letter>*{position:relative;z-index:1}
-.letter-top{height:31mm;background:linear-gradient(135deg,#061b33 0%,#0b335f 72%,#092641 100%);border-radius:3mm;padding:6mm 7mm;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:7mm;box-shadow:0 4px 18px rgba(6,27,51,.18);margin-bottom:4.5mm}
-.letter-brand{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:5mm;min-width:0}
-.mark-as{font-size:34px;line-height:.82;font-weight:950;letter-spacing:-2px;color:#37a7ef}
-.mark-sub{font-size:8px;letter-spacing:1.9px;text-transform:uppercase;font-weight:800;color:#d7e7f6;margin-top:1mm;white-space:nowrap}
-.mark-bloc{font-size:20px;line-height:1;font-weight:950;letter-spacing:.5px;color:#f8fafc;text-transform:uppercase;white-space:nowrap}
-.mark-bloc span{display:block;color:#d71920;font-size:17px;letter-spacing:1px;margin-top:1mm}
-.top-divider{width:1px;height:20mm;background:rgba(255,255,255,.28)}
-.letter-contact{font-size:9.2px;line-height:1.42;text-align:right;color:#eaf2fb;min-width:54mm}
-.letter-contact b{font-size:10.6px;color:#fff}
-.sender-line{font-size:8px;color:#475467;border-bottom:1px solid #c9d6e4;padding-bottom:1.6mm;margin:0 0 4.6mm;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.addr-date{display:flex;justify-content:space-between;gap:14mm;margin-bottom:6.5mm}
-.recipient{font-size:10.5px;line-height:1.33;min-height:25mm;width:82mm}
-.date{font-size:10px;color:#334155;text-align:right;white-space:nowrap;padding-top:1mm}
-.subject{font-size:14.2px;line-height:1.18;font-weight:950;color:#061b33;margin:0 0 4.5mm;padding-bottom:2.1mm;border-bottom:2px solid #0b63b6}
-.body{font-size:10.45px;line-height:1.38;color:#1f2937;padding-bottom:29mm}
-.body p{margin:0 0 2.55mm}
-.focus-box{margin:4.1mm 0;border:1px solid #bfd0e3;border-top:3px solid #0b63b6;border-radius:2.3mm;padding:3.2mm 3.6mm;background:rgba(255,255,255,.92);box-shadow:0 5px 14px rgba(15,39,66,.06)}
-.focus-box h3{font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin:0 0 2.4mm;color:#061b33}
-.focus-intro{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm}
-.focus-item{border-left:2px solid #0b63b6;background:#f8fbff;border-radius:1.7mm;padding:2.2mm 2.3mm;min-height:13mm}
-.focus-item b{display:block;color:#061b33;font-size:9.4px;margin-bottom:.7mm}
-.focus-item span{display:block;color:#334155;font-size:8.35px;line-height:1.25}
-.brand-strip{margin-top:2.7mm;padding-top:2.3mm;border-top:1px solid #d7e1ed;font-size:8.8px;color:#0f2742;font-weight:850;line-height:1.35}
-.core-grid{display:grid;grid-template-columns:1fr 1fr;gap:2.5mm;margin-top:1mm}
-.core-card{border-left:2.4px solid #0b63b6;background:#fff;padding:2.4mm 2.7mm;border-radius:1.8mm;font-size:9px;line-height:1.32;box-shadow:0 2px 7px rgba(15,39,66,.06)}
-.core-card b{display:block;color:#061b33;margin-bottom:.8mm;font-size:9.4px}
-.signature{margin-top:5.5mm;font-size:10.6px;line-height:1.35}
-.signature p{margin-bottom:2.2mm}
-.cta{position:absolute;left:15mm;right:15mm;bottom:12mm;min-height:24mm;border-radius:2.8mm;background:linear-gradient(135deg,#061b33,#082c50);color:#fff;padding:4mm 5mm;display:flex;gap:4.5mm;align-items:center;box-shadow:0 5px 18px rgba(6,27,51,.22)}
-.qr{width:18mm;height:18mm;border:1px solid rgba(255,255,255,.55);border-radius:2mm;object-fit:contain;background:#fff;padding:.8mm;flex:0 0 auto}
-.cta-title{font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.05em;color:#fff;margin-bottom:1mm}
-.cta-text{font-size:9.1px;color:#e8f2fb;line-height:1.3}.cta-text b{color:#fff}
-.no-print-note{margin-top:10px}
-
-@media(max-width:1050px){.app{grid-template-columns:1fr}aside{position:relative;height:auto}.cards{grid-template-columns:repeat(2,1fr)}.split,.wide-split{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.form-grid .span2,.form-grid .span4{grid-column:span 1}}
-@media print{
-  @page{size:A4;margin:0}
-  body{background:white!important}
-  aside,main,.modal{display:none!important}
-  .print-wrap{display:block!important}
-  .letter{border:0;margin:0;box-shadow:none;width:210mm;height:297mm;min-height:297mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .letter:last-child{page-break-after:auto;break-after:auto}
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BLOC73 Akquise-App · Serienbriefe & Nachtelefonie</title>
+  <style>
+    :root{
+      --navy:#061b33;--blue:#0b5fae;--blue2:#0a7bd1;--red:#b4171f;--ink:#0b1422;--muted:#64748b;
+      --line:#d7e0ea;--paper:#f8fafc;--ok:#0f766e;--warn:#b45309;--bad:#b91c1c;--soft:#eef5fb;
+      --shadow:0 16px 40px rgba(2,8,23,.16);--radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:
+      linear-gradient(90deg,rgba(255,255,255,.85),rgba(255,255,255,.45),rgba(255,255,255,.85)),
+      repeating-linear-gradient(90deg,#cfd6de 0,#f7f9fb 2px,#b7c0cb 4px,#edf2f7 7px);min-height:100vh}
+    .app{display:grid;grid-template-columns:280px 1fr;min-height:100vh}
+    aside{background:linear-gradient(180deg,#05182e,#092744 52%,#041426);color:#fff;padding:24px 18px;position:sticky;top:0;height:100vh;box-shadow:8px 0 30px rgba(0,0,0,.18)}
+    .brand{border:1px solid rgba(255,255,255,.17);border-radius:22px;padding:18px 16px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.03));margin-bottom:18px}
+    .brand .as{font-size:34px;font-weight:950;letter-spacing:-2px;color:#56b8ff;line-height:1}.brand .sub{font-size:12px;text-transform:uppercase;letter-spacing:2.2px;color:#c8d7e8;margin-top:6px}.brand .bloc{font-size:23px;font-weight:900;margin-top:16px;letter-spacing:1px}.brand .mach{color:#ff3240;font-weight:950}
+    nav button{display:flex;width:100%;align-items:center;gap:10px;border:0;border-radius:14px;background:transparent;color:#dbeafe;padding:13px 13px;margin:4px 0;font-weight:750;cursor:pointer;text-align:left;font-size:14px}nav button:hover{background:rgba(255,255,255,.09)}nav button.active{background:linear-gradient(90deg,#0878d8,#063a70);color:#fff;box-shadow:inset 3px 0 0 #fff}
+    .side-note{font-size:12px;color:#b7c9de;line-height:1.45;margin-top:22px;border-top:1px solid rgba(255,255,255,.18);padding-top:16px}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;font-size:12px;font-weight:800;background:#eaf5ff;color:#064a83;border:1px solid #c7e2fb}.pill.ok{background:#ecfdf5;color:#0f766e;border-color:#b7ebd3}.pill.warn{background:#fff7ed;color:#b45309;border-color:#fed7aa}.pill.bad{background:#fef2f2;color:#b91c1c;border-color:#fecaca}.pill.dark{background:#0b2440;color:#fff;border-color:#1f5b96}.pill.red{background:#fef2f2;color:#b4171f;border-color:#fecaca}
+    main{padding:28px;min-width:0}.topbar{display:flex;justify-content:space-between;align-items:flex-start;gap:18px;margin-bottom:20px}.title h1{margin:0;font-size:30px;letter-spacing:-.8px;color:#061b33}.title p{margin:7px 0 0;color:#526176;max-width:820px;line-height:1.45}.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}.btn{border:0;border-radius:12px;padding:11px 14px;font-weight:850;cursor:pointer;color:#fff;background:linear-gradient(90deg,var(--blue),#0b87df);box-shadow:0 6px 18px rgba(11,95,174,.22)}.btn:hover{filter:brightness(1.05)}.btn.secondary{background:#fff;color:var(--navy);border:1px solid var(--line);box-shadow:none}.btn.danger{background:linear-gradient(90deg,#991b1b,#dc2626)}.btn.ok{background:linear-gradient(90deg,#047857,#0f766e)}.btn.warn{background:linear-gradient(90deg,#b45309,#f59e0b)}.btn.small{padding:7px 9px;border-radius:9px;font-size:12px}.btn:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.3)}
+    section.view{display:none}section.view.active{display:block}.grid{display:grid;gap:16px}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.card{background:rgba(255,255,255,.88);border:1px solid rgba(200,212,225,.78);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;backdrop-filter:blur(8px)}.metric{font-size:34px;font-weight:950;letter-spacing:-1px;color:#061b33}.metric-label{color:#526176;font-weight:750;font-size:13px;margin-top:3px}.card h2,.card h3{margin:0 0 12px;color:#061b33}.card h2{font-size:22px}.card h3{font-size:17px}.split{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;font-weight:850;color:#334155;text-transform:uppercase;letter-spacing:.6px}.field input,.field select,.field textarea{width:100%;border:1px solid #cbd5e1;background:#fff;border-radius:12px;padding:10px 11px;font:inherit;color:#0f172a;outline:none}.field textarea{min-height:92px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:#0b7bd0;box-shadow:0 0 0 3px rgba(11,123,208,.12)}.field.required label::after{content:" *";color:#b91c1c}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.toolbar .field{min-width:180px;flex:1}.muted{color:#64748b}.note{font-size:13px;line-height:1.45;color:#4b5563}.alert{border-radius:14px;padding:12px 14px;border:1px solid #fed7aa;background:#fff7ed;color:#92400e;font-weight:750}.alert.bad{border-color:#fecaca;background:#fef2f2;color:#991b1b}.alert.ok{border-color:#bbf7d0;background:#f0fdf4;color:#166534}.alert.blue{border-color:#bfdbfe;background:#eff6ff;color:#1e3a8a}
+    table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;font-size:13px}th,td{padding:10px 11px;border-bottom:1px solid #e7edf4;vertical-align:top;text-align:left}th{background:#edf4fb;color:#0f2f50;font-size:12px;text-transform:uppercase;letter-spacing:.5px}tr:last-child td{border-bottom:0}tr:hover td{background:#f8fbff}.nowrap{white-space:nowrap}.right{text-align:right}.customer-name{font-weight:900;color:#061b33}.danger-text{color:#b91c1c;font-weight:850}.ok-text{color:#0f766e;font-weight:850}.warn-text{color:#b45309;font-weight:850}.taglist{display:flex;flex-wrap:wrap;gap:6px}.empty{padding:28px;border:2px dashed #cbd5e1;border-radius:18px;text-align:center;color:#64748b;background:rgba(255,255,255,.75)}
+    .modal{position:fixed;inset:0;background:rgba(2,6,23,.60);display:none;align-items:center;justify-content:center;z-index:50;padding:22px}.modal.active{display:flex}.modal-panel{background:#fff;border-radius:22px;box-shadow:0 30px 80px rgba(0,0,0,.35);width:min(1080px,96vw);max-height:92vh;overflow:auto;padding:22px}.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px}.modal-head h2{margin:0;color:#061b33}.x{border:0;background:#f1f5f9;border-radius:12px;width:38px;height:38px;font-weight:900;cursor:pointer}
+    .letter-preview{display:none}.search-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.search-links a{display:block;text-decoration:none;color:#083a70;background:#f8fbff;border:1px solid #cfe0f1;border-radius:14px;padding:12px;font-weight:850}.history-item{border-left:4px solid #0b72c6;padding:8px 0 8px 12px;margin:9px 0;background:#f8fbff;border-radius:0 12px 12px 0}.mini{font-size:12px}.kbd{font-family:ui-monospace,Menlo,monospace;background:#f1f5f9;border:1px solid #cbd5e1;border-bottom-width:2px;border-radius:7px;padding:2px 6px}.footerline{margin-top:18px;color:#64748b;font-size:12px}
+    @media(max-width:1100px){.app{grid-template-columns:1fr}aside{height:auto;position:relative}.cards,.three{grid-template-columns:repeat(2,minmax(0,1fr))}.split,.two{grid-template-columns:1fr}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.topbar{flex-direction:column}.actions{justify-content:flex-start}}
+    @media(max-width:700px){main{padding:16px}.cards,.three,.form-grid{grid-template-columns:1fr}.search-links{grid-template-columns:1fr}table{font-size:12px;display:block;overflow:auto}.brand .as{font-size:28px}}
+    @media print{
+      body{background:#fff!important}.app,aside,main,.modal{display:none!important}.letter-preview{display:block!important}.print-page{width:210mm;height:297mm;page-break-after:always;position:relative;overflow:hidden;background:#fff;color:#0b1422;font-family:Arial,Helvetica,sans-serif}.print-page:last-child{page-break-after:auto}.print-bg{position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(255,255,255,.72),rgba(255,255,255,.92)),repeating-linear-gradient(90deg,#cfd6de 0,#f7f9fb 1px,#b7c0cb 3px,#edf2f7 6px);z-index:0}.letter-inner{position:relative;z-index:1;padding:17mm 18mm 12mm}.letter-top{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #0b5fae;padding-bottom:7mm}.letter-logo .as{font-size:34px;font-weight:900;letter-spacing:-2px;color:#0674c9}.letter-logo .sub{font-size:10px;letter-spacing:2px;color:#1e3a5f;text-transform:uppercase}.letter-logo .bloc{font-size:18px;font-weight:900;margin-top:2mm}.letter-logo .bloc span{color:#b4171f}.sender{font-size:8.5pt;color:#526176;margin-top:6mm}.addr{font-size:10.3pt;line-height:1.35;margin-top:6mm;min-height:24mm}.date{float:right;font-size:9pt;color:#334155}.subject{clear:both;font-size:13.5pt;font-weight:900;color:#061b33;margin:6mm 0 4mm;text-transform:none}.bodytext{font-size:10.1pt;line-height:1.43}.bodytext p{margin:0 0 3.8mm}.adbox{margin-top:5mm;border:1.4pt solid #0b5fae;border-left:6pt solid #b4171f;border-radius:3mm;background:rgba(255,255,255,.74);padding:4mm 5mm}.adtitle{font-size:10.5pt;color:#061b33;font-weight:900;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2mm}.adcols{display:grid;grid-template-columns:1fr 1fr;gap:5mm;font-size:9.2pt;line-height:1.32}.adcols ul{margin:0;padding-left:4mm}.cta{margin-top:5mm;display:grid;grid-template-columns:25mm 1fr;gap:5mm;align-items:center;background:linear-gradient(90deg,#061b33,#082f56);color:#fff;border-radius:3mm;padding:4mm 5mm;border:1pt solid #6687a8}.qr{width:25mm;height:25mm;background:#fff;border-radius:2mm;padding:1.8mm}.cta h3{margin:0 0 1mm;font-size:12pt;text-transform:uppercase;letter-spacing:.5px}.cta p{margin:0;font-size:9.3pt;line-height:1.35}.sign{margin-top:4.5mm;font-size:10.1pt;line-height:1.35}.letter-footer{position:absolute;left:18mm;right:18mm;bottom:9mm;border-top:1.2pt solid #0b5fae;padding-top:2mm;font-size:8.5pt;color:#0f2f50;display:flex;justify-content:space-between;gap:6mm}.page-note{position:absolute;right:8mm;top:50%;transform:rotate(90deg);transform-origin:right top;color:rgba(6,27,51,.10);font-size:48pt;font-weight:900;letter-spacing:4px}.no-print{display:none!important}@page{size:A4;margin:0}
+    }
+  </style>
 </head>
 <body>
 <div class="app">
-<aside>
-  <div class="brand"><div class="as">AS</div><div class="sub">Technical Solution</div><div class="bloc">BLOC73 <span>MACHINERY</span></div></div>
-  <nav>
-    <button class="active" data-go="dashboard">Dashboard</button>
-    <button data-go="customers">Kunden einfügen & bearbeiten</button>
-    <button data-go="import">CSV-Import</button>
-    <button data-go="research">Google / Impressum</button>
-    <button data-go="letters">Brieftexte & Kernpunkte</button>
-    <button data-go="campaigns">Serienbriefe</button>
-    <button data-go="calls">Nachtelefonie</button>
-    <button data-go="backup">Sicherung</button>
-  </nav>
-  <div class="sidebox"><b>Regel:</b><br>Kein Ansprechpartner = kein Brief. Schritt 1 ist die Vorstellung. Schritt 2 sind gezielte Kernpunkte. Interne Nachfassdaten stehen nie im Kundenbrief.</div>
-</aside>
-<main>
-  <div class="top"><div><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Akquise, PLZ-Gebiete, Impressum-Datenübernahme, Serienbriefe und Nachtelefonie.</p></div><div class="actions"><button class="btn secondary" id="topBackup">JSON-Sicherung</button><button class="btn secondary" id="topCsv">CSV Export</button><button class="btn" id="topNew">+ Kunde einfügen</button></div></div>
+  <aside>
+    <div class="brand">
+      <div class="as">AS</div>
+      <div class="sub">Technical Solution</div>
+      <div class="bloc">BLOC73 <span class="mach">MACHINERY</span></div>
+    </div>
+    <nav id="nav"></nav>
+    <div class="side-note">
+      <b>Grundregel:</b><br>
+      Kein Ansprechpartner = kein Serienbrief, keine Kampagne, keine Nachtelefonie. Jeder Brief enthält einen Werbeimpuls.
+    </div>
+  </aside>
+  <main>
+    <div class="topbar">
+      <div class="title">
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageDesc">BLOC73 Akquise-App für postalische Werbung, Serienbriefe, PLZ-Gebiete und Nachtelefonie.</p>
+      </div>
+      <div class="actions">
+        <button class="btn secondary" onclick="downloadBackup()">JSON-Sicherung</button>
+        <button class="btn secondary" onclick="exportCustomersCsv()">CSV Export</button>
+        <button class="btn" onclick="openCustomerModal()">+ Kunde</button>
+      </div>
+    </div>
 
-  <section class="view active" data-view="dashboard">
-    <div class="cards"><div class="card"><div class="metric" id="mTotal">0</div><div class="metric-label">Kunden gesamt</div></div><div class="card"><div class="metric" id="mReady">0</div><div class="metric-label">Kampagnenfähig</div></div><div class="card"><div class="metric" id="mBlocked">0</div><div class="metric-label">Gesperrt / unvollständig</div></div><div class="card"><div class="metric" id="mDue">0</div><div class="metric-label">Heute nachfassen</div></div></div>
-    <div class="card"><h2>Schnellzugriff</h2><div class="quick-grid"><div class="quick-card"><b>Kunde einfügen</b><p class="mini">Neuen Kontakt anlegen, Google öffnen oder Impressum einfügen.</p><button class="btn small" id="dashNew">+ Kunde einfügen</button></div><div class="quick-card"><b>Kunden bearbeiten</b><p class="mini">Kontakte filtern, vervollständigen und Ansprechpartner prüfen.</p><button class="btn small secondary" data-jump="customers">Kunden öffnen</button></div><div class="quick-card"><b>Serienbrief erstellen</b><p class="mini">PLZ-Gebiet wählen, Schritt 1 oder Schritt 2 auswählen und drucken.</p><button class="btn small secondary" data-jump="campaigns">Serienbriefe öffnen</button></div></div></div>
-    <div class="split"><div class="card"><h2>Heute nachtelefonieren</h2><div id="todayList" class="empty">Noch keine Daten.</div></div><div class="card"><h2>Arbeitsablauf</h2><div class="alert blue">1. Kunden über CSV importieren oder manuell einfügen.</div><div class="alert blue">2. Google/Website/Impressum nutzen und Daten automatisch übernehmen.</div><div class="alert blue">3. Erstanschreiben senden, danach telefonisch nachfassen und passende Kernpunkte in Schritt 2 versenden.</div></div></div>
-  </section>
+    <section class="view active" data-view="dashboard">
+      <div class="cards">
+        <div class="card"><div class="metric" id="mTotal">0</div><div class="metric-label">Kunden gesamt</div></div>
+        <div class="card"><div class="metric" id="mReady">0</div><div class="metric-label">kampagnenfähig</div></div>
+        <div class="card"><div class="metric" id="mBlocked">0</div><div class="metric-label">gesperrt / unvollständig</div></div>
+        <div class="card"><div class="metric" id="mCalls">0</div><div class="metric-label">Nachtelefonie fällig</div></div>
+      </div>
+      <div class="split" style="margin-top:16px">
+        <div class="card">
+          <h2>Akquise-Ablauf</h2>
+          <table>
+            <thead><tr><th>Schritt</th><th>Vertriebslogik</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td class="nowrap"><b>1. Daten</b></td><td>CSV importieren oder saubere Kontakte manuell aus Web-Recherche übernehmen.</td><td><span class="pill dark">Recherche</span></td></tr>
+              <tr><td class="nowrap"><b>2. Prüfung</b></td><td>Ansprechpartner, Adresse, PLZ, Telefon und Branche müssen vollständig sein.</td><td><span class="pill bad">Pflicht</span></td></tr>
+              <tr><td class="nowrap"><b>3. Kampagne</b></td><td>PLZ-Gebiet wählen, Briefart wählen, Werbeimpuls wählen, Serienbrief erzeugen.</td><td><span class="pill ok">Bereit</span></td></tr>
+              <tr><td class="nowrap"><b>4. Nachtelefonie</b></td><td>Nachfassdatum automatisch setzen, Gespräch dokumentieren, Lead oder Wiedervorlage erzeugen.</td><td><span class="pill warn">Follow-up</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="card">
+          <h2>Heute wichtig</h2>
+          <div id="todayList" class="grid"></div>
+        </div>
+      </div>
+    </section>
 
-  <section class="view" data-view="customers"><div class="card"><h2>Kunden einfügen & bearbeiten</h2><div class="toolbar"><button class="btn" id="btnNewCustomer">+ Kunde einfügen</button><button class="btn secondary" id="btnImportFromImprint">Impressum als neuer Kunde</button><div class="field"><label>Suche</label><input id="filterQ" placeholder="Firma, Ort, Telefon, Ansprechpartner"></div><div class="field"><label>PLZ beginnt mit</label><input id="filterPlz" placeholder="z. B. 09"></div><div class="field"><label>Status</label><select id="filterStatus"></select></div><div class="field"><label>Branche</label><select id="filterBranch"></select></div></div><div id="customerTable" style="margin-top:12px"></div></div></section>
+    <section class="view" data-view="customers">
+      <div class="card">
+        <h2>Kundenverwaltung</h2>
+        <div class="toolbar">
+          <div class="field"><label>Suche</label><input id="filterSearch" placeholder="Firma, Ort, Ansprechpartner, Telefon..." oninput="renderCustomers()"></div>
+          <div class="field"><label>PLZ beginnt</label><input id="filterPlz" placeholder="z. B. 09" oninput="renderCustomers()"></div>
+          <div class="field"><label>Status</label><select id="filterStatus" onchange="renderCustomers()"><option value="">Alle</option></select></div>
+          <div class="field"><label>Branche</label><select id="filterBranch" onchange="renderCustomers()"><option value="">Alle</option></select></div>
+        </div>
+        <div id="customerTable"></div>
+      </div>
+    </section>
 
-  <section class="view" data-view="import"><div class="card"><h2>CSV-Import</h2><div class="alert blue">CSV mit Semikolon oder Komma möglich. Ansprechpartner ist Pflicht. Fehlende Ansprechpartner werden importiert, aber gesperrt.</div><div class="toolbar"><input type="file" id="csvFile" accept=".csv,.txt"><button class="btn secondary" id="btnSampleCsv">Beispiel laden</button><button class="btn" id="btnPreviewCsv">Vorschau prüfen</button><button class="btn ok" id="btnImportCsv" disabled>Import übernehmen</button></div><textarea id="csvText" placeholder="Firma;Ansprechpartner;Strasse;PLZ;Ort;Telefon;Email;Website;Branche;Notiz"></textarea><div id="csvResult" style="margin-top:12px"></div></div></section>
+    <section class="view" data-view="import">
+      <div class="split">
+        <div class="card">
+          <h2>CSV-Import</h2>
+          <div class="alert blue">Importierte Kontakte ohne Ansprechpartner werden gespeichert, aber für Kampagnen gesperrt.</div>
+          <div class="field" style="margin-top:12px"><label>CSV-Datei</label><input type="file" id="csvFile" accept=".csv,text/csv" onchange="handleCsvFile(event)"></div>
+          <div class="field"><label>CSV direkt einfügen</label><textarea id="csvText" placeholder="Firma,Ansprechpartner,Strasse,PLZ,Ort,Telefon,Email,Website,Branche,Notiz"></textarea></div>
+          <button class="btn" onclick="importCsvText()">CSV einlesen</button>
+          <button class="btn secondary" onclick="loadSampleCsv()">Muster laden</button>
+        </div>
+        <div class="card">
+          <h2>Import-Vorschau</h2>
+          <div id="importPreview" class="empty">Noch keine CSV geladen.</div>
+        </div>
+      </div>
+    </section>
 
-  <section class="view" data-view="research"><div class="card"><h2>Google / Impressum</h2><div class="alert blue">Suche öffnen, Website oder Impressum kopieren, dann als neuen Kunden einfügen oder im Kundenfenster übernehmen.</div><div class="toolbar"><div class="field"><label>Branche</label><input id="rBranch" value="Metzgerei"></div><div class="field"><label>Ort</label><input id="rCity" value="Chemnitz"></div><div class="field"><label>PLZ</label><input id="rPlz" placeholder="z. B. 09111"></div><div class="field"><label>Zusatz</label><input id="rExtra" value="Impressum Geschäftsführer Inhaber Telefon"></div><button class="btn" id="btnSearchLinks">Suchlinks aktualisieren</button></div><div id="searchLinks" class="search-links"></div></div><div class="card"><h2>Impressum direkt einfügen</h2><textarea id="quickImprint" placeholder="Komplettes Impressum hier einfügen..."></textarea><div class="toolbar"><button class="btn" id="btnQuickExtract">Daten erkennen</button><button class="btn ok" id="btnQuickCreate" disabled>Als Kunden einfügen</button></div><div id="quickPreview" class="preview" style="margin-top:12px"><div class="empty">Noch keine Daten erkannt.</div></div></div></section>
+    <section class="view" data-view="research">
+      <div class="split">
+        <div class="card">
+          <h2>Web-Recherche</h2>
+          <p class="note">Die App öffnet gezielte Suchlinks. Die Übernahme bleibt bewusst manuell, damit die Kontakte sauber bleiben.</p>
+          <div class="form-grid">
+            <div class="field"><label>Branche / Suchbegriff</label><input id="rBranch" value="Metzgerei"></div>
+            <div class="field"><label>Ort</label><input id="rCity" value="Chemnitz"></div>
+            <div class="field"><label>PLZ / Gebiet</label><input id="rPlz" value="09"></div>
+            <div class="field"><label>Radius / Zusatz</label><input id="rExtra" placeholder="z. B. Lebensmittelproduktion"></div>
+          </div>
+          <div class="toolbar" style="margin-top:12px">
+            <button class="btn" onclick="renderSearchLinks()">Suchlinks erstellen</button>
+            <button class="btn secondary" onclick="openCustomerModal({quelle:'Web-Recherche',branche:document.getElementById('rBranch').value,plz:document.getElementById('rPlz').value,ort:document.getElementById('rCity').value,status:'Recherche offen'})">Kontakt manuell übernehmen</button>
+          </div>
+          <div id="searchLinks" class="search-links"></div>
+        </div>
+        <div class="card">
+          <h2>Qualitätsregel</h2>
+          <div class="alert bad">Kein Ansprechpartner = keine Kampagne. Bei Metzgereien/Fleischereien notfalls Inhaber/Geschäftsführung aus Impressum eintragen.</div>
+          <p class="note">Für postalische Werbung zählt Qualität. Ein personalisiertes Anschreiben mit Nachtelefonie ist stärker als 500 unklare Adressen.</p>
+        </div>
+      </div>
+    </section>
 
-  <section class="view" data-view="letters"><div class="wide-split"><div class="card"><h2>Brieftexte & Kernpunkte bearbeiten</h2><div class="field"><label>Vorlage</label><select id="tplSelect"></select></div><div class="toolbar" style="margin-top:10px"><button class="btn secondary" id="btnLoadTpl">Vorlage laden</button><button class="btn ok" id="btnSaveTpl">Änderung speichern</button><button class="btn danger" id="btnResetTpl">Standard wiederherstellen</button></div><div class="alert blue">Diese Texte sind die Grundlage für Schritt 1 und Schritt 2. Interne Begriffe werden nicht im Brief ausgegeben.</div></div><div class="card"><h2>Vorlage bearbeiten</h2><div class="form-grid"><div class="field span2"><label>Titel intern</label><input id="tplTitle"></div><div class="field span2"><label>Betreff im Brief</label><input id="tplSubject"></div><div class="field span4"><label>Text / Absätze / Karten</label><textarea id="tplText" style="min-height:280px"></textarea></div><div class="field span4"><label>Markenzeile</label><input id="tplBrand"></div></div></div></div></section>
+    <section class="view" data-view="campaigns">
+      <div class="card">
+        <h2>Serienbrief & Kampagne</h2>
+        <div class="alert blue">Jeder Brief bekommt zwingend einen Werbeimpuls. Ohne Ansprechpartner werden Kontakte automatisch ausgeschlossen.</div>
+        <div class="form-grid" style="margin-top:12px">
+          <div class="field"><label>PLZ beginnt</label><input id="campPlz" placeholder="z. B. 09" oninput="renderCampaignSelection()"></div>
+          <div class="field"><label>Branche</label><select id="campBranch" onchange="renderCampaignSelection()"><option value="">Alle Branchen</option></select></div>
+          <div class="field"><label>Briefart</label><select id="letterType" onchange="renderCampaignSelection()"></select></div>
+          <div class="field required"><label>Werbeimpuls</label><select id="adType" onchange="renderCampaignSelection()"></select></div>
+          <div class="field"><label>Nachfassen nach Werktagen</label><input id="followDays" type="number" min="1" max="30" value="7"></div>
+          <div class="field"><label>Kampagnenname</label><input id="campaignName" placeholder="z. B. PLZ 09 Vorstellung KW 29"></div>
+          <div class="field"><label>Ausgabe</label><select id="outputMode"><option value="print">Drucken / als PDF speichern</option></select></div>
+          <div class="field"><label>Aktion</label><button class="btn ok" onclick="generateLetters()">Serienbrief erzeugen</button></div>
+        </div>
+        <div id="campaignInfo" style="margin-top:12px"></div>
+        <div id="campaignSelection" style="margin-top:12px"></div>
+      </div>
+    </section>
 
-  <section class="view" data-view="campaigns"><div class="card"><h2>Serienbriefe</h2><div class="alert blue"><b>Druckhinweis:</b> Beim Speichern als PDF im Browser unbedingt „Kopf- und Fußzeilen“ deaktivieren und Ränder auf „Keine“ oder „Minimal“ stellen. Sonst druckt der Browser GitHub-URL, Datum und Seitenzahlen mit.</div><div class="toolbar"><div class="field"><label>Kampagne</label><input id="campName" placeholder="z. B. PLZ 09 Vorstellung KW 29"></div><div class="field"><label>PLZ beginnt mit</label><input id="campPlz" placeholder="z. B. 09"></div><div class="field"><label>Branche</label><select id="campBranch"></select></div><div class="field"><label>Dokumenttyp</label><select id="docType"><option value="intro">Schritt 1: Erstanschreiben</option><option value="core">Schritt 2: Kernpunkte</option></select></div><div class="field"><label>Vorlage</label><select id="letterType"></select></div><div class="field"><label>Nachfassen in Werktagen</label><input id="followDays" type="number" min="1" value="7"></div></div><div class="toolbar" style="margin-top:12px"><button class="btn" id="btnBuildLetters">Vorschau / Serienbrief erstellen</button><button class="btn ok" id="btnPrintLetters" disabled>PDF / Drucken</button><button class="btn secondary" id="btnMarkSent" disabled>Versand intern speichern</button></div><div id="campaignResult" style="margin-top:12px"></div></div><div class="card"><h2>Briefvorschau</h2><div id="letterPreview" class="preview"><div class="empty">Noch kein Serienbrief erstellt.</div></div></div></section>
+    <section class="view" data-view="calls">
+      <div class="card">
+        <h2>Nachtelefonie</h2>
+        <div class="toolbar">
+          <div class="field"><label>Ansicht</label><select id="callView" onchange="renderCalls()"><option value="due">Fällig</option><option value="all">Alle Nachfass-Kontakte</option><option value="interest">Interesse / Lead</option></select></div>
+          <div class="field"><label>Suche</label><input id="callSearch" oninput="renderCalls()" placeholder="Firma, Ort, Telefon..."></div>
+          <div class="field"><label>PLZ beginnt</label><input id="callPlz" oninput="renderCalls()" placeholder="z. B. 09"></div>
+        </div>
+        <div id="callsTable"></div>
+      </div>
+    </section>
 
-  <section class="view" data-view="calls"><div class="card"><h2>Nachtelefonie</h2><div class="toolbar"><div class="field"><label>Fällig bis</label><input id="callDate" type="date"></div><div class="field"><label>Status</label><select id="callStatus"><option value="">alle</option><option>Nachtelefonieren</option><option>Nicht erreicht</option><option>Rückruf</option><option>Interesse</option><option>Angebot</option><option>Termin</option><option>Kein Bedarf</option></select></div><button class="btn secondary" id="btnRefreshCalls">Aktualisieren</button></div><div id="callTable" style="margin-top:12px"></div></div></section>
-
-  <section class="view" data-view="backup"><div class="card"><h2>Sicherung & Export</h2><div class="toolbar"><button class="btn" id="btnDownloadJson">JSON-Sicherung herunterladen</button><button class="btn secondary" id="btnDownloadCsv">CSV herunterladen</button><input type="file" id="jsonFile" accept=".json"><button class="btn warn" id="btnImportJson">JSON-Sicherung einspielen</button></div><div class="alert blue">Die App speichert lokal im Browser. Für GitHub keine Kundendaten fest in den Code schreiben.</div></div></section>
-</main>
+    <section class="view" data-view="settings">
+      <div class="two">
+        <div class="card">
+          <h2>Einstellungen</h2>
+          <div class="form-grid">
+            <div class="field"><label>Name</label><input id="sName"></div>
+            <div class="field"><label>Position</label><input id="sPosition"></div>
+            <div class="field"><label>Mobil</label><input id="sPhone"></div>
+            <div class="field"><label>E-Mail</label><input id="sEmail"></div>
+            <div class="field"><label>Website</label><input id="sWeb"></div>
+            <div class="field"><label>Firma</label><input id="sCompany"></div>
+          </div>
+          <div class="toolbar" style="margin-top:12px"><button class="btn" onclick="saveSettings()">Einstellungen speichern</button><button class="btn secondary" onclick="resetSettings()">Standard wiederherstellen</button></div>
+        </div>
+        <div class="card">
+          <h2>Briefmodule</h2>
+          <p class="note">Die Brief- und Werbemodule sind in dieser Version fest hinterlegt. Nächster Schritt: Editor für eigene Werbeblöcke und Monatsangebote.</p>
+          <div id="moduleList" class="taglist"></div>
+        </div>
+      </div>
+    </section>
+  </main>
 </div>
 
-<div class="modal" id="customerModal" aria-hidden="true"><div class="dialog"><div class="dialog-head"><h2 id="customerTitle">Kunde bearbeiten</h2><button class="x" id="closeCustomer">×</button></div><div id="validationBox"></div><div class="form-grid"><div class="field span2"><label>Firma *</label><input id="cFirma"></div><div class="field span2"><label>Ansprechpartner *</label><input id="cPerson" placeholder="Herr/Frau Vorname Nachname"></div><div class="field span2"><label>Straße *</label><input id="cStrasse"></div><div class="field"><label>PLZ *</label><input id="cPlz"></div><div class="field"><label>Ort *</label><input id="cOrt"></div><div class="field"><label>Telefon *</label><input id="cTelefon"></div><div class="field"><label>E-Mail</label><input id="cEmail"></div><div class="field"><label>Website</label><input id="cWebsite"></div><div class="field"><label>Branche *</label><select id="cBranche"></select></div><div class="field"><label>Status</label><select id="cStatus"></select></div><div class="field"><label>Quelle</label><input id="cQuelle"></div><div class="field"><label>Nachfassdatum</label><input id="cFollow" type="date"></div><div class="field span4"><label>Notiz</label><textarea id="cNotiz"></textarea></div></div><div class="card" style="box-shadow:none;margin-top:12px"><h3>Google / Website / Impressum</h3><div class="toolbar"><button class="btn secondary" id="btnGoogleCustomer">Google</button><button class="btn secondary" id="btnMapsCustomer">Google Maps</button><button class="btn secondary" id="btnWebsiteCustomer">Website öffnen</button><button class="btn" id="btnExtractCustomer">Impressum einfügen & Daten erkennen</button><button class="btn ok" id="btnApplyExtract">Erkannte Daten übernehmen</button></div><textarea id="cImpressum" placeholder="Komplettes Impressum hier einfügen..."></textarea><div id="impressumPreview" class="preview"><div class="empty">Noch keine Daten erkannt.</div></div></div><div id="historyBox"></div><div class="toolbar" style="justify-content:flex-end"><button class="btn danger" id="btnDeleteCustomer">Löschen</button><button class="btn secondary" id="btnCancelCustomer">Abbrechen</button><button class="btn ok" id="btnSaveCustomer">Speichern</button></div></div></div>
-<div class="print-wrap" id="printArea"></div>
+<div class="modal" id="customerModal">
+  <div class="modal-panel">
+    <div class="modal-head"><h2 id="customerModalTitle">Kunde bearbeiten</h2><button class="x" onclick="closeCustomerModal()">×</button></div>
+    <input type="hidden" id="cId">
+    <div class="form-grid">
+      <div class="field required"><label>Firma</label><input id="cFirma"></div>
+      <div class="field required"><label>Ansprechpartner</label><input id="cAnsprechpartner" placeholder="Herr/Frau Vorname Nachname"></div>
+      <div class="field required"><label>Straße</label><input id="cStrasse"></div>
+      <div class="field required"><label>PLZ</label><input id="cPlz"></div>
+      <div class="field required"><label>Ort</label><input id="cOrt"></div>
+      <div class="field required"><label>Telefon</label><input id="cTelefon"></div>
+      <div class="field"><label>E-Mail</label><input id="cEmail"></div>
+      <div class="field"><label>Website</label><input id="cWebsite"></div>
+      <div class="field required"><label>Branche</label><input id="cBranche" list="brancheList"></div>
+      <div class="field"><label>Quelle</label><input id="cQuelle" value="Manuell"></div>
+      <div class="field"><label>Status</label><select id="cStatus"></select></div>
+      <div class="field"><label>Werbe-Fokus</label><select id="cAdFocus"></select></div>
+      <div class="field" style="grid-column:1/-1"><label>Notiz</label><textarea id="cNotiz" placeholder="Maschinenbestand, Bedarf, Telefonnotiz, Wiedervorlage..."></textarea></div>
+    </div>
+    <div id="customerValidation" style="margin-top:12px"></div>
+    <div class="toolbar" style="justify-content:flex-end;margin-top:14px">
+      <button class="btn secondary" onclick="closeCustomerModal()">Abbrechen</button>
+      <button class="btn danger" id="deleteCustomerBtn" onclick="deleteCustomer()">Löschen</button>
+      <button class="btn ok" onclick="saveCustomer()">Speichern</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="callModal">
+  <div class="modal-panel" style="width:min(760px,96vw)">
+    <div class="modal-head"><h2>Telefonat dokumentieren</h2><button class="x" onclick="closeCallModal()">×</button></div>
+    <input type="hidden" id="callCustomerId">
+    <div id="callCustomerHead" class="alert blue"></div>
+    <div class="form-grid" style="margin-top:12px">
+      <div class="field"><label>Status nach Telefonat</label><select id="callStatus"></select></div>
+      <div class="field"><label>Nächste Wiedervorlage</label><input id="callFollow" type="date"></div>
+      <div class="field" style="grid-column:1/-1"><label>Gesprächsnotiz</label><textarea id="callNote" placeholder="Kurz und verwertbar: Bedarf, Maschine, nächste Aktion, Entscheider..."></textarea></div>
+    </div>
+    <div class="toolbar" style="justify-content:flex-end;margin-top:14px"><button class="btn secondary" onclick="closeCallModal()">Abbrechen</button><button class="btn ok" onclick="saveCall()">Telefonat speichern</button></div>
+  </div>
+</div>
+
+<div class="letter-preview" id="printArea"></div>
+<datalist id="brancheList"></datalist>
 <script>
-
-const QR_DATA="data:image/png;base64,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";
-const DEFAULT_INTROS={"intro_general": {"kind": "intro", "title": "Schritt 1 · Erstanschreiben AS / BLOC73", "subject": "Technik, Service und Maschinenvertrieb für professionelle Lebensmittelbetriebe", "paragraphs": ["wir möchten Ihnen die AS Technical Solution GmbH und unsere Vertriebsmarke BLOC73 Machinery vorstellen.", "Wir unterstützen professionelle Lebensmittelbetriebe mit ausgewählten Maschinenlösungen, technischer Beratung, Service, Wartung und direkter Betreuung. Unser Anspruch ist klar: kurze Wege, ehrliche Einschätzung und Lösungen, die im Betrieb wirklich funktionieren.", "Mit BLOC73 Machinery bündeln wir Maschinenvertrieb und technische Kompetenz für Metzgereien, Fleischereien, Lebensmittelproduktion, Handel, Großküchen, Gastronomie und industrielle Verarbeitungsbetriebe.", "Ein besonderer Schwerpunkt liegt auf unseren zertifizierten Partnerschaften: Wir sind zertifizierter GRAEF Partner und zusätzlich zertifizierter BASTRA Partner für Service- und Wartungsarbeiten.", "Gerne prüfen wir gemeinsam mit Ihnen, ob wir Sie bei aktuellen oder zukünftigen Maschinenprojekten, Servicethemen oder technischen Anforderungen unterstützen können."], "focusTitle": "Unsere Schwerpunkte", "focusItems": ["Maschinenvertrieb", "Service & Wartung", "Beratung mit Praxisbezug", "direkter Ansprechpartner"], "brandLine": "GRAEF · ZERMAT · FOODLOGISTIK · ATOSA · GASER · DÜKER-REX / Kolbe-REX · BASTRA Service · Gebrauchttechnik"}, "intro_butcher": {"kind": "intro", "title": "Schritt 1 · Erstanschreiben Metzgerei / Fleischerei", "subject": "Maschinen, Service und Beratung für Fleischerei und Lebensmittelhandwerk", "paragraphs": ["als professioneller Lebensmittelbetrieb brauchen Sie Technik, die zuverlässig arbeitet, sauber zu Ihren Abläufen passt und im Servicefall schnell betreut werden kann.", "Die AS Technical Solution GmbH und BLOC73 Machinery unterstützen Fleischereien, Metzgereien und Produktionsbetriebe mit Maschinenvertrieb, technischer Beratung, Service, Wartung und direkter Betreuung.", "Dabei geht es uns nicht um eine anonyme Maschinenvermittlung, sondern um eine ehrliche Einschätzung: Welche Lösung passt zu Produkt, Platz, Personal, Reinigung und Wirtschaftlichkeit?", "Als zertifizierter GRAEF Partner und zertifizierter BASTRA Partner für Service- und Wartungsarbeiten verbinden wir Vertrieb mit technischem Praxisverständnis.", "Bei Interesse besprechen wir gern kurz, ob bei Ihnen aktuell oder perspektivisch Bedarf im Bereich Schneidtechnik, Verpackung, Verarbeitung, Kühlung oder Service besteht."], "focusTitle": "Relevante Bereiche", "focusItems": ["Schneidtechnik", "Verpackung", "Verarbeitung", "Service & Wartung"], "brandLine": "GRAEF · ZERMAT · FOODLOGISTIK · GASER · DÜKER-REX / Kolbe-REX · BASTRA Service"}};
-const DEFAULT_CORES={"core_graef": {"kind": "core", "title": "Schritt 2 · Kernpunkte GRAEF Schneidtechnik", "subject": "Kernpunkte: professionelle GRAEF Schneidtechnik für Ihren Betrieb", "intro": "nach unserem Erstkontakt möchten wir Ihnen ergänzend die wichtigsten Kernpunkte zur professionellen GRAEF Schneidtechnik zusammenfassen.", "lead": "Als zertifizierter GRAEF Partner unterstützen wir Sie bei Beratung, Auswahl, Vertrieb und Service rund um professionelle Schneidtechnik.", "cards": [["Präzise Schneidtechnik", "Aufschnittmaschinen, Halbautomaten und Vollautomaten für Theke, SB-Vorbereitung und Produktion."], ["Betriebsnah beraten", "Auswahl nach Produkt, Bedienablauf, Reinigungsaufwand, Platzbedarf und täglicher Nutzung."], ["Service & Betreuung", "Direkter Ansprechpartner für technische Fragen, Ersatzteile, Wartung und Unterstützung im laufenden Betrieb."], ["Vertriebliche Chance", "Vorführung, Austausch bestehender Technik oder konkrete Angebotsprüfung nach Bedarf möglich."]], "brandLine": "GRAEF · zertifizierter Partner · Schneidtechnik · Service · Beratung"}, "core_bastra": {"kind": "core", "title": "Schritt 2 · Kernpunkte BASTRA Service & Wartung", "subject": "Kernpunkte: BASTRA Service und Wartung für Rauch-, Koch- und Verarbeitungstechnik", "intro": "ergänzend zu unserer Vorstellung möchten wir Ihnen die wichtigsten Punkte zu unserem BASTRA Service- und Wartungsbereich zusammenfassen.", "lead": "Wir sind zertifizierter BASTRA Partner für Service- und Wartungsarbeiten und unterstützen Betriebe bei technischer Betreuung, Wartung und Serviceabstimmung.", "cards": [["Planbare Wartung", "Wartungs- und Serviceabstimmung für bestehende Anlagen- und Verarbeitungstechnik."], ["Technische Betreuung", "Unterstützung bei Rauch-, Koch- und Verarbeitungstechnik im laufenden Betrieb."], ["Ersatzteile & Service", "Direkter Ansprechpartner für technische Fragen, Ersatzteilunterstützung und weitere Abstimmung."], ["Betriebssicherheit", "Ziel ist eine verlässliche Anlagenverfügbarkeit und eine klare technische Begleitung."]], "brandLine": "BASTRA Service · zertifizierter Partner · Wartung · technische Betreuung"}, "core_zermat": {"kind": "core", "title": "Schritt 2 · Kernpunkte ZERMAT Verpackung", "subject": "Kernpunkte: Vakuumtechnik, Kammermaschinen und Traysealer", "intro": "nach unserem Erstkontakt möchten wir Ihnen kompakt die wichtigsten Punkte im Bereich Verpackungstechnik zusammenfassen.", "lead": "Über BLOC73 Machinery bieten wir Lösungen rund um Vakuumverpackung, Kammermaschinen und Traysealer für professionelle Lebensmittelbetriebe.", "cards": [["Vakuumtechnik", "Kammermaschinen und Verpackungslösungen für Fleischerei, Produktion, Küche und Handel."], ["Traysealer", "Schalenversiegelung für SB-Ware, vorbereitete Produkte und professionelle Verpackungslinien."], ["Bedarfsgerecht", "Auswahl nach Produkt, Verpackungsart, Leistung, Platz und Bedienkonzept."], ["Projektprüfung", "Wir prüfen mit Ihnen, welche Verpackungslösung wirtschaftlich und technisch sinnvoll ist."]], "brandLine": "ZERMAT · Vakuumtechnik · Kammermaschinen · Traysealer"}, "core_processing": {"kind": "core", "title": "Schritt 2 · Kernpunkte Verarbeitung / Produktion", "subject": "Kernpunkte: Verarbeitungstechnik für Lebensmittelbetriebe", "intro": "ergänzend zu unserer Vorstellung erhalten Sie die wichtigsten Kernpunkte zu Maschinen für Verarbeitung und Produktion.", "lead": "Wir unterstützen Betriebe bei Schneiden, Würfeln, Formen, Portionieren, Kuttern, Wolfen und weiteren Verarbeitungsschritten.", "cards": [["Schneiden & Würfeln", "FOODLOGISTIK Lösungen für Schneiden, Würfeln, Zerkleinern und Slicen."], ["Formen & Portionieren", "GASER Lösungen für Formtechnik, Hamburger, Fleischklöße und Portionierung."], ["Kutter & Wölfe", "DÜKER-REX / Kolbe-REX Technik für robuste Fleischereianwendungen."], ["Zubehör & Bedarf", "Clips, Schlaufen, Spieße, Gefrierblockschneider und weitere Produktionsbereiche nach Bedarf."]], "brandLine": "FOODLOGISTIK · GASER · DÜKER-REX / Kolbe-REX · Clips · Schlaufen · Spieße"}, "core_atosa": {"kind": "core", "title": "Schritt 2 · Kernpunkte ATOSA Kühltechnik", "subject": "Kernpunkte: professionelle Kühltechnik und Ausstattung", "intro": "ergänzend zu unserer Vorstellung möchten wir Ihnen die wichtigsten Punkte zur professionellen Kühltechnik zusammenfassen.", "lead": "Mit ATOSA bieten wir Kühltechnik und professionelle Ausstattung für Gastronomie, Handel, Großküche und Produktionsumfeld.", "cards": [["Kühltechnik", "Lösungen für Lagerung, Vorbereitung, Verkauf und professionelle Lebensmittelumgebung."], ["Ausstattung", "Praxisgerechte Technik für Gastronomie, Handel, Küche und Produktion."], ["Projektbezogen", "Auswahl nach Platz, Einsatz, Temperaturbereich und täglichem Bedarf."], ["Direkte Anfrage", "Wir prüfen Verfügbarkeit, passende Lösung und Angebot nach Ihrem konkreten Bedarf."]], "brandLine": "ATOSA · Kühltechnik · Gastronomie · Handel · Produktion"}, "core_service": {"kind": "core", "title": "Schritt 2 · Kernpunkte Service / Wartung / DGUV", "subject": "Kernpunkte: Service, Wartung und technische Betreuung", "intro": "nach unserem Erstkontakt möchten wir Ihnen unsere Service- und Betreuungsbereiche kompakt zusammenfassen.", "lead": "AS Technical Solution verbindet Maschinenvertrieb mit technischer Betreuung, Wartung, Service und praxisnaher Unterstützung im laufenden Betrieb.", "cards": [["Wartung", "Planbare Wartungs- und Serviceabstimmung für Maschinen und technische Bereiche."], ["Ersatzteile", "Unterstützung bei Ersatzteilbedarf, technischen Fragen und schneller Klärung."], ["Modernisierung", "Prüfung vorhandener Technik und sinnvolle technische Weiterentwicklung."], ["DGUV / Betriebssicherheit", "Technische Prüf- und Serviceleistungen nach Bedarf und Einsatzbereich."]], "brandLine": "AS Technical Solution · Service · Wartung · DGUV · technische Betreuung"}, "core_used": {"kind": "core", "title": "Schritt 2 · Kernpunkte Gebrauchttechnik", "subject": "Kernpunkte: verfügbare Gebrauchttechnik und Maschinenangebote", "intro": "ergänzend zu unserer Vorstellung möchten wir Ihnen den Bereich Gebrauchttechnik und verfügbare Maschinenlösungen kurz vorstellen.", "lead": "Je nach Verfügbarkeit bieten wir geprüfte Gebrauchttechnik und Maschinenangebote für Betriebe, die zeitnah und wirtschaftlich investieren möchten.", "cards": [["Verfügbarkeit", "Gebrauchttechnik und Maschinenangebote nach aktuellem Bestand und Projektlage."], ["Wirtschaftlichkeit", "Interessant bei Austausch, Erweiterung, Ersatzbedarf oder kurzfristigen Projekten."], ["Praxisprüfung", "Wir prüfen gemeinsam, ob Maschine, Zustand, Leistung und Einsatz zu Ihrem Betrieb passen."], ["Direkte Anfrage", "Bei Bedarf senden wir passende verfügbare Maschinen und Angebote gezielt zu."]], "brandLine": "Gebrauchttechnik · Maschinenangebote · Verfügbarkeit · Projektprüfung"}};
-const BRANCHES=['Metzgerei','Fleischerei','Lebensmittelproduktion','Handel / LEH','Großküche','Gastronomie','Catering','Räucherei','Geflügel','Sonstige'];
-const STATUSES=['Recherche offen','Unvollständig','Bereit für Kampagne','Angeschrieben','Nachtelefonieren','Nicht erreicht','Rückruf','Interesse','Angebot','Termin','Kein Bedarf','Später wieder melden','Gesperrt'];
-const VIEW_TITLES={dashboard:'Dashboard',customers:'Kunden einfügen & bearbeiten',import:'CSV-Import',research:'Google / Impressum',letters:'Brieftexte & Kernpunkte',campaigns:'Serienbriefe',calls:'Nachtelefonie',backup:'Sicherung'};
-let state=loadState(), editId=null, extracted=null, quickExtracted=null, builtIds=[], currentTplKey=null, importRows=[];
-function el(id){return document.getElementById(id)}
-function esc(v){return String(v??'').replace(/[&<>"']/g,s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[s]))}
-function uid(){return 'id_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)}
+const KEY='bloc73_akquise_v1';
+const DEFAULT_SETTINGS={name:'Robert Kutschke',position:'Vertriebsleiter / Head of Sales',phone:'+49 160 91658700',email:'r.kutschke@as-technical.de',web:'www.bloc73machinery.com',company:'AS Technical Solution GmbH · BLOC73 Machinery'};
+const STATUSES=['Unvollständig','Recherche offen','Bereit für Kampagne','Angeschrieben','Nachtelefonieren','Nicht erreicht','Interesse','Angebot','Termin','Kein Bedarf','Später wieder melden','Gesperrt'];
+const BRANCHES=['Metzgerei','Fleischerei','Lebensmittelproduktion','LEH / Theke','Großküche','Gastronomie','Catering','Räucherei','Wurstproduktion','Handel','Kühlung / Lager','Sonstige'];
+const LETTERS={
+  intro:{name:'1 · Vorstellung AS / BLOC73',subject:'Technik, Service und Maschinenvertrieb für professionelle Lebensmittelbetriebe',body:c=>[
+    `wir möchten Ihnen heute die AS Technical Solution GmbH und unsere Vertriebsmarke BLOC73 Machinery vorstellen.`,
+    `Wir unterstützen professionelle Lebensmittelbetriebe mit ausgewählten Maschinenlösungen, technischer Beratung, Service, Wartung und direkter Betreuung. Unser Anspruch ist klar: keine anonyme Maschinenvermittlung, sondern ehrliche Einschätzung, kurze Wege und Lösungen, die im Betrieb wirklich funktionieren.`,
+    `Mit BLOC73 Machinery bündeln wir Maschinenvertrieb und technische Kompetenz für Metzgereien, Fleischereien, Lebensmittelproduktion, Handel, Großküchen, Gastronomie und industrielle Verarbeitungsbetriebe.`,
+    `Ein besonderer Schwerpunkt liegt auf unseren zertifizierten Partnerschaften: Wir sind zertifizierter GRAEF Partner und zusätzlich zertifizierter BASTRA Partner für Service- und Wartungsarbeiten.`,
+    `Gerne prüfen wir gemeinsam mit Ihnen, ob wir Sie bei aktuellen oder zukünftigen Maschinenprojekten, Servicethemen oder technischen Anforderungen unterstützen können.`
+  ]},
+  ad:{name:'2 · Werbung Maschinen & Service',subject:'Maschinenlösungen, Service und Wartung mit direktem Ansprechpartner',body:c=>[
+    `in vielen Lebensmittelbetrieben entscheidet die richtige Technik über Ablauf, Qualität, Personalbindung und Wirtschaftlichkeit. Genau deshalb lohnt sich ein technischer Blick auf bestehende Maschinen, geplante Anschaffungen und mögliche Modernisierungen.`,
+    `Über AS Technical Solution und BLOC73 Machinery bieten wir Ihnen ausgewählte Lösungen für Schneidtechnik, Verpackung, Verarbeitung, Kühlung, Service und Wartung. Dabei stehen nicht Kataloge im Mittelpunkt, sondern Ihr konkreter Bedarf im Betrieb.`,
+    `Wir begleiten Sie von der ersten Einschätzung über die passende Maschinenlösung bis zur technischen Betreuung im laufenden Betrieb. Dazu gehören auch Ersatzteile, Wartung, Vorführungen und die Prüfung verfügbarer Gebrauchttechnik.`,
+    `Als zertifizierter GRAEF Partner sowie zertifizierter BASTRA Partner für Service- und Wartungsarbeiten verbinden wir Maschinenvertrieb mit technischem Praxisverständnis.`,
+    `Ich melde mich nach dem Versand gerne telefonisch bei Ihnen, um kurz abzustimmen, ob es aktuell ein Thema gibt, bei dem wir Sie sinnvoll unterstützen können.`
+  ]},
+  graef:{name:'3 · GRAEF Fokus',subject:'Professionelle Schneidtechnik – Beratung, Vertrieb und Service',body:c=>[
+    `professionelle Schneidtechnik muss im Alltag sauber, zuverlässig und wirtschaftlich funktionieren. Gerade an Theke, in Produktion und Vorbereitung zählt eine Lösung, die zum Betrieb, zum Personal und zum Sortiment passt.`,
+    `Als zertifizierter GRAEF Partner unterstützen wir Sie bei Beratung, Auswahl, Vertrieb und Service rund um professionelle Schneidtechnik. Dazu gehören Halbautomaten, Vollautomaten und praxisnahe Lösungen für unterschiedliche Einsatzbereiche.`,
+    `Wir prüfen gemeinsam mit Ihnen, ob eine bestehende Maschine noch sinnvoll betrieben werden kann oder ob eine moderne Lösung Vorteile bei Schnittbild, Ablauf, Bedienung und Reinigung bringt.`,
+    `Neben der Maschine selbst ist für uns die Betreuung entscheidend: kurze Wege, klare Rückmeldung und ein Ansprechpartner, der die Anforderungen in Lebensmittelbetrieben versteht.`,
+    `Gerne sprechen wir telefonisch kurz darüber, ob Schneidtechnik bei Ihnen aktuell oder perspektivisch ein Thema ist.`
+  ]},
+  bastra:{name:'4 · BASTRA Service & Wartung',subject:'Service und Wartung für Rauch-, Koch- und Verarbeitungstechnik',body:c=>[
+    `Rauch-, Koch- und Verarbeitungstechnik ist in vielen Betrieben ein zentraler Bestandteil der Produktion. Stillstand, unklare Wartung oder fehlende Betreuung kosten Zeit, Nerven und im Zweifel bares Geld.`,
+    `Als zertifizierter BASTRA Partner für Service- und Wartungsarbeiten unterstützen wir Betriebe bei technischer Betreuung, Wartung, Ersatzteilthemen und der Einschätzung bestehender Anlagen.`,
+    `Unser Ziel ist nicht nur die einmalige Reparatur, sondern eine verlässliche technische Begleitung, damit Ihre Anlage im laufenden Betrieb planbarer und sicherer bleibt.`,
+    `Wenn bei Ihnen Rauch-, Koch- oder vergleichbare Verarbeitungstechnik im Einsatz ist, lohnt sich eine kurze Abstimmung, ob Wartung, Prüfung oder Modernisierung sinnvoll vorbereitet werden sollte.`,
+    `Ich melde mich gerne telefonisch bei Ihnen, um den aktuellen Bedarf kurz einzuordnen.`
+  ]},
+  zermat:{name:'5 · Verpackung / ZERMAT',subject:'Verpackungslösungen für Fleischerei, Produktion und SB-Ware',body:c=>[
+    `Verpackung ist heute weit mehr als ein letzter Arbeitsschritt. Sie beeinflusst Haltbarkeit, Warenpräsentation, Ablauf, Personalaufwand und die Möglichkeiten im Verkauf.`,
+    `Über BLOC73 Machinery beraten wir zu passenden Verpackungslösungen wie Vakuumtechnik, Kammermaschinen und Traysealer-Lösungen für handwerkliche und professionelle Lebensmittelbetriebe.`,
+    `Wichtig ist dabei nicht die größte Maschine, sondern die richtige Lösung für Produkt, Menge, Platz, Bedienung und Reinigungsaufwand.`,
+    `Gerne prüfen wir mit Ihnen, ob bestehende Verpackungsprozesse verbessert oder neue Produktwege wie SB-Ware, MAP oder Skin-Verpackungen interessant sein können.`,
+    `Ich melde mich nach dem Versand gerne telefonisch, um kurz zu klären, ob Verpackungstechnik bei Ihnen aktuell ein Thema ist.`
+  ]},
+  processing:{name:'6 · Verarbeitung / Produktion',subject:'Verarbeitungstechnik für Produktion, Handwerk und Lebensmittelbetriebe',body:c=>[
+    `in der Verarbeitung zählt robuste Technik, die zur täglichen Produktion passt. Schneiden, Formen, Wolfen, Kuttern, Füllen oder Portionieren muss zuverlässig und nachvollziehbar funktionieren.`,
+    `Mit BLOC73 Machinery bieten wir Zugang zu ausgewählten Maschinenlösungen aus Bereichen wie FOODLOGISTIK, GASER und DÜKER-REX sowie weiteren technischen Lösungen für professionelle Lebensmittelverarbeitung.`,
+    `Wir prüfen gemeinsam, welche Lösung für Ihr Produkt, Ihre Mengen, Ihren Platz und Ihren Arbeitsablauf sinnvoll ist. Dabei geht es immer um eine ehrliche technische Einschätzung statt um pauschalen Maschinenverkauf.`,
+    `Auch Gebrauchttechnik, Verfügbarkeit, Ersatzteile und mögliche Modernisierung bestehender Prozesse können wir gemeinsam bewerten.`,
+    `Gerne sprechen wir kurz darüber, ob in Ihrer Produktion aktuell Bedarf, Engpass oder ein zukünftiges Projekt besteht.`
+  ]},
+  used:{name:'7 · Gebrauchttechnik / Angebote',subject:'Gebrauchttechnik, Maschinenangebote und technische Einschätzung',body:c=>[
+    `nicht jede technische Aufgabe muss zwangsläufig mit einer neuen Maschine gelöst werden. In vielen Fällen kann geprüfte Gebrauchttechnik oder eine passende kurzfristig verfügbare Lösung wirtschaftlich interessant sein.`,
+    `Über BLOC73 Machinery prüfen wir regelmäßig verfügbare Maschinen für professionelle Lebensmittelbetriebe und ordnen ein, ob eine Maschine technisch und wirtschaftlich zu Ihrem Bedarf passt.`,
+    `Dabei betrachten wir nicht nur den Preis, sondern auch Zustand, Einsatzbereich, Verfügbarkeit, Transport, Service und spätere Betreuung.`,
+    `Wenn bei Ihnen aktuell ein Maschinenbedarf besteht oder Sie perspektivisch Ersatz für eine bestehende Maschine planen, lohnt sich ein kurzer Austausch.`,
+    `Ich melde mich gerne telefonisch bei Ihnen, um zu klären, ob wir passende Technik oder aktuelle Angebote für Sie prüfen sollen.`
+  ]}
+};
+const ADS={
+  full:{name:'Vollprogramm BLOC73',title:'Aktueller Werbeimpuls · Maschinen, Service und Beratung',bullets:['GRAEF Schneidtechnik · zertifizierter Partner','BASTRA Service & Wartung · zertifizierter Partner','ZERMAT Verpackung · Vakuum / Traysealer','FOODLOGISTIK, GASER, DÜKER-REX · Verarbeitung','ATOSA Kühlung · Gebrauchttechnik nach Verfügbarkeit'],text:'Nutzen Sie BLOC73 Machinery als direkten Ansprechpartner für Maschinenprojekte, Servicefälle, Wartung, Ersatzteile und technische Einschätzung.'},
+  graef:{name:'GRAEF Schneidtechnik',title:'Werbeimpuls · Professionelle GRAEF Schneidtechnik',bullets:['Halbautomaten und Vollautomaten','saubere Abläufe an Theke und Produktion','Beratung, Vorführung und Service','zertifizierter GRAEF Partner'],text:'Interessant für Betriebe, die Schnittbild, Bedienung, Ablauf und Reinigbarkeit verbessern möchten.'},
+  bastra:{name:'BASTRA Service & Wartung',title:'Werbeimpuls · BASTRA Service und Wartung',bullets:['Wartung und technische Betreuung','Rauch-, Koch- und Verarbeitungstechnik','Ersatzteil- und Serviceunterstützung','zertifizierter BASTRA Partner'],text:'Für Betriebe mit bestehender Anlagen- und Verarbeitungstechnik lohnt sich eine planbare Wartungs- und Serviceabstimmung.'},
+  zermat:{name:'ZERMAT Verpackung',title:'Werbeimpuls · Verpackung und Traysealer',bullets:['Vakuumtechnik und Kammermaschinen','Traysealer-Lösungen','SB-Ware, Frische, Präsentation','Beratung nach Produkt und Menge'],text:'Verpackungstechnik kann neue Verkaufswege öffnen und Abläufe im Betrieb spürbar verbessern.'},
+  processing:{name:'Verarbeitung GASER / FOODLOGISTIK / REX',title:'Werbeimpuls · Verarbeitungstechnik',bullets:['Schneiden, Würfeln, Formen, Portionieren','Kutter, Wölfe und robuste Fleischereitechnik','Lösungen für Handwerk und Produktion','technische Einschätzung vor Angebot'],text:'Wir prüfen, welche Verarbeitungslösung zum Produkt, zur Menge und zum vorhandenen Platz passt.'},
+  atosa:{name:'ATOSA Kühlung',title:'Werbeimpuls · Kühlung und Ausstattung',bullets:['Kühltechnik für Gastronomie, Handel und Produktion','professionelle Ausstattung nach Bedarf','sinnvoll bei Erweiterung und Modernisierung','kurze Abstimmung vor Angebot'],text:'Kühltechnik muss zuverlässig, passend dimensioniert und wirtschaftlich sinnvoll sein.'},
+  used:{name:'Gebrauchttechnik / Monatsangebote',title:'Werbeimpuls · Gebrauchttechnik und aktuelle Angebote',bullets:['geprüfte Maschinen nach Verfügbarkeit','wirtschaftliche Alternative zur Neuanschaffung','schnelle Prüfung bei konkretem Bedarf','Monatsangebote und verfügbare Technik'],text:'Gerade bei kurzfristigem Bedarf kann verfügbare Gebrauchttechnik eine starke Vertriebschance sein.'}
+};
+let state={customers:[],history:[],settings:{...DEFAULT_SETTINGS}};
+let selectedCampaignIds=new Set();
+const $=id=>document.getElementById(id);
+function esc(s){return String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));}
 function today(){return new Date().toISOString().slice(0,10)}
-function addWorkdays(start, days){let d=new Date(start+'T12:00:00');let n=Number(days)||7;while(n>0){d.setDate(d.getDate()+1);let w=d.getDay();if(w!==0&&w!==6)n--;}return d.toISOString().slice(0,10)}
-function loadState(){
-  try{
-    const old=localStorage.getItem('bloc73_akquise_final');
-    const raw=localStorage.getItem('bloc73_akquise_final_v3_layout');
-    const src=raw||old;
-    if(src){
-      const s=JSON.parse(src);
-      // Kunden und Historie übernehmen, Briefvorlagen bewusst auf saubere Standardtexte setzen.
-      // So bleiben alte interne Begriffe wie Werbeimpuls/Nachfassdatum nicht im Kundenbrief hängen.
-      return {customers:(s.customers||[]),history:(s.history||[]),intros:structuredClone(DEFAULT_INTROS),cores:structuredClone(DEFAULT_CORES)};
-    }
-  }catch(e){}
-  return {customers:[],history:[],intros:structuredClone(DEFAULT_INTROS),cores:structuredClone(DEFAULT_CORES)}
+function uid(){return 'c_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));}
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){state=JSON.parse(raw);state.settings={...DEFAULT_SETTINGS,...(state.settings||{})};state.customers=state.customers||[];state.history=state.history||[];}}catch(e){console.error(e)}}
+function statusFor(c){const issues=validateCustomer(c);if(issues.length)return 'Unvollständig';return c.status&&c.status!=='Unvollständig'?c.status:'Bereit für Kampagne'}
+function validateCustomer(c){const issues=[];if(!String(c.firma||'').trim())issues.push('Firma fehlt');if(!String(c.ansprechpartner||'').trim())issues.push('Ansprechpartner fehlt');if(!String(c.strasse||'').trim())issues.push('Straße fehlt');if(!String(c.plz||'').trim())issues.push('PLZ fehlt');if(!String(c.ort||'').trim())issues.push('Ort fehlt');if(!String(c.telefon||'').trim())issues.push('Telefon fehlt');if(!String(c.branche||'').trim())issues.push('Branche fehlt');return issues;}
+function isReady(c){return validateCustomer(c).length===0 && statusFor(c)!=='Gesperrt'}
+function addBusinessDays(dateStr,days){let d=new Date(dateStr+'T12:00:00');let added=0;while(added<days){d.setDate(d.getDate()+1);const day=d.getDay();if(day!==0&&day!==6)added++;}return d.toISOString().slice(0,10)}
+function navInit(){const items=[['dashboard','Dashboard','Steuerung & Überblick'],['customers','Kunden','Kundenverwaltung'],['import','CSV-Import','Daten einlesen'],['research','Web-Recherche','Kunden suchen'],['campaigns','Serienbrief','Kampagnen erzeugen'],['calls','Nachtelefonie','Fällige Kontakte'],['settings','Einstellungen','Kontakt & Module']];const nav=$('nav');nav.innerHTML=items.map(i=>`<button data-go="${i[0]}" onclick="go('${i[0]}')"><span>${icon(i[0])}</span><span>${i[1]}</span></button>`).join('');}
+function icon(v){return {dashboard:'▣',customers:'◎',import:'⇩',research:'⌕',campaigns:'✉',calls:'☎',settings:'⚙'}[v]||'•'}
+function go(view){document.querySelectorAll('section.view').forEach(s=>s.classList.toggle('active',s.dataset.view===view));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===view));const meta={dashboard:['Dashboard','BLOC73 Akquise-App für postalische Werbung, Serienbriefe, PLZ-Gebiete und Nachtelefonie.'],customers:['Kunden','Kontakte prüfen, vervollständigen und für Kampagnen vorbereiten.'],import:['CSV-Import','Bestehende Daten übernehmen und Pflichtfelder prüfen.'],research:['Web-Recherche','Kunden gezielt suchen und manuell sauber übernehmen.'],campaigns:['Serienbrief','PLZ-Gebiet, Briefart und Werbeimpuls auswählen.'],calls:['Nachtelefonie','Fällige Kontakte abarbeiten, Ergebnis dokumentieren, Lead erzeugen.'],settings:['Einstellungen','Kontaktdaten und App-Grunddaten verwalten.']};$('pageTitle').textContent=meta[view][0];$('pageDesc').textContent=meta[view][1];renderAll();}
+function renderAll(){fillSelects();renderDashboard();renderCustomers();renderCampaignSelection();renderCalls();renderSettings();}
+function fillSelects(){
+  const branchSet=[...new Set([...BRANCHES,...state.customers.map(c=>c.branche).filter(Boolean)])].sort();
+  const branchOpts=['<option value="">Alle</option>',...branchSet.map(b=>`<option>${esc(b)}</option>`)].join('');
+  ['filterBranch','campBranch'].forEach(id=>{const el=$(id);if(el){const old=el.value;el.innerHTML=id==='campBranch'?branchOpts.replace('Alle','Alle Branchen'):branchOpts;el.value=old;}});
+  $('brancheList').innerHTML=branchSet.map(b=>`<option value="${esc(b)}">`).join('');
+  $('filterStatus').innerHTML='<option value="">Alle</option>'+STATUSES.map(s=>`<option>${s}</option>`).join('');
+  ['cStatus','callStatus'].forEach(id=>{const el=$(id);if(el){const old=el.value;el.innerHTML=STATUSES.map(s=>`<option>${s}</option>`).join('');if(old)el.value=old;}});
+  const adOpts=Object.entries(ADS).map(([k,a])=>`<option value="${k}">${esc(a.name)}</option>`).join('');
+  ['adType','cAdFocus'].forEach(id=>{const el=$(id);if(el){const old=el.value;el.innerHTML=adOpts;if(old)el.value=old;}});
+  const letterOpts=Object.entries(LETTERS).map(([k,l])=>`<option value="${k}">${esc(l.name)}</option>`).join('');$('letterType').innerHTML=letterOpts;
 }
-function save(){localStorage.setItem('bloc73_akquise_final_v3_layout',JSON.stringify(state))}
-function normalizeCustomer(c){return {id:c.id||uid(),firma:c.firma||c.Firma||'',ansprechpartner:c.ansprechpartner||c.Ansprechpartner||'',strasse:c.strasse||c.Strasse||c.Straße||'',plz:String(c.plz||c.PLZ||''),ort:c.ort||c.Ort||'',telefon:c.telefon||c.Telefon||'',email:c.email||c.Email||c['E-Mail']||'',website:c.website||c.Website||'',branche:c.branche||c.Branche||'Metzgerei',quelle:c.quelle||c.Quelle||'',status:c.status||c.Status||'Recherche offen',followUp:c.followUp||c.Nachfassdatum||'',notiz:c.notiz||c.Notiz||''}}
-function missing(c){let m=[]; if(!c.firma.trim())m.push('Firma'); if(!c.ansprechpartner.trim())m.push('Ansprechpartner'); if(!c.strasse.trim())m.push('Straße'); if(!c.plz.trim())m.push('PLZ'); if(!c.ort.trim())m.push('Ort'); if(!c.telefon.trim())m.push('Telefon'); if(!c.branche.trim())m.push('Branche'); return m}
-function isReady(c){return missing(c).length===0 && c.status!=='Gesperrt'}
-function autoStatus(c){const m=missing(c); if(m.length)c.status='Unvollständig'; else if(['Recherche offen','Unvollständig','Gesperrt',''].includes(c.status)) c.status='Bereit für Kampagne'; return c}
-function fillSelect(sel,arr){sel.innerHTML=arr.map(v=>'<option value="'+esc(v)+'">'+(v?esc(v):'alle')+'</option>').join('')}
-function init(){
-  fillSelect(el('filterStatus'),['',...STATUSES]); fillSelect(el('filterBranch'),['',...BRANCHES]); fillSelect(el('campBranch'),['',...BRANCHES]); fillSelect(el('cBranche'),BRANCHES); fillSelect(el('cStatus'),STATUSES); fillSelect(el('callStatus'),['','Nachtelefonieren','Nicht erreicht','Rückruf','Interesse','Angebot','Termin','Kein Bedarf']); el('callDate').value=today();
-  document.querySelectorAll('nav button[data-go], [data-jump]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.go||b.dataset.jump)));
-  ['filterQ','filterPlz','filterStatus','filterBranch'].forEach(id=>el(id).addEventListener('input',renderCustomers));
-  el('topNew').onclick=()=>openCustomer(); el('dashNew').onclick=()=>openCustomer(); el('btnNewCustomer').onclick=()=>openCustomer(); el('btnImportFromImprint').onclick=()=>{showView('research');el('quickImprint').focus();};
-  el('topBackup').onclick=downloadJson; el('topCsv').onclick=downloadCsv; el('btnDownloadJson').onclick=downloadJson; el('btnDownloadCsv').onclick=downloadCsv;
-  el('csvFile').addEventListener('change',readCsvFile); el('btnSampleCsv').onclick=sampleCsv; el('btnPreviewCsv').onclick=previewCsv; el('btnImportCsv').onclick=importCsv;
-  el('btnSearchLinks').onclick=renderSearchLinks; ['rBranch','rCity','rPlz','rExtra'].forEach(id=>el(id).addEventListener('input',renderSearchLinks));
-  el('btnQuickExtract').onclick=quickExtract; el('btnQuickCreate').onclick=quickCreate;
-  el('closeCustomer').onclick=closeCustomer; el('btnCancelCustomer').onclick=closeCustomer; el('btnSaveCustomer').onclick=saveCustomer; el('btnDeleteCustomer').onclick=deleteCustomer; el('btnGoogleCustomer').onclick=openGoogleForCustomer; el('btnMapsCustomer').onclick=openMapsForCustomer; el('btnWebsiteCustomer').onclick=openWebsiteForCustomer; el('btnExtractCustomer').onclick=extractCustomerImprint; el('btnApplyExtract').onclick=applyExtracted;
-  ['cFirma','cPerson','cStrasse','cPlz','cOrt','cTelefon','cBranche'].forEach(id=>el(id).addEventListener('input',renderValidation));
-  el('docType').onchange=renderLetterOptions; el('btnBuildLetters').onclick=buildLetters; el('btnPrintLetters').onclick=()=>window.print(); el('btnMarkSent').onclick=markSent;
-  el('btnRefreshCalls').onclick=renderCalls; el('callDate').onchange=renderCalls; el('callStatus').onchange=renderCalls;
-  el('btnImportJson').onclick=importJson;
-  el('btnLoadTpl').onclick=loadTemplateEditor; el('btnSaveTpl').onclick=saveTemplateEditor; el('btnResetTpl').onclick=resetTemplates; el('tplSelect').onchange=loadTemplateEditor;
-  renderSearchLinks(); renderLetterOptions(); renderTemplateSelect(); renderAll();
-}
-function showView(v){document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.dataset.view===v));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.go===v));el('pageTitle').textContent=VIEW_TITLES[v]||'Dashboard';renderAll()}
-function renderAll(){renderMetrics();renderToday();renderCustomers();renderCalls();renderLetterOptions();renderTemplateSelect(false);save()}
-function renderMetrics(){let total=state.customers.length, ready=state.customers.filter(isReady).length, blocked=state.customers.filter(c=>!isReady(c)).length, due=dueCalls().length; el('mTotal').textContent=total; el('mReady').textContent=ready; el('mBlocked').textContent=blocked; el('mDue').textContent=due}
-function dueCalls(){let d=el('callDate')?.value||today(); return state.customers.filter(c=>c.followUp&&c.followUp<=d&&['Angeschrieben','Nachtelefonieren','Nicht erreicht','Rückruf'].includes(c.status))}
-function statusPill(c){let m=missing(c); if(c.status==='Gesperrt')return '<span class="pill bad">Gesperrt</span>'; if(m.length)return '<span class="pill bad">Fehlt: '+esc(m.join(', '))+'</span>'; if(['Bereit für Kampagne','Interesse','Termin','Angebot'].includes(c.status))return '<span class="pill ok">'+esc(c.status)+'</span>'; return '<span class="pill warn">'+esc(c.status||'offen')+'</span>'}
-function renderToday(){let list=dueCalls().slice(0,8); el('todayList').innerHTML=list.length?'<table><thead><tr><th>Firma</th><th>Ansprechpartner</th><th>Telefon</th><th></th></tr></thead><tbody>'+list.map(c=>`<tr><td><b>${esc(c.firma)}</b><br><span class="mini">${esc(c.ort)}</span></td><td>${esc(c.ansprechpartner)}</td><td>${esc(c.telefon)}</td><td><button class="btn small secondary" onclick="openCustomer('${c.id}')">Bearbeiten</button></td></tr>`).join('')+'</tbody></table>':'<div class="empty">Keine fällige Nachtelefonie.</div>'}
-function filteredCustomers(){let q=(el('filterQ').value||'').toLowerCase().trim(), plz=el('filterPlz').value.trim(), st=el('filterStatus').value, br=el('filterBranch').value; return state.customers.filter(c=>(!q||[c.firma,c.ansprechpartner,c.ort,c.telefon,c.email,c.website].join(' ').toLowerCase().includes(q))&&(!plz||c.plz.startsWith(plz))&&(!st||c.status===st)&&(!br||c.branche===br))}
-function renderCustomers(){let rows=filteredCustomers(); el('customerTable').innerHTML=rows.length?'<table><thead><tr><th>Firma</th><th>Kontakt</th><th>Adresse</th><th>Status</th><th>Aktion</th></tr></thead><tbody>'+rows.map(c=>`<tr><td><b>${esc(c.firma)}</b><br><span class="mini">${esc(c.branche)} · ${esc(c.quelle)}</span></td><td>${esc(c.ansprechpartner)}<br><span class="mini">${esc(c.telefon)}<br>${esc(c.email)}</span></td><td>${esc(c.strasse)}<br>${esc(c.plz)} ${esc(c.ort)}</td><td>${statusPill(c)}</td><td><div class="toolbar"><button class="btn small" onclick="openCustomer('${c.id}')">Bearbeiten</button><button class="btn small secondary" onclick="openGoogleId('${c.id}')">Google</button><button class="btn small secondary" onclick="openMapsId('${c.id}')">Maps</button></div></td></tr>`).join('')+'</tbody></table>':'<div class="empty">Keine Kunden vorhanden oder Filter zu eng.</div>'}
-function openCustomer(id=null){editId=id; extracted=null; let c=id?state.customers.find(x=>x.id===id):normalizeCustomer({status:'Recherche offen',quelle:'Manuell / Google',branche:'Metzgerei'}); if(!c)c=normalizeCustomer({}); el('customerTitle').textContent=id?'Kunde bearbeiten':'Kunde einfügen'; el('cFirma').value=c.firma;el('cPerson').value=c.ansprechpartner;el('cStrasse').value=c.strasse;el('cPlz').value=c.plz;el('cOrt').value=c.ort;el('cTelefon').value=c.telefon;el('cEmail').value=c.email;el('cWebsite').value=c.website;el('cBranche').value=c.branche||'Metzgerei';el('cStatus').value=c.status||'Recherche offen';el('cQuelle').value=c.quelle;el('cFollow').value=c.followUp;el('cNotiz').value=c.notiz;el('cImpressum').value='';el('impressumPreview').innerHTML='<div class="empty">Noch keine Daten erkannt.</div>';renderValidation();renderHistory(id);el('customerModal').classList.add('active')}
-function closeCustomer(){el('customerModal').classList.remove('active')}
-function draftCustomer(){return normalizeCustomer({id:editId||uid(),firma:el('cFirma').value,ansprechpartner:el('cPerson').value,strasse:el('cStrasse').value,plz:el('cPlz').value,ort:el('cOrt').value,telefon:el('cTelefon').value,email:el('cEmail').value,website:el('cWebsite').value,branche:el('cBranche').value,status:el('cStatus').value,quelle:el('cQuelle').value,followUp:el('cFollow').value,notiz:el('cNotiz').value})}
-function renderValidation(){let c=draftCustomer(), m=missing(c); el('validationBox').innerHTML=m.length?'<div class="alert bad"><b>Kontakt gesperrt:</b> Es fehlen '+esc(m.join(', '))+'. Ohne Ansprechpartner und Pflichtdaten kein Serienbrief.</div>':'<div class="alert ok"><b>Kampagnenfähig:</b> Pflichtdaten vollständig.</div>'}
-function saveCustomer(){let c=autoStatus(draftCustomer()); let idx=state.customers.findIndex(x=>x.id===c.id); if(idx>=0)state.customers[idx]=c; else state.customers.unshift(c); addHist(c.id,'Kunde gespeichert',missing(c).length?'Unvollständig':'Vollständig'); closeCustomer(); renderAll()}
-function deleteCustomer(){if(!editId){closeCustomer();return} if(!confirm('Kunde wirklich löschen?'))return; state.customers=state.customers.filter(c=>c.id!==editId); state.history=state.history.filter(h=>h.customerId!==editId); closeCustomer(); renderAll()}
-function addHist(id,type,note=''){state.history.unshift({id:uid(),customerId:id,date:today(),type,note})}
-function renderHistory(id){if(!id){el('historyBox').innerHTML='';return} let h=state.history.filter(x=>x.customerId===id).slice(0,8); el('historyBox').innerHTML=h.length?'<div class="card" style="box-shadow:none"><h3>Historie</h3>'+h.map(x=>'<div class="mini"><b>'+esc(x.date)+'</b> · '+esc(x.type)+' · '+esc(x.note)+'</div>').join('')+'</div>':''}
-function openGoogleId(id){let c=state.customers.find(x=>x.id===id); if(c) window.open('https://www.google.com/search?q='+encodeURIComponent([c.firma,c.ort,'Impressum Geschäftsführer Telefon'].join(' ')),'_blank')}
-function openMapsId(id){let c=state.customers.find(x=>x.id===id); if(c) window.open('https://www.google.com/maps/search/'+encodeURIComponent([c.firma,c.plz,c.ort].join(' ')),'_blank')}
-function openGoogleForCustomer(){let c=draftCustomer();window.open('https://www.google.com/search?q='+encodeURIComponent([c.firma,c.ort,'Impressum Geschäftsführer Telefon'].join(' ')),'_blank')}
-function openMapsForCustomer(){let c=draftCustomer();window.open('https://www.google.com/maps/search/'+encodeURIComponent([c.firma,c.plz,c.ort].join(' ')),'_blank')}
-function openWebsiteForCustomer(){let w=el('cWebsite').value.trim(); if(!w)return alert('Keine Website eingetragen.'); if(!/^https?:\/\//i.test(w))w='https://'+w; window.open(w,'_blank')}
-function renderSearchLinks(){let q=[el('rBranch').value,el('rPlz').value,el('rCity').value,el('rExtra').value].filter(Boolean).join(' '); el('searchLinks').innerHTML=['Google Suche','Google Maps','Impressum Suche'].map((t,i)=>{let u=i===1?'https://www.google.com/maps/search/'+encodeURIComponent(q):'https://www.google.com/search?q='+encodeURIComponent(q+(i===2?' Impressum':''));return '<a class="btn secondary" target="_blank" href="'+u+'">'+t+'</a>'}).join('')}
-function extractCustomerImprint(){extracted=extractImprint(el('cImpressum').value); el('impressumPreview').innerHTML=previewExtract(extracted)}
-function applyExtracted(){if(!extracted)return alert('Erst Impressum-Daten erkennen.'); applyToForm(extracted); renderValidation()}
-function applyToForm(d){if(d.firma)el('cFirma').value=d.firma;if(d.ansprechpartner)el('cPerson').value=d.ansprechpartner;if(d.strasse)el('cStrasse').value=d.strasse;if(d.plz)el('cPlz').value=d.plz;if(d.ort)el('cOrt').value=d.ort;if(d.telefon)el('cTelefon').value=d.telefon;if(d.email)el('cEmail').value=d.email;if(d.website)el('cWebsite').value=d.website; if(!el('cQuelle').value)el('cQuelle').value='Impressum / Website'}
-function quickExtract(){quickExtracted=extractImprint(el('quickImprint').value); el('quickPreview').innerHTML=previewExtract(quickExtracted); el('btnQuickCreate').disabled=false}
-function quickCreate(){if(!quickExtracted)return; openCustomer(); applyToForm(quickExtracted); el('cQuelle').value='Impressum / Website'; renderValidation()}
-function previewExtract(d){let m=missing(normalizeCustomer(d)); return '<table><tbody>'+Object.entries({Firma:d.firma,Ansprechpartner:d.ansprechpartner,Straße:d.strasse,PLZ:d.plz,Ort:d.ort,Telefon:d.telefon,'E-Mail':d.email,Website:d.website}).map(([k,v])=>'<tr><th>'+esc(k)+'</th><td>'+esc(v||'')+'</td></tr>').join('')+'</tbody></table>'+(m.length?'<div class="alert bad">Fehlt noch: '+esc(m.join(', '))+'</div>':'<div class="alert ok">Daten wirken vollständig.</div>')}
-function extractImprint(text){let raw=(text||'').replace(/\r/g,'\n'); let lines=raw.split('\n').map(s=>s.trim()).filter(Boolean); let flat=raw.replace(/\s+/g,' '); let email=(flat.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)||[''])[0]; let web=(flat.match(/https?:\/\/[^\s)]+|www\.[^\s)]+/i)||[''])[0]; let phone=''; let phoneMatch=flat.match(/(?:Telefon|Tel\.?|Fon|Phone|Mobil|Mobile)\s*[:.]?\s*([+]?\d[\d\s().\/-]{5,})/i); if(phoneMatch)phone=phoneMatch[1].trim(); let addrLine=lines.find(l=>/(straße|str\.|strasse|weg|platz|allee|gasse|ring|damm|ufer|markt)\s*\d/i.test(l.toLowerCase()))||''; let plz='',ort=''; let plzLine=lines.find(l=>/\b\d{5}\b/.test(l)); if(plzLine){let mm=plzLine.match(/\b(\d{5})\s+(.+)/); if(mm){plz=mm[1];ort=mm[2].replace(/Deutschland|Germany|Tel.*|Telefon.*/i,'').trim().replace(/,$/,'')}} let person=''; let pats=[/(?:Geschäftsführer(?:in)?|Inhaber(?:in)?|Vertreten durch|vertretungsberechtigt|Verantwortlich(?:er)?|Geschäftsleitung)\s*[:\-]?\s*(Herr\s+|Frau\s+)?([A-ZÄÖÜ][A-Za-zÄÖÜäöüß.\-]+(?:\s+[A-ZÄÖÜ][A-Za-zÄÖÜäöüß.\-]+){1,4})/i,/(Herr|Frau)\s+([A-ZÄÖÜ][A-Za-zÄÖÜäöüß.\-]+\s+[A-ZÄÖÜ][A-Za-zÄÖÜäöüß.\-]+)/]; for(let p of pats){let mm=flat.match(p); if(mm){person=((mm[1]||'')+mm[2]).trim();break}} let firma=''; let fline=lines.find(l=>/(GmbH|UG|e\.K\.|eK|KG|AG|GbR|OHG|GmbH & Co|Fleischerei|Metzgerei|Räucherei|Manufaktur|Partyservice|Catering)/i.test(l)&&!/Register|USt|Steuer|Telefon|Telefax|E-Mail|Email/i.test(l)); if(fline)firma=fline.replace(/^Firma\s*[:\-]?\s*/i,'').trim(); if(!firma&&lines.length) firma=lines.find(l=>!/(Impressum|Angaben|Kontakt|Datenschutz|Telefon|E-Mail|Email)/i.test(l))||''; return normalizeCustomer({firma,ansprechpartner:person,strasse:addrLine,plz,ort,telefon:phone,email,website:web,branche:guessBranch(raw),quelle:'Impressum / Website',status:'Recherche offen'})}
-function guessBranch(t){t=t.toLowerCase(); if(t.includes('metzgerei'))return 'Metzgerei'; if(t.includes('fleischerei'))return 'Fleischerei'; if(t.includes('räucherei')||t.includes('rauch'))return 'Räucherei'; if(t.includes('catering'))return 'Catering'; if(t.includes('restaurant')||t.includes('gastronomie'))return 'Gastronomie'; if(t.includes('geflügel'))return 'Geflügel'; return 'Metzgerei'}
-function parseCsv(text){let rows=[],row=[],field='',q=false; for(let i=0;i<text.length;i++){let ch=text[i],next=text[i+1]; if(ch==='"'&&q&&next==='"'){field+='"';i++} else if(ch==='"')q=!q; else if((ch===';'||ch===',')&&!q){row.push(field);field=''} else if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&next==='\n')i++;row.push(field);field=''; if(row.some(x=>x.trim()))rows.push(row); row=[]} else field+=ch} row.push(field); if(row.some(x=>x.trim()))rows.push(row); return rows}
-function readCsvFile(e){let f=e.target.files[0]; if(!f)return; let r=new FileReader(); r.onload=()=>{el('csvText').value=r.result; previewCsv()}; r.readAsText(f,'utf-8')}
-function sampleCsv(){el('csvText').value='Firma;Ansprechpartner;Strasse;PLZ;Ort;Telefon;Email;Website;Branche;Notiz\nMetzgerei Müller GmbH;Herr Thomas Müller;Musterstraße 12;09111;Chemnitz;0371 123456;info@mueller.de;www.mueller.de;Metzgerei;'}
-function previewCsv(){let rows=parseCsv(el('csvText').value); if(!rows.length)return; let head=rows[0].map(h=>h.trim()); importRows=rows.slice(1).map(r=>{let o={}; head.forEach((h,i)=>o[h]=r[i]||''); return autoStatus(normalizeCustomer(o))}); el('csvResult').innerHTML='<div class="alert blue">'+importRows.length+' Zeilen erkannt. Davon '+importRows.filter(isReady).length+' kampagnenfähig.</div><table><thead><tr><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Status</th></tr></thead><tbody>'+importRows.slice(0,20).map(c=>'<tr><td>'+esc(c.firma)+'</td><td>'+esc(c.ansprechpartner)+'</td><td>'+esc(c.plz)+' '+esc(c.ort)+'</td><td>'+statusPill(c)+'</td></tr>').join('')+'</tbody></table>'; el('btnImportCsv').disabled=false}
-function importCsv(){state.customers=[...importRows,...state.customers]; importRows.forEach(c=>addHist(c.id,'CSV-Import',c.status)); renderAll(); alert(importRows.length+' Kunden importiert.')}
-function renderLetterOptions(){let intro=el('docType').value==='intro'; let src=intro?state.intros:state.cores; el('letterType').innerHTML=Object.entries(src).map(([k,v])=>'<option value="'+k+'">'+esc(v.title)+'</option>').join('')}
-function campaignCustomers(){let plz=el('campPlz').value.trim(), br=el('campBranch').value; return state.customers.filter(c=>isReady(c)&&(!plz||c.plz.startsWith(plz))&&(!br||c.branche===br))}
-function buildLetters(){let list=campaignCustomers(); builtIds=list.map(c=>c.id); if(!list.length){el('campaignResult').innerHTML='<div class="alert bad">Keine kampagnenfähigen Kunden gefunden. Ansprechpartner/Pflichtdaten prüfen.</div>';return} let tpl=getSelectedTemplate(); let html=list.map(c=>letterHtml(c,tpl)).join(''); el('printArea').innerHTML=html; el('letterPreview').innerHTML=html.replaceAll('class="letter"','class="letter" style="transform:scale(.62);transform-origin:top left;margin-bottom:-105mm"'); el('campaignResult').innerHTML='<div class="alert ok">'+list.length+' Briefe erstellt. Vorschau prüfen, dann PDF/Drucken.</div>'; el('btnPrintLetters').disabled=false; el('btnMarkSent').disabled=false}
-function getSelectedTemplate(){let src=el('docType').value==='intro'?state.intros:state.cores; return src[el('letterType').value]}
-function recipientBlock(c){return esc(c.firma)+'<br>'+esc(c.ansprechpartner)+'<br>'+esc(c.strasse)+'<br>'+esc(c.plz+' '+c.ort)}
-function salutation(c){let p=c.ansprechpartner.trim(); let last=p.split(/\s+/).filter(Boolean).pop()||p; if(/^frau\b/i.test(p))return 'Sehr geehrte Frau '+last+','; if(/^herr\b/i.test(p))return 'Sehr geehrter Herr '+last+','; return 'Sehr geehrte Damen und Herren,'}
-function focusText(label){
-  const map={
-    'Maschinenvertrieb':'ausgewählte Maschinenlösungen für Produktion, Verarbeitung, Verpackung und Verkauf',
-    'Service & Wartung':'technische Betreuung, Wartung, Ersatzteile und laufende Unterstützung',
-    'Beratung mit Praxisbezug':'klare Einschätzung, kurze Wege und Lösungen, die im Betrieb funktionieren',
-    'direkter Ansprechpartner':'persönliche Betreuung vom Erstkontakt bis zur konkreten Lösung',
-    'Schneidtechnik':'GRAEF Schneidtechnik, Beratung, Service und passende Ausstattung',
-    'Verpackung':'Vakuumtechnik, Kammermaschinen, Traysealer und projektbezogene Auswahl',
-    'Verarbeitung':'Schneiden, Würfeln, Formen, Portionieren, Kutter und Wölfe',
-    'Service':'Wartung, Ersatzteile, Modernisierung und technische Einschätzung'
-  };
-  return map[label]||'praxisnahe Unterstützung für professionelle Lebensmittelbetriebe';
-}
-function letterHtml(c,t){
-  let isCore=t.kind==='core';
-  let paras=isCore?[t.intro,t.lead]:t.paragraphs;
-  let focus='';
-  if(isCore){
-    focus='<div class="focus-box"><h3>Kernpunkte für Ihren Betrieb</h3><div class="core-grid">'+t.cards.map(x=>'<div class="core-card"><b>'+esc(x[0])+'</b>'+esc(x[1])+'</div>').join('')+'</div><div class="brand-strip">'+esc(t.brandLine)+'</div></div>';
-  }else{
-    let items=(t.focusItems||[]).slice(0,4);
-    focus='<div class="focus-box"><h3>'+esc(t.focusTitle||'Unsere Schwerpunkte')+'</h3><div class="focus-intro">'+items.map(x=>'<div class="focus-item"><b>'+esc(x)+'</b><span>'+esc(focusText(x))+'</span></div>').join('')+'</div><div class="brand-strip">'+esc(t.brandLine)+'</div></div>';
-  }
-  return '<article class="letter">'+
-    '<div class="letter-top"><div class="letter-brand"><div><div class="mark-as">AS</div><div class="mark-sub">Technical Solution</div></div><div class="top-divider"></div><div class="mark-bloc">BLOC73 <span>Machinery</span></div></div><div class="letter-contact"><b>Robert Kutschke</b><br>Vertriebsleiter / Head of Sales<br>Mobil / WhatsApp: +49 160 91658700<br>r.kutschke@as-technical.de<br>www.bloc73machinery.com</div></div>'+
-    '<div class="sender-line">AS Technical Solution GmbH · BLOC73 Machinery · Robert Kutschke · www.bloc73machinery.com</div>'+
-    '<div class="addr-date"><div class="recipient">'+recipientBlock(c)+'</div><div class="date">'+new Date().toLocaleDateString('de-DE')+'</div></div>'+
-    '<h1 class="subject">'+esc(t.subject)+'</h1>'+
-    '<div class="body"><p>'+salutation(c)+'</p>'+paras.map(p=>'<p>'+esc(p)+'</p>').join('')+focus+'<p>Für eine kurze Abstimmung oder eine konkrete Anfrage erreichen Sie mich direkt telefonisch oder per E-Mail.</p><div class="signature"><p>Mit freundlichen Grüßen</p><p><b>Robert Kutschke</b><br>Vertriebsleiter / Head of Sales</p></div></div>'+
-    '<div class="cta">'+(QR_DATA?'<img class="qr" src="'+QR_DATA+'">':'')+'<div><div class="cta-title">Scannen & direkt anfragen</div><div class="cta-text">Maschinenlösungen, Service, Wartung und Beratung für Ihren Betrieb – schnell, direkt und unverbindlich.<br><b>+49 160 91658700 · r.kutschke@as-technical.de · www.bloc73machinery.com</b></div></div></div>'+
-    '</article>'
-}
-function markSent(){let tpl=getSelectedTemplate(); let f=addWorkdays(today(),el('followDays').value); builtIds.forEach(id=>{let c=state.customers.find(x=>x.id===id); if(c){c.status='Angeschrieben';c.followUp=f;addHist(id,el('docType').value==='intro'?'Erstanschreiben versendet':'Kernpunkte versendet',tpl.title)}}); renderAll(); alert('Versand intern gespeichert. Nachfassdatum: '+f)}
-function renderCalls(){let d=el('callDate').value||today(), st=el('callStatus').value; let list=state.customers.filter(c=>(!c.followUp||c.followUp<=d)&&(!st||c.status===st)&&['Angeschrieben','Nachtelefonieren','Nicht erreicht','Rückruf','Interesse','Angebot','Termin','Kein Bedarf','Später wieder melden'].includes(c.status)); el('callTable').innerHTML=list.length?'<table><thead><tr><th>Firma</th><th>Kontakt</th><th>Fällig</th><th>Status</th><th>Aktion</th></tr></thead><tbody>'+list.map(c=>`<tr><td><b>${esc(c.firma)}</b><br><span class="mini">${esc(c.plz+' '+c.ort)}</span></td><td>${esc(c.ansprechpartner)}<br>${esc(c.telefon)}</td><td>${esc(c.followUp||'')}</td><td>${statusPill(c)}</td><td><div class="toolbar"><button class="btn small" onclick="setCall('${c.id}','Nicht erreicht')">Nicht erreicht</button><button class="btn small ok" onclick="setCall('${c.id}','Interesse')">Interesse</button><button class="btn small warn" onclick="setCall('${c.id}','Angebot')">Angebot</button><button class="btn small secondary" onclick="openCustomer('${c.id}')">Notiz</button></div></td></tr>`).join('')+'</tbody></table>':'<div class="empty">Keine Einträge.</div>'}
-function setCall(id,status){let c=state.customers.find(x=>x.id===id); if(!c)return; c.status=status; if(['Nicht erreicht','Rückruf','Später wieder melden'].includes(status))c.followUp=addWorkdays(today(),3); addHist(id,'Nachtelefonie',status); renderAll()}
-function renderTemplateSelect(keep=true){let sel=el('tplSelect'); let old=sel.value; let all={...Object.fromEntries(Object.entries(state.intros).map(([k,v])=>['intro:'+k,v])),...Object.fromEntries(Object.entries(state.cores).map(([k,v])=>['core:'+k,v]))}; sel.innerHTML=Object.entries(all).map(([k,v])=>'<option value="'+k+'">'+esc(v.title)+'</option>').join(''); if(keep&&old)sel.value=old; if(!currentTplKey)loadTemplateEditor()}
-function loadTemplateEditor(){currentTplKey=el('tplSelect').value||Object.keys(state.intros).map(k=>'intro:'+k)[0]; let [kind,key]=currentTplKey.split(':'); let t=(kind==='intro'?state.intros:state.cores)[key]; if(!t)return; el('tplTitle').value=t.title; el('tplSubject').value=t.subject; el('tplBrand').value=t.brandLine||''; if(kind==='intro') el('tplText').value=t.paragraphs.join('\n\n')+'\n\n--- Schwerpunkte ---\n'+t.focusItems.join('\n'); else el('tplText').value=[t.intro,t.lead,'--- Karten: Titel | Text ---',...t.cards.map(c=>c[0]+' | '+c[1])].join('\n')}
-function saveTemplateEditor(){let [kind,key]=el('tplSelect').value.split(':'); let src=kind==='intro'?state.intros:state.cores; let t=src[key]; t.title=el('tplTitle').value; t.subject=el('tplSubject').value; t.brandLine=el('tplBrand').value; let txt=el('tplText').value; if(kind==='intro'){let parts=txt.split(/---\s*Schwerpunkte\s*---/i); t.paragraphs=parts[0].split(/\n\s*\n/).map(s=>s.trim()).filter(Boolean); t.focusItems=(parts[1]||'').split('\n').map(s=>s.trim()).filter(Boolean)} else {let lines=txt.split('\n').map(s=>s.trim()).filter(Boolean); t.intro=lines[0]||''; t.lead=lines[1]||''; t.cards=lines.filter(l=>l.includes('|')).map(l=>l.split('|').map(s=>s.trim())).filter(a=>a.length>=2).map(a=>[a[0],a.slice(1).join(' | ')])} save();renderTemplateSelect();renderLetterOptions();alert('Vorlage gespeichert.')}
-function resetTemplates(){if(!confirm('Alle Vorlagen auf Standard zurücksetzen?'))return; state.intros=structuredClone(DEFAULT_INTROS); state.cores=structuredClone(DEFAULT_CORES); currentTplKey=null; renderTemplateSelect(false);renderLetterOptions();save()}
-function download(name,text,type='text/plain'){let a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-function downloadJson(){download('bloc73-akquise-sicherung.json',JSON.stringify(state,null,2),'application/json')}
-function downloadCsv(){let head=['Firma','Ansprechpartner','Strasse','PLZ','Ort','Telefon','Email','Website','Branche','Status','Nachfassdatum','Notiz']; let rows=state.customers.map(c=>[c.firma,c.ansprechpartner,c.strasse,c.plz,c.ort,c.telefon,c.email,c.website,c.branche,c.status,c.followUp,c.notiz]); let csv=[head,...rows].map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(';')).join('\n'); download('bloc73-kunden-export.csv',csv,'text/csv')}
-function importJson(){let f=el('jsonFile').files[0]; if(!f)return alert('JSON-Datei wählen.'); let r=new FileReader(); r.onload=()=>{try{let s=JSON.parse(r.result); if(!s.customers)throw new Error('Keine Kunden gefunden'); state=s; state.intros=state.intros||structuredClone(DEFAULT_INTROS); state.cores=state.cores||structuredClone(DEFAULT_CORES); save();renderAll();alert('Sicherung eingespielt.')}catch(e){alert('JSON konnte nicht gelesen werden: '+e.message)}}; r.readAsText(f,'utf-8')}
-window.openCustomer=openCustomer; window.openGoogleId=openGoogleId; window.openMapsId=openMapsId; window.setCall=setCall;
-document.addEventListener('DOMContentLoaded',init);
-
+function renderDashboard(){const total=state.customers.length;const ready=state.customers.filter(isReady).length;const blocked=state.customers.filter(c=>!isReady(c)).length;const calls=state.customers.filter(c=>c.followUp&&c.followUp<=today()&&['Nachtelefonieren','Nicht erreicht','Später wieder melden','Angeschrieben'].includes(statusFor(c))).length;$('mTotal').textContent=total;$('mReady').textContent=ready;$('mBlocked').textContent=blocked;$('mCalls').textContent=calls;const due=state.customers.filter(c=>c.followUp&&c.followUp<=today()).slice(0,6);$('todayList').innerHTML=due.length?due.map(c=>`<div class="history-item"><b>${esc(c.firma)}</b><br><span class="mini">${esc(c.ansprechpartner)} · ${esc(c.plz)} ${esc(c.ort)} · ${esc(c.telefon)}</span><br><span class="pill warn">Nachfassen ${esc(c.followUp)}</span></div>`).join(''):'<div class="empty">Keine fällige Nachtelefonie.</div>';}
+function filteredCustomers(base=state.customers){const q=($('filterSearch')?.value||'').toLowerCase();const plz=$('filterPlz')?.value||'';const st=$('filterStatus')?.value||'';const br=$('filterBranch')?.value||'';return base.filter(c=>{const hay=[c.firma,c.ansprechpartner,c.ort,c.plz,c.telefon,c.email,c.website,c.branche].join(' ').toLowerCase();return (!q||hay.includes(q))&&(!plz||String(c.plz||'').startsWith(plz))&&(!st||statusFor(c)===st)&&(!br||c.branche===br);});}
+function statusPill(c){const st=statusFor(c);const cls=st==='Unvollständig'||st==='Gesperrt'?'bad':st==='Bereit für Kampagne'||st==='Interesse'||st==='Angebot'||st==='Termin'?'ok':st==='Nachtelefonieren'||st==='Nicht erreicht'||st==='Später wieder melden'?'warn':'dark';return `<span class="pill ${cls}">${esc(st)}</span>`}
+function renderCustomers(){const rows=filteredCustomers();$('customerTable').innerHTML=rows.length?`<table><thead><tr><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Telefon</th><th>Branche</th><th>Status</th><th>Aktion</th></tr></thead><tbody>${rows.map(c=>{const issues=validateCustomer(c);return `<tr><td><div class="customer-name">${esc(c.firma)}</div><div class="mini muted">Quelle: ${esc(c.quelle||'-')}</div>${issues.length?`<div class="danger-text mini">${issues.map(esc).join(', ')}</div>`:''}</td><td>${esc(c.ansprechpartner||'')} ${!c.ansprechpartner?'<div class="danger-text">Pflichtfeld</div>':''}</td><td>${esc(c.strasse)}<br>${esc(c.plz)} ${esc(c.ort)}</td><td class="nowrap">${esc(c.telefon)}<br><span class="mini muted">${esc(c.email||'')}</span></td><td>${esc(c.branche||'')}</td><td>${statusPill(c)}${c.followUp?`<br><span class="mini">WV: ${esc(c.followUp)}</span>`:''}</td><td class="nowrap"><button class="btn small secondary" onclick="openCustomerModalById('${c.id}')">Bearbeiten</button> <button class="btn small" onclick="openCallModal('${c.id}')">Telefon</button></td></tr>`}).join('')}</tbody></table>`:'<div class="empty">Keine Kunden gefunden.</div>';}
+function openCustomerModal(prefill={}){['Id','Firma','Ansprechpartner','Strasse','Plz','Ort','Telefon','Email','Website','Branche','Quelle','Notiz'].forEach(k=>{$('c'+k).value=''});$('cId').value=prefill.id||'';$('cFirma').value=prefill.firma||'';$('cAnsprechpartner').value=prefill.ansprechpartner||'';$('cStrasse').value=prefill.strasse||'';$('cPlz').value=prefill.plz||'';$('cOrt').value=prefill.ort||'';$('cTelefon').value=prefill.telefon||'';$('cEmail').value=prefill.email||'';$('cWebsite').value=prefill.website||'';$('cBranche').value=prefill.branche||'';$('cQuelle').value=prefill.quelle||'Manuell';$('cStatus').value=prefill.status||'Recherche offen';$('cAdFocus').value=prefill.adFocus||'full';$('cNotiz').value=prefill.notiz||'';$('deleteCustomerBtn').style.display=prefill.id?'inline-flex':'none';$('customerModalTitle').textContent=prefill.id?'Kunde bearbeiten':'Kunde anlegen';$('customerValidation').innerHTML='';$('customerModal').classList.add('active');}
+function openCustomerModalById(id){const c=state.customers.find(x=>x.id===id);if(c)openCustomerModal(c)}
+function closeCustomerModal(){$('customerModal').classList.remove('active')}
+function formCustomer(){return {id:$('cId').value||uid(),firma:$('cFirma').value.trim(),ansprechpartner:$('cAnsprechpartner').value.trim(),strasse:$('cStrasse').value.trim(),plz:$('cPlz').value.trim(),ort:$('cOrt').value.trim(),telefon:$('cTelefon').value.trim(),email:$('cEmail').value.trim(),website:$('cWebsite').value.trim(),branche:$('cBranche').value.trim(),quelle:$('cQuelle').value.trim()||'Manuell',status:$('cStatus').value,adFocus:$('cAdFocus').value||'full',notiz:$('cNotiz').value.trim()};}
+function saveCustomer(){const c=formCustomer();const issues=validateCustomer(c);if(issues.length){c.status='Unvollständig';$('customerValidation').innerHTML=`<div class="alert bad">${issues.map(esc).join(' · ')}. Der Kunde wird gespeichert, bleibt aber für Kampagnen gesperrt.</div>`;}else if(c.status==='Unvollständig'){c.status='Bereit für Kampagne'}const old=state.customers.find(x=>x.id===c.id);const merged={...(old||{}),...c,updatedAt:new Date().toISOString(),createdAt:old?.createdAt||new Date().toISOString()};const idx=state.customers.findIndex(x=>x.id===c.id);if(idx>=0)state.customers[idx]=merged;else state.customers.unshift(merged);save();renderAll();setTimeout(closeCustomerModal,issues.length?650:0);}
+function deleteCustomer(){const id=$('cId').value;if(!id)return;if(confirm('Kunden wirklich löschen?')){state.customers=state.customers.filter(c=>c.id!==id);save();renderAll();closeCustomerModal();}}
+function parseCsv(text){const rows=[];let row=[],cell='',q=false;for(let i=0;i<text.length;i++){const ch=text[i],next=text[i+1];if(ch==='"'){if(q&&next==='"'){cell+='"';i++;}else q=!q;}else if(ch===','&&!q){row.push(cell);cell='';}else if((ch==='\n'||ch==='\r')&&!q){if(ch==='\r'&&next==='\n')i++;row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);row=[];cell='';}else cell+=ch;}row.push(cell);if(row.some(x=>String(x).trim()))rows.push(row);if(!rows.length)return[];const headers=rows[0].map(h=>h.trim().toLowerCase());const map={firma:['firma','unternehmen','name','company'],ansprechpartner:['ansprechpartner','kontakt','inhaber','geschäftsführer','geschaeftsfuehrer','contact'],strasse:['strasse','straße','adresse','address'],plz:['plz','zip','postal code'],ort:['ort','stadt','city'],telefon:['telefon','tel','phone'],email:['email','e-mail','mail'],website:['website','web','url'],branche:['branche','category','kategorie'],notiz:['notiz','note','bemerkung']};function val(r,key){const names=map[key];const idx=headers.findIndex(h=>names.includes(h));return idx>=0?(r[idx]||'').trim():''}return rows.slice(1).map(r=>({id:uid(),firma:val(r,'firma'),ansprechpartner:val(r,'ansprechpartner'),strasse:val(r,'strasse'),plz:val(r,'plz'),ort:val(r,'ort'),telefon:val(r,'telefon'),email:val(r,'email'),website:val(r,'website'),branche:val(r,'branche'),notiz:val(r,'notiz'),quelle:'CSV-Import',adFocus:'full',status:'Recherche offen',createdAt:new Date().toISOString()}));}
+function previewImport(list){if(!list.length){$('importPreview').innerHTML='<div class="empty">Keine gültigen CSV-Zeilen erkannt.</div>';return}const bad=list.filter(c=>validateCustomer(c).length).length;$('importPreview').innerHTML=`<div class="alert ${bad?'bad':'ok'}">${list.length} Kontakte erkannt · ${bad} unvollständig / gesperrt</div><div style="margin-top:12px;max-height:420px;overflow:auto"><table><thead><tr><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Telefon</th><th>Status</th></tr></thead><tbody>${list.slice(0,80).map(c=>`<tr><td>${esc(c.firma)}</td><td>${esc(c.ansprechpartner)||'<span class="danger-text">fehlt</span>'}</td><td>${esc(c.plz)} ${esc(c.ort)}</td><td>${esc(c.telefon)}</td><td>${validateCustomer(c).length?'<span class="pill bad">Unvollständig</span>':'<span class="pill ok">Bereit</span>'}</td></tr>`).join('')}</tbody></table></div><div class="toolbar" style="margin-top:12px"><button class="btn ok" onclick="commitImport()">${list.length} Kontakte importieren</button></div>`;window.pendingImport=list;}
+function importCsvText(){const list=parseCsv($('csvText').value);previewImport(list)}
+function handleCsvFile(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{ $('csvText').value=r.result; previewImport(parseCsv(r.result));};r.readAsText(f,'utf-8');}
+function commitImport(){const list=window.pendingImport||[];list.forEach(c=>{c.status=validateCustomer(c).length?'Unvollständig':'Bereit für Kampagne';});state.customers=[...list,...state.customers];save();window.pendingImport=[];renderAll();$('importPreview').innerHTML=`<div class="alert ok">${list.length} Kontakte importiert.</div>`;}
+function loadSampleCsv(){$('csvText').value='Firma,Ansprechpartner,Strasse,PLZ,Ort,Telefon,Email,Website,Branche,Notiz\nMetzgerei Müller GmbH,Herr Thomas Müller,Musterstraße 12,09111,Chemnitz,0371 123456,info@mueller.de,www.mueller.de,Metzgerei,Interesse Schneidtechnik\nFleischerei Beispiel,,Hauptstraße 8,09599,Freiberg,03731 000000,,,Fleischerei,Ansprechpartner fehlt';importCsvText();}
+function renderSearchLinks(){const branch=$('rBranch').value.trim();const city=$('rCity').value.trim();const plz=$('rPlz').value.trim();const extra=$('rExtra').value.trim();const q=[branch,city,plz,extra].filter(Boolean).join(' ');const enc=encodeURIComponent(q);const queries=[['Google Suche',`https://www.google.com/search?q=${enc}`],['Google Maps',`https://www.google.com/maps/search/${enc}`],['Impressum suchen',`https://www.google.com/search?q=${encodeURIComponent(q+' Impressum Geschäftsführer Inhaber')}`],['Telefon / Ansprechpartner',`https://www.google.com/search?q=${encodeURIComponent(q+' Telefon Ansprechpartner')}`],['Branche + PLZ',`https://www.google.com/search?q=${encodeURIComponent(branch+' '+plz+' '+city)}`],['Website-Liste',`https://www.google.com/search?q=${encodeURIComponent(branch+' '+city+' Website')}`]];$('searchLinks').innerHTML=queries.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)}<br><span class="mini muted">${esc(q)}</span></a>`).join('');}
+function campaignPool(){const plz=$('campPlz').value.trim();const br=$('campBranch').value;return state.customers.filter(c=>isReady(c)&&(!plz||String(c.plz||'').startsWith(plz))&&(!br||c.branche===br));}
+function renderCampaignSelection(){if(!$('campaignSelection'))return;const pool=campaignPool();pool.forEach(c=>{if(!selectedCampaignIds.size)selectedCampaignIds.add(c.id)});selectedCampaignIds=new Set([...selectedCampaignIds].filter(id=>pool.some(c=>c.id===id)));const blocked=state.customers.filter(c=>!isReady(c)).length;const campName=$('campaignName');if(campName&&!campName.value){const plz=$('campPlz')?.value||'';const l=LETTERS[$('letterType')?.value||'intro'];campName.value=`${l?l.name.split('·').pop().trim():'Kampagne'} ${plz?'PLZ '+plz:''} ${today()}`.trim();}$('campaignInfo').innerHTML=`<div class="taglist"><span class="pill ok">${pool.length} kampagnenfähig</span><span class="pill bad">${blocked} gesperrt/unvollständig</span><span class="pill dark">${selectedCampaignIds.size} ausgewählt</span><span class="pill red">Werbeimpuls Pflicht</span></div>`;$('campaignSelection').innerHTML=pool.length?`<table><thead><tr><th><input type="checkbox" ${selectedCampaignIds.size===pool.length?'checked':''} onchange="toggleAllCampaign(this.checked)"></th><th>Firma</th><th>Ansprechpartner</th><th>Adresse</th><th>Briefhistorie</th></tr></thead><tbody>${pool.map(c=>`<tr><td><input type="checkbox" ${selectedCampaignIds.has(c.id)?'checked':''} onchange="toggleCampaignId('${c.id}',this.checked)"></td><td><b>${esc(c.firma)}</b><br><span class="mini muted">${esc(c.branche)}</span></td><td>${esc(c.ansprechpartner)}</td><td>${esc(c.strasse)}<br>${esc(c.plz)} ${esc(c.ort)}</td><td><span class="mini">${esc(c.lastBrief||'noch kein Brief')}</span><br><span class="mini muted">${esc(c.lastSent||'')}</span></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Keine kampagnenfähigen Kunden im gewählten Filter. Prüfe Ansprechpartner und Pflichtfelder.</div>';}
+function toggleAllCampaign(v){const pool=campaignPool();selectedCampaignIds=v?new Set(pool.map(c=>c.id)):new Set();renderCampaignSelection()}
+function toggleCampaignId(id,v){if(v)selectedCampaignIds.add(id);else selectedCampaignIds.delete(id);renderCampaignSelection()}
+function greeting(name){const n=(name||'').trim();if(!n)return 'Sehr geehrte Damen und Herren,';if(/^frau\b/i.test(n))return `Sehr geehrte ${n},`;if(/^herr\b/i.test(n))return `Sehr geehrter ${n},`;return `Sehr geehrte/r ${n},`;}
+function addressBlock(c){return [c.firma,c.ansprechpartner,c.strasse,`${c.plz} ${c.ort}`].filter(Boolean).map(esc).join('<br>')}
+function letterHtml(c,letterKey,adKey,campaignName,followDate){const s=state.settings;const L=LETTERS[letterKey]||LETTERS.intro;const A=ADS[adKey]||ADS.full;const body=L.body(c).map(p=>`<p>${esc(p)}</p>`).join('');return `<div class="print-page"><div class="print-bg"></div><div class="page-note">BLOC73 MACHINERY</div><div class="letter-inner"><div class="letter-top"><div class="letter-logo"><div class="as">AS</div><div class="sub">Technical Solution</div><div class="bloc">BLOC73 <span>MACHINERY</span></div></div><div style="text-align:right;font-size:8.5pt;line-height:1.4;color:#334155"><b>${esc(s.company)}</b><br>${esc(s.name)}<br>${esc(s.phone)}<br>${esc(s.email)}<br>${esc(s.web)}</div></div><div class="sender">${esc(s.company)} · ${esc(s.name)} · ${esc(s.web)}</div><div class="date">${new Date().toLocaleDateString('de-DE')}</div><div class="addr">${addressBlock(c)}</div><div class="subject">${esc(L.subject)}</div><div class="bodytext"><p>${greeting(c.ansprechpartner)}</p>${body}</div><div class="adbox"><div class="adtitle">${esc(A.title)}</div><div class="adcols"><div><b>Chance für Ihren Betrieb:</b><br>${esc(A.text)}</div><div><ul>${A.bullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul></div></div></div><div class="cta"><div class="qr">${QR_SVG}</div><div><h3>Scannen & direkt anfragen</h3><p>Maschinenlösungen, Service, Wartung und Beratung für Ihren Betrieb – schnell, direkt und unverbindlich. Nachfassdatum intern: ${esc(followDate)}</p></div></div><div class="sign">Mit freundlichen Grüßen<br><br><b>${esc(s.name)}</b><br>${esc(s.position)}<br>${esc(s.company)}</div></div><div class="letter-footer"><span>Mobil / WhatsApp: ${esc(s.phone)}</span><span>${esc(s.email)}</span><span>${esc(s.web)}</span></div></div>`;}
+const QR_SVG='<img src="data:image/png;base64,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" alt="QR Code" style="width:100%;height:100%;object-fit:contain;display:block">';
+function generateLetters(){const ids=[...selectedCampaignIds];if(!ids.length){alert('Keine Kunden ausgewählt.');return}const letterKey=$('letterType').value;const adKey=$('adType').value;if(!adKey){alert('Werbeimpuls fehlt. Jeder Brief braucht Werbung.');return}const followDays=parseInt($('followDays').value||'7',10);const followDate=addBusinessDays(today(),followDays);const campaignName=$('campaignName').value.trim()||`Kampagne ${today()}`;const customers=ids.map(id=>state.customers.find(c=>c.id===id)).filter(Boolean);const bad=customers.filter(c=>!isReady(c));if(bad.length){alert('Es sind Kontakte ohne Ansprechpartner/Pflichtfelder enthalten. Diese können nicht gedruckt werden.');return}const html=customers.map(c=>letterHtml(c,letterKey,adKey,campaignName,followDate)).join('');$('printArea').innerHTML=html;customers.forEach(c=>{c.lastBrief=LETTERS[letterKey].name;c.lastSent=today();c.followUp=followDate;c.campaign=campaignName;c.adFocus=adKey;c.status='Nachtelefonieren';state.history.unshift({id:uid(),customerId:c.id,date:today(),type:'Brief',campaign:campaignName,letter:LETTERS[letterKey].name,ad:ADS[adKey].name,followUp:followDate});});save();renderAll();setTimeout(()=>window.print(),150);}
+function renderCalls(){const view=$('callView')?.value||'due';const q=($('callSearch')?.value||'').toLowerCase();const plz=$('callPlz')?.value||'';let list=state.customers.filter(c=>c.followUp);if(view==='due')list=list.filter(c=>c.followUp<=today());if(view==='interest')list=list.filter(c=>['Interesse','Angebot','Termin'].includes(statusFor(c)));list=list.filter(c=>{const hay=[c.firma,c.ansprechpartner,c.ort,c.plz,c.telefon,c.notiz].join(' ').toLowerCase();return (!q||hay.includes(q))&&(!plz||String(c.plz||'').startsWith(plz));}).sort((a,b)=>(a.followUp||'').localeCompare(b.followUp||''));$('callsTable').innerHTML=list.length?`<table><thead><tr><th>Fällig</th><th>Firma</th><th>Ansprechpartner</th><th>Telefon</th><th>Brief / Werbung</th><th>Status</th><th>Aktion</th></tr></thead><tbody>${list.map(c=>`<tr><td class="nowrap"><b>${esc(c.followUp)}</b></td><td><b>${esc(c.firma)}</b><br><span class="mini muted">${esc(c.plz)} ${esc(c.ort)}</span></td><td>${esc(c.ansprechpartner)}</td><td class="nowrap">${esc(c.telefon)}</td><td><span class="mini">${esc(c.lastBrief||'-')}</span><br><span class="mini muted">${esc(ADS[c.adFocus]?.name||'Werbung')}</span></td><td>${statusPill(c)}</td><td><button class="btn small" onclick="openCallModal('${c.id}')">Telefonat</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">Keine passenden Nachfasskontakte.</div>';}
+function openCallModal(id){const c=state.customers.find(x=>x.id===id);if(!c)return;$('callCustomerId').value=id;$('callCustomerHead').innerHTML=`<b>${esc(c.firma)}</b><br>${esc(c.ansprechpartner)} · ${esc(c.telefon)} · ${esc(c.plz)} ${esc(c.ort)}<br>Letzter Brief: ${esc(c.lastBrief||'-')}`;$('callStatus').value=statusFor(c)==='Unvollständig'?'Nachtelefonieren':statusFor(c);$('callFollow').value=c.followUp||addBusinessDays(today(),5);$('callNote').value='';$('callModal').classList.add('active');}
+function closeCallModal(){$('callModal').classList.remove('active')}
+function saveCall(){const id=$('callCustomerId').value;const c=state.customers.find(x=>x.id===id);if(!c)return;const note=$('callNote').value.trim();c.status=$('callStatus').value;c.followUp=$('callFollow').value;c.notiz=[c.notiz,note?`${new Date().toLocaleDateString('de-DE')}: ${note}`:''].filter(Boolean).join('\n');state.history.unshift({id:uid(),customerId:id,date:today(),type:'Telefonat',status:c.status,note,followUp:c.followUp});save();renderAll();closeCallModal();}
+function csvEscape(v){const s=String(v??'');return /[",\n;]/.test(s)?`"${s.replace(/"/g,'""')}"`:s}
+function exportCustomersCsv(){const headers=['Firma','Ansprechpartner','Strasse','PLZ','Ort','Telefon','Email','Website','Branche','Quelle','Status','Letzter Brief','Letzter Versand','Nachfassdatum','Notiz'];const lines=[headers.join(',')];state.customers.forEach(c=>lines.push([c.firma,c.ansprechpartner,c.strasse,c.plz,c.ort,c.telefon,c.email,c.website,c.branche,c.quelle,statusFor(c),c.lastBrief,c.lastSent,c.followUp,c.notiz].map(csvEscape).join(',')));downloadText('bloc73_kunden_export.csv',lines.join('\n'),'text/csv');}
+function downloadBackup(){downloadText('bloc73_akquise_sicherung.json',JSON.stringify(state,null,2),'application/json');}
+function downloadText(name,text,type){const blob=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
+function renderSettings(){if(!$('sName'))return;$('sName').value=state.settings.name;$('sPosition').value=state.settings.position;$('sPhone').value=state.settings.phone;$('sEmail').value=state.settings.email;$('sWeb').value=state.settings.web;$('sCompany').value=state.settings.company;$('moduleList').innerHTML=[...Object.values(LETTERS).map(x=>x.name),...Object.values(ADS).map(x=>x.name)].map(x=>`<span class="pill dark">${esc(x)}</span>`).join('');}
+function saveSettings(){state.settings={name:$('sName').value,position:$('sPosition').value,phone:$('sPhone').value,email:$('sEmail').value,web:$('sWeb').value,company:$('sCompany').value};save();renderAll();alert('Einstellungen gespeichert.');}
+function resetSettings(){state.settings={...DEFAULT_SETTINGS};save();renderAll();}
+function seedIfEmpty(){if(state.customers.length)return;state.customers=[{id:uid(),firma:'Metzgerei Muster GmbH',ansprechpartner:'Herr Thomas Muster',strasse:'Musterstraße 12',plz:'09111',ort:'Chemnitz',telefon:'0371 123456',email:'info@metzgerei-muster.de',website:'www.metzgerei-muster.de',branche:'Metzgerei',quelle:'Muster',status:'Bereit für Kampagne',adFocus:'graef',notiz:'Musterkontakt – kann gelöscht werden.',createdAt:new Date().toISOString()},{id:uid(),firma:'Fleischerei Ohne Ansprechpartner',ansprechpartner:'',strasse:'Hauptstraße 8',plz:'09599',ort:'Freiberg',telefon:'03731 000000',email:'',website:'',branche:'Fleischerei',quelle:'Muster',status:'Unvollständig',adFocus:'full',notiz:'Demokontakt: Ansprechpartner fehlt, daher gesperrt.',createdAt:new Date().toISOString()}];save();}
+load();seedIfEmpty();navInit();go('dashboard');
 </script>
 </body>
 </html>
