@@ -275,68 +275,189 @@
   const BRANCHES = ['Metzgerei','Fleischerei','Lebensmittelproduktion','Gastronomie','Großküche','Catering','Bäckerei','Kühltechnik','Verpackung','Sonstige'];
   const STATUSES = ['Unvollständig','Recherche offen','Bereit für Kampagne','Angeschrieben','Nachtelefonieren','Nicht erreicht','Rückruf','Interesse','Termin','Angebot','Kein Bedarf','Später wieder melden','Gesperrt'];
   const LETTERS = {
-    vorstellung: {
-      name:'1. Vorstellung AS / BLOC73',
-      subject:'Technik, Service und Maschinenvertrieb für professionelle Lebensmittelbetriebe',
-      body:[
-        'wir möchten Ihnen die AS Technical Solution GmbH und unsere Vertriebsmarke BLOC73 Machinery vorstellen. Wir unterstützen professionelle Lebensmittelbetriebe mit Maschinenvertrieb, technischer Beratung, Service, Wartung und direkter Betreuung.',
-        'Unser Fokus liegt auf Lösungen, die im Alltag funktionieren: saubere Beratung, kurze Wege, verlässliche Technik und ein Ansprechpartner, der die Praxis in Lebensmittelbetrieben versteht.',
-        'Besonders hervorheben möchten wir unseren zertifizierten Partnerstatus: Wir sind zertifizierter GRAEF Partner und zertifizierter BASTRA Partner für Service- und Wartungsarbeiten.'
-      ]
+    "vorstellung": {
+        "name": "1. Vorstellung AS / BLOC73",
+        "subject": "AS Technical Solution & BLOC73 Machinery – Technik, Service und Maschinenvertrieb",
+        "body": [
+            "wir möchten Ihnen die AS Technical Solution GmbH und unsere Vertriebsmarke BLOC73 Machinery vorstellen. Wir verbinden Maschinenvertrieb mit technischer Praxis, Service, Wartung, Instandhaltung, Einweisung und direkter Betreuung für professionelle Lebensmittelbetriebe.",
+            "Unser Portfolio deckt die wichtigsten Bereiche im Betrieb ab: GRAEF Schneidtechnik, ZERMAT Verpackungstechnik, FOODLOGISTIK Verarbeitungstechnik, ATOSA Kühltechnik, GASER Form- und Portioniertechnik, DÜKER-REX / Kolbe-REX Kutter und Wolftechnik, Rauchanlagen und Thermik, Gefrierblockschneider, Clips, Schlaufen, Spieße, Geflügeltechnik sowie Gebrauchttechnik nach Verfügbarkeit.",
+            "Besonders wichtig: Wir sind zertifizierter GRAEF Partner und zertifizierter BASTRA Partner für Service- und Wartungsarbeiten. Damit endet unser Ansatz nicht beim Verkauf, sondern bleibt auch im laufenden Betrieb technisch greifbar."
+        ]
     },
-    werbung: {
-      name:'2. Werbung Maschinen & Service',
-      subject:'Maschinen, Service und Wartung aus einer Hand',
-      body:[
-        'in vielen Betrieben steckt kurzfristig Potenzial in der richtigen Maschine, sauberer Wartung oder einer technischen Modernisierung. Genau hier setzen wir mit BLOC73 Machinery an.',
-        'Wir betreuen Themen rund um Schneidtechnik, Verpackung, Verarbeitung, Kühlung, Service, Ersatzteile und Gebrauchttechnik. Ziel ist eine Lösung, die fachlich passt und wirtschaftlich Sinn ergibt.',
-        'Ich fasse dieses Schreiben telefonisch nach, damit wir schnell prüfen können, ob es bei Ihnen aktuell oder mittelfristig einen sinnvollen Ansatz gibt.'
-      ]
+    "werbung": {
+        "name": "2. Werbung Maschinen & Service",
+        "subject": "Maschinen, Service, Wartung und technische Beratung für Ihren Betrieb",
+        "body": [
+            "in vielen Lebensmittelbetrieben liegt Potenzial in der richtigen Maschine, einer planbaren Wartung oder einer sauberen technischen Modernisierung. Genau hier setzen AS Technical Solution und BLOC73 Machinery an: Wir prüfen nicht nur den Preis, sondern den tatsächlichen Nutzen im Betrieb.",
+            "Über BLOC73 Machinery erhalten Sie Zugang zu ausgewählten Lösungen von GRAEF, ZERMAT, FOODLOGISTIK, ATOSA, GASER, DÜKER-REX / Kolbe-REX sowie zu Rauchanlagen, Gefrierblockschneidern, Clips, Schlaufen, Spießen, Geflügeltechnik und Gebrauchttechnik. AS Technical begleitet die technische Seite mit Service, Wartung, Reparatur, DGUV-Prüfung und praktischer Einordnung.",
+            "Ich fasse dieses Schreiben telefonisch nach. Ziel ist nicht irgendein Maschinenangebot, sondern ein konkreter Ansatz: Ersatzbedarf, Engpass, Modernisierung, Wartung, Vorführung oder eine wirtschaftlich bessere Lösung."
+        ]
     },
-    graef: {
-      name:'3. GRAEF Fokus',
-      subject:'Professionelle Schneidtechnik – Beratung, Vertrieb und Service',
-      body:[
-        'als zertifizierter GRAEF Partner unterstützen wir Sie bei professioneller Schneidtechnik für Theke, Produktion und Verkauf.',
-        'Ob Halbautomat, Vollautomat, Ersatzbedarf oder Vorführung: Wir prüfen gemeinsam, welche Lösung zu Produkt, Personal und Ablauf passt.',
-        'Gerade im Bedienbereich zählt Technik, die sauber schneidet, Bedienzeit reduziert und zuverlässig läuft.'
-      ]
+    "graef": {
+        "name": "3. GRAEF Schneidtechnik",
+        "subject": "Zertifizierter GRAEF Partner – Schneidtechnik für Theke und Produktion",
+        "body": [
+            "als zertifizierter GRAEF Partner unterstützen wir Sie bei professioneller Schneidtechnik für Theke, Bedienbereich, SB-Vorbereitung und Produktion. Im Fokus stehen präzise Schnitte, saubere Ablage, weniger Bedienbindung und zuverlässige Technik im Tagesgeschäft.",
+            "Wir betrachten gemeinsam, ob Halbautomat, Vollautomat, Master Line, Zubehör, Service oder Ersatzteilversorgung sinnvoll ist. Dabei geht es um Produkt, Aufstellfläche, Bedienpersonal, Reinigungsaufwand, Ausbringung und wirtschaftlichen Nutzen.",
+            "Ergänzend bleibt BLOC73 Machinery Ihr Ansprechpartner für weitere Bereiche: Verpackung mit ZERMAT, Verarbeitung mit FOODLOGISTIK und GASER, Kühlung mit ATOSA, Kutter und Wölfe mit DÜKER-REX / Kolbe-REX sowie Gebrauchttechnik und Verbrauchsmaterial."
+        ]
     },
-    bastra: {
-      name:'4. BASTRA Service & Wartung',
-      subject:'Service und Wartung für Rauch-, Koch- und Verarbeitungstechnik',
-      body:[
-        'als zertifizierter BASTRA Partner für Service- und Wartungsarbeiten unterstützen wir Betriebe bei technischer Betreuung, Wartung und Ersatzteilthemen.',
-        'Bestehende Anlagen müssen zuverlässig laufen. Wir helfen dabei, Ausfälle zu reduzieren, Wartungen planbar zu machen und technische Fragen sauber zu klären.',
-        'Gerne prüfen wir, ob wir Ihre vorhandene Technik im Service oder bei Wartungsthemen sinnvoll unterstützen können.'
-      ]
+    "bastra": {
+        "name": "4. BASTRA Service & Wartung",
+        "subject": "Zertifizierter BASTRA Partner für Service- und Wartungsarbeiten",
+        "body": [
+            "als zertifizierter BASTRA Partner für Service- und Wartungsarbeiten unterstützen wir Betriebe bei Rauch-, Koch-, Thermik- und Verarbeitungstechnik. Gerade bei bestehenden Anlagen zählt planbare Betreuung, schnelle technische Einschätzung und verlässliche Wartung.",
+            "Wir prüfen Wartung, Störung, Ersatzteilthemen, Modernisierung, Bedienung, Prozesssicherheit und sinnvolle Folgemaßnahmen. Ziel ist, Ausfälle zu reduzieren und vorhandene Technik wirtschaftlich weiter nutzbar zu halten.",
+            "Zusätzlich können wir über BLOC73 Machinery weitere Maschinenbereiche einordnen: GRAEF, ZERMAT, FOODLOGISTIK, GASER, DÜKER-REX / Kolbe-REX, ATOSA, Gefrierblockschneider, Clips, Schlaufen, Spieße, Geflügeltechnik und Gebrauchttechnik."
+        ]
     },
-    verpackung: {
-      name:'5. Verpackung / ZERMAT',
-      subject:'Verpackungslösungen für Frische, SB-Ware und Produktion',
-      body:[
-        'Verpackung ist heute ein zentraler Punkt in Lebensmittelbetrieben: Haltbarkeit, Optik, Prozesssicherheit und Wirtschaftlichkeit müssen zusammenpassen.',
-        'Über BLOC73 Machinery bieten wir Lösungen rund um Vakuumtechnik, Kammermaschinen und Traysealer an.',
-        'Gerne prüfen wir gemeinsam, ob für Ihren Betrieb eine technische oder wirtschaftliche Verbesserung möglich ist.'
-      ]
+    "zermat": {
+        "name": "5. ZERMAT Verpackung",
+        "subject": "ZERMAT Verpackungstechnik – Vakuum, Kammermaschinen und Traysealer",
+        "body": [
+            "Verpackung entscheidet über Haltbarkeit, Warenoptik, Prozesssicherheit und Wirtschaftlichkeit. Über BLOC73 Machinery bieten wir ZERMAT Lösungen für professionelle Vakuumverpackung, Kammermaschinen, Standmaschinen, Hochleistungs-Vakuumtechnik und Traysealer.",
+            "Wir prüfen gemeinsam, ob eine kompakte Kammermaschine, eine leistungsfähigere Standmaschine oder ein Traysealer sinnvoll ist. Entscheidend sind Produkt, Verpackungsart, Menge, Platz, Personal, Reinigungsaufwand und gewünschte Präsentation.",
+            "Bei Bedarf verbinden wir die Verpackung direkt mit weiteren Themen: GRAEF Schneidtechnik, FOODLOGISTIK Verarbeitung, GASER Formtechnik, DÜKER-REX / Kolbe-REX Zerkleinerung, ATOSA Kühlung sowie Service und Wartung durch AS Technical."
+        ]
     },
-    verarbeitung: {
-      name:'6. Verarbeitung / Produktion',
-      subject:'Verarbeitungstechnik für professionelle Lebensmittelbetriebe',
-      body:[
-        'für Produktion und Verarbeitung stehen bei uns robuste Maschinenlösungen im Fokus: Schneiden, Formen, Wolfen, Kuttern, Füllen und weitere Prozessschritte.',
-        'Wir betrachten nicht nur die Maschine selbst, sondern auch Ablauf, Personal, Reinigung, Platzverhältnisse und Wirtschaftlichkeit.',
-        'So entsteht aus einer Maschinenanfrage eine Lösung, die im Betrieb tatsächlich funktioniert.'
-      ]
+    "verarbeitung": {
+        "name": "6. Verarbeitung / Produktion",
+        "subject": "Verarbeitungstechnik für Schneiden, Formen, Wolfen, Kuttern und Produktion",
+        "body": [
+            "für Produktion und Verarbeitung steht bei uns robuste, praxisnahe Technik im Fokus. Wir prüfen Lösungen rund um FOODLOGISTIK Schneid- und Würfeltechnik, GASER Form- und Portioniertechnik, DÜKER-REX / Kolbe-REX Kutter und Wölfe sowie weitere Prozessschritte in der Lebensmittelverarbeitung.",
+            "Wichtig ist nicht nur der Modellname. Entscheidend sind Produkt, Tagesmenge, Reinigungsaufwand, Personal, Stellfläche, Bedienung, Prozesskette und Wirtschaftlichkeit. Genau hier trennen sich gute Maschinenangebote von echten Lösungen.",
+            "Ergänzend deckt BLOC73 Machinery Schneidtechnik mit GRAEF, Verpackung mit ZERMAT, Kühlung mit ATOSA, Rauchanlagen und Thermik, Gefrierblockschneider, Clips, Schlaufen, Spieße, Geflügeltechnik und Gebrauchttechnik ab."
+        ]
+    },
+    "kuehlung": {
+        "name": "7. ATOSA Kühltechnik",
+        "subject": "Professionelle Kühltechnik für Gastronomie, Handel und Lebensmittelproduktion",
+        "body": [
+            "Kühltechnik muss im Alltag zuverlässig, hygienisch und wirtschaftlich funktionieren. Über BLOC73 Machinery betreuen wir ATOSA Kühltechnik und professionelle Ausstattung für Gastronomie, Handel, Fleischerei und Lebensmittelproduktion.",
+            "Wir prüfen, welche Lösung zu Lagerung, Verkauf, Produktionsablauf, Platzsituation und Budget passt. Dabei betrachten wir nicht nur den Anschaffungspreis, sondern auch Alltagstauglichkeit, Reinigung, Bedienung und technische Betreuung.",
+            "Bei Bedarf kombinieren wir Kühltechnik mit weiteren Bereichen: GRAEF Schneidtechnik, ZERMAT Verpackung, FOODLOGISTIK und GASER Verarbeitung, DÜKER-REX / Kolbe-REX Zerkleinerung, Rauchanlagen, Service und Wartung."
+        ]
+    },
+    "gebraucht": {
+        "name": "8. Gebrauchttechnik / Wirtschaftlich",
+        "subject": "Gebrauchttechnik und Maschinenlösungen nach Verfügbarkeit",
+        "body": [
+            "nicht jede Investition muss eine Neumaschine sein. Je nach Bedarf kann geprüfte Gebrauchttechnik eine wirtschaftlich sinnvolle Alternative sein – besonders dann, wenn Maschine, Zustand, Verfügbarkeit und Anwendung sauber eingeordnet werden.",
+            "Über BLOC73 Machinery prüfen wir gebrauchte und verfügbare Maschinen aus Bereichen wie Schneidtechnik, Verpackung, Verarbeitung, Kühlung, Kutter, Wölfe, Rauchanlagen, Gefrierblockschneider und weitere Lebensmitteltechnik.",
+            "Der Vorteil liegt in der Kombination aus Vertrieb und Technik: AS Technical kann Service, Wartung, technische Bewertung und praktische Einschätzung einbringen. Dadurch wird Gebrauchttechnik nicht zur Wundertüte, sondern zu einer kontrollierten Option."
+        ]
+    },
+    "dguservice": {
+        "name": "9. Service / DGUV / Wartung",
+        "subject": "Service, Wartung, Instandhaltung und DGUV-Prüfung für Lebensmitteltechnik",
+        "body": [
+            "Maschinen müssen nicht nur gekauft, sondern im Alltag sicher und zuverlässig betrieben werden. AS Technical Solution unterstützt Lebensmittelbetriebe bei Service, Wartung, Instandhaltung, Störungsbeseitigung, Einweisung, Modernisierung und DGUV-Prüfung.",
+            "Unsere technische Basis ergänzt den Maschinenvertrieb von BLOC73 Machinery. Dadurch können wir bei neuen Projekten, bestehenden Anlagen, Ersatzteilen, Umbauten oder wiederkehrenden Prüfungen praxisnah unterstützen.",
+            "Gleichzeitig bleiben alle Maschinenbereiche im Blick: GRAEF, ZERMAT, FOODLOGISTIK, ATOSA, GASER, DÜKER-REX / Kolbe-REX, BASTRA Service, Rauchanlagen, Gefrierblockschneider, Clips, Schlaufen, Spieße, Geflügeltechnik und Gebrauchttechnik."
+        ]
     }
-  };
+};
+
   const ADS = {
-    partner: { name:'Partner & Service', title:'Zertifizierte Partner für Service und Praxis', items:['GRAEF zertifizierter Partner für Schneidtechnik','BASTRA zertifizierter Partner für Service und Wartung','Beratung, Service, Wartung und Ersatzteile','Direkter Ansprechpartner statt anonymer Maschinenvermittlung'] },
-    maschinen: { name:'Maschinenprogramm', title:'Maschinenlösungen über BLOC73 Machinery', items:['GRAEF, ZERMAT, FOODLOGISTIK, GASER, DÜKER-REX, ATOSA','Schneidtechnik, Verpackung, Verarbeitung, Kühlung','Clips, Schlaufen, Spieße und Verbrauchsmaterial','Gebrauchttechnik nach Verfügbarkeit'] },
-    graef: { name:'GRAEF Werbung', title:'Schneidtechnik für Theke und Produktion', items:['Halbautomaten und Vollautomaten','Beratung zu Aufstellung, Ablauf und Bedienung','Vorführung und Bedarfsklärung möglich','Serviceorientierte Betreuung'] },
-    bastra: { name:'BASTRA Werbung', title:'Service und Wartung für BASTRA Technik', items:['Wartung bestehender Anlagen','Technische Betreuung und Ersatzteilthemen','Rauch-, Koch- und Verarbeitungstechnik','Planbare Serviceeinsätze'] },
-    verpackung: { name:'Verpackung Werbung', title:'Verpackungstechnik für professionelle Betriebe', items:['Vakuumtechnik, Kammermaschinen, Traysealer','Lösungen für SB-Ware und Produktion','Prozesssicherheit und saubere Präsentation','Technische Beratung vor Anschaffung'] }
-  };
+    "gesamt": {
+        "name": "Gesamtprogramm Werbung",
+        "title": "BLOC73 Machinery – unser Maschinen- und Serviceprogramm",
+        "items": [
+            "GRAEF Schneidtechnik · zertifizierter Partner",
+            "BASTRA Service & Wartung · zertifizierter Partner",
+            "ZERMAT Vakuumtechnik, Kammermaschinen, Traysealer",
+            "FOODLOGISTIK Schneiden, Würfeln, Zerkleinern, Slicen",
+            "GASER Formtechnik, Hamburger, Fleischklöße, Portionieren",
+            "DÜKER-REX / Kolbe-REX Kutter, Wölfe, Verarbeitung",
+            "ATOSA Kühltechnik und professionelle Ausstattung",
+            "Rauchanlagen, Thermik, Gefrierblockschneider, Gebrauchttechnik"
+        ]
+    },
+    "partner": {
+        "name": "Partner & Service Werbung",
+        "title": "Zertifizierte Partner und technische Basis",
+        "items": [
+            "GRAEF zertifizierter Partner für Schneidtechnik",
+            "BASTRA zertifizierter Partner für Service und Wartung",
+            "AS Technical: Service, Wartung, Reparatur, DGUV-Prüfung",
+            "Einweisung, technische Betreuung und Ersatzteilthemen",
+            "BLOC73: Maschinenvertrieb mit technischer Einordnung",
+            "Direkter Ansprechpartner statt anonymer Maschinenvermittlung",
+            "Nachtelefonie nach Versand für echte Bedarfsprüfung",
+            "Lösung nach Produkt, Platz, Personal und Budget"
+        ]
+    },
+    "schneiden": {
+        "name": "Schneidtechnik Werbung",
+        "title": "Schneidtechnik und Thekenprozesse",
+        "items": [
+            "GRAEF Halbautomaten und Vollautomaten",
+            "Master Line, Theke, Produktion und SB-Vorbereitung",
+            "Präzise Schnitte und saubere Ablage",
+            "Beratung zu Ablauf, Aufstellung und Bedienung",
+            "Vorführung und Bedarfsklärung möglich",
+            "Serviceorientierte Betreuung und Ersatzteile",
+            "Ergänzend: Verpackung, Kühlung und Verarbeitung",
+            "Nachfassgespräch zur konkreten Bedarfsklärung"
+        ]
+    },
+    "verpackung": {
+        "name": "Verpackung Werbung",
+        "title": "Verpackung, Frische und Präsentation",
+        "items": [
+            "ZERMAT Vakuumtechnik und Kammermaschinen",
+            "Standmaschinen und Hochleistungs-Vakuumtechnik",
+            "Traysealer für SB-Ware und Produktion",
+            "MAP / Skin je nach Maschine und Anwendung",
+            "Saubere Präsentation und Prozesssicherheit",
+            "Beratung zu Produkt, Menge, Folie, Schale und Platz",
+            "Kombination mit GRAEF Schneidtechnik möglich",
+            "Service und technische Einordnung durch AS Technical"
+        ]
+    },
+    "produktion": {
+        "name": "Produktion Werbung",
+        "title": "Verarbeitung und Produktion",
+        "items": [
+            "FOODLOGISTIK Schneiden, Würfeln, Zerkleinern, Slicen",
+            "GASER Formtechnik, Hamburger und Fleischklöße",
+            "DÜKER-REX / Kolbe-REX Kutter und Wölfe",
+            "Rauch-, Koch- und Thermiktechnik im Servicefokus",
+            "Gefrierblockschneider für tiefgekühlte Blöcke",
+            "Geflügeltechnik und weitere Verarbeitungslösungen",
+            "Clips, Schlaufen, Spieße und Verbrauchsmaterial",
+            "Gebrauchttechnik nach Bedarf und Verfügbarkeit"
+        ]
+    },
+    "wartung": {
+        "name": "Wartung Werbung",
+        "title": "Service, Wartung und Betriebssicherheit",
+        "items": [
+            "BASTRA Service und Wartung für Bestandstechnik",
+            "Rauch- und Reifekammern, Thermik und Prozessanlagen",
+            "Reparatur, Instandhaltung und technische Bewertung",
+            "DGUV-Prüfung und Dokumentation",
+            "Modernisierung, Retrofit und Ersatzteilthemen",
+            "Einweisung und praxisnahe Bedienunterstützung",
+            "Planbare Serviceeinsätze statt Stillstand",
+            "Direkter Kontakt per Telefon oder WhatsApp"
+        ]
+    },
+    "gebraucht": {
+        "name": "Gebrauchttechnik Werbung",
+        "title": "Wirtschaftliche Maschinenlösungen",
+        "items": [
+            "Gebrauchttechnik als Alternative zur Neumaschine",
+            "Technische Einordnung vor Angebotserstellung",
+            "Schneidtechnik, Verpackung, Verarbeitung und Kühlung",
+            "Kutter, Wölfe, Rauchanlagen und weitere Maschinen",
+            "Verfügbarkeit nach aktuellem Bestand",
+            "Service- und Wartungsblick durch AS Technical",
+            "Keine blinde Maschinenvermittlung",
+            "Klare Empfehlung: kaufen, warten, modernisieren oder lassen"
+        ]
+    }
+};
 
   let state = { customers: [], history: [] };
   let activeView = 'dashboard';
