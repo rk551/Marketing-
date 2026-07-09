@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>BLOC73 Flyer Studio V22 Eingabemaske Fix</title>
+<title>BLOC73 Flyer Studio V23 Speicherfix</title>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>if(!window.jspdf){document.write('<script src="https://unpkg.com/jspdf@2.5.1/dist/jspdf.umd.min.js"><\/script>')}</script>
 <style>
-/* V22_EINGABEMASKE_IMMER_WAEHLBAR */
+/* V23_SPEICHER_BEIM_SEITENWECHSEL_FIX */
 :root{--red:#c91f2d;--dark:#0d1117;--ink:#151b22;--muted:#66717d;--line:#d8dee5;--scale:1}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#e9eef3}
@@ -33,12 +33,12 @@ textarea{min-height:86px;line-height:1.42;resize:vertical}
 <body>
 <div id="app">
   <aside class="side">
-    <div class="top"><div class="mark">V22</div><div><h1>BLOC73 Marketing Studio</h1><p>Direkte PDF-Erstellung · Eingabemaske-Fix · 5 Seiten</p></div></div>
+    <div class="top"><div class="mark">V23</div><div><h1>BLOC73 Marketing Studio</h1><p>Direkte PDF-Erstellung · Speicherfix · 5 Seiten</p></div></div>
     <div class="btns"><button class="red sm" id="pdfBtn">PDF direkt erstellen</button><button class="light sm" id="checkBtn">Systemcheck</button><button class="light sm" id="clearPage">Seite leeren</button><button class="danger sm" id="resetAll">Reset</button></div>
-    <div class="status" id="status">Stabile Einzelvorschau aktiv. Das PDF wird direkt aus 5 festen Seiten erzeugt.</div>
+    <div class="status" id="status">Speicherfix aktiv. Beim Seitenwechsel wird zuerst gesichert.</div>
     <div class="status" id="previewInfo">Aktuelle Seite wird geladen …</div>
     <div class="tabs" id="tabs"></div>
-    <div class="status" id="editorNotice">Bitte Seite auswählen. Die passende Eingabemaske erscheint darunter.</div>
+    <div class="status" id="editorNotice">Bitte Seite auswählen. Vor jedem Wechsel wird der aktuelle Text gespeichert.</div>
     <div class="box" id="coverEditor">
       <h2>Startseite</h2>
       <label>Headline</label><textarea id="coverHeadline"></textarea>
@@ -72,7 +72,7 @@ textarea{min-height:86px;line-height:1.42;resize:vertical}
       <textarea id="briefing" readonly></textarea>
     </div>
   </aside>
-  <main class="preview"><div class="bar"><b>Einzelvorschau · PDF-Ausgabe V22</b><div class="btns" style="margin:0"><button class="light sm" id="previewReload">Vorschau neu laden</button><button class="red sm" id="pdfBtn2">PDF direkt erstellen</button></div></div><div id="previewPages" class="canvas"></div></main>
+  <main class="preview"><div class="bar"><b>Einzelvorschau · PDF-Ausgabe V23</b><div class="btns" style="margin:0"><button class="light sm" id="previewReload">Vorschau neu laden</button><button class="red sm" id="pdfBtn2">PDF direkt erstellen</button></div></div><div id="previewPages" class="canvas"></div></main>
 </div>
 <script>
 const DATA_KEY='bloc73_v14_edelstahl_geprueft_20260708';
@@ -221,8 +221,22 @@ let renderRun=0;async function renderPreview(){
   }
 }
 function fit(){document.documentElement.style.setProperty('--scale','1')}
-function renderTabs(){const names=['1 · Startseite','2 · Unternehmen','3 · Maschine 1','4 · Maschine 2','5 · Maschine 3'];$('tabs').innerHTML=names.map((n,i)=>`<button class="tab ${state.selected===i?'active':''}" data-i="${i}">${n}</button>`).join('');document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{state.selected=+b.dataset.i;renderTabs();renderEditors();save();renderPreview()})}
-function curM(){return state.selected>=2?state.machines[state.selected-2]:null}function renderEditors(){
+function renderTabs(){const names=['1 · Startseite','2 · Unternehmen','3 · Maschine 1','4 · Maschine 2','5 · Maschine 3'];$('tabs').innerHTML=names.map((n,i)=>`<button class="tab ${state.selected===i?'active':''}" data-i="${i}">${n}</button>`).join('');document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{collectCurrentForm();save();state.selected=+b.dataset.i;renderTabs();renderEditors();save();renderPreview()})}
+function curM(){return state.selected>=2?state.machines[state.selected-2]:null}
+function collectCurrentForm(){
+  try{
+    if(state.selected===0){
+      if($('coverHeadline'))state.cover.headline=$('coverHeadline').value;
+      if($('coverSubline'))state.cover.subline=$('coverSubline').value;
+      if($('coverContact'))state.cover.contact=$('coverContact').value;
+    }else if(state.selected>=2){
+      const m=curM(); if(!m)return;
+      ['category','productTitle','intro','benefits','specs','price','availability','cta'].forEach(id=>{if($(id))m[id]=$(id).value});
+      ['mainZoom','mainX','mainY'].forEach(id=>{if($(id))m[id]=+$(id).value||0});
+    }
+  }catch(e){console.warn('collectCurrentForm',e)}
+}
+function renderEditors(){
   const cover=$('coverEditor'), company=$('companyEditor'), machine=$('machineEditor');
   if(cover)cover.classList.toggle('hidden',state.selected!==0);
   if(company)company.classList.toggle('hidden',state.selected!==1);
@@ -239,7 +253,14 @@ function curM(){return state.selected>=2?state.machines[state.selected-2]:null}f
     if($('briefing'))$('briefing').value=briefingText(m);
   }
 }
-function render(){renderTabs();renderEditors();renderPreview();fit()}function bind(id,fn){let el=$(id);if(el)el.addEventListener('input',e=>{fn(e.target.value);save();renderPreview()})}
+function render(){renderTabs();renderEditors();renderPreview();fit()}function bind(id,fn){
+  let el=$(id);
+  if(!el)return;
+  const handler=e=>{fn(e.target.value);save();renderPreview()};
+  el.addEventListener('input',handler);
+  el.addEventListener('change',handler);
+  el.addEventListener('blur',handler);
+}
 bind('coverHeadline',v=>state.cover.headline=v);bind('coverSubline',v=>state.cover.subline=v);bind('coverContact',v=>state.cover.contact=v);['category','productTitle','intro','benefits','specs','price','availability','cta','mainZoom','mainX','mainY'].forEach(id=>bind(id,v=>{let m=curM();if(!m)return;m[id]=['mainZoom','mainX','mainY'].includes(id)?+v:v}));async function fileToData(f){
   return new Promise(res=>{
     const r=new FileReader();
@@ -268,7 +289,7 @@ function briefingText(m){return `Erstelle ein hochwertiges, fotorealistisches Ma
 if($('goMachine1'))$('goMachine1').onclick=()=>{state.selected=2;renderTabs();renderEditors();save();renderPreview()};
 $('copyBriefing').onclick=async()=>{let t=briefingText(curM());try{await navigator.clipboard.writeText(t);alert('Briefing kopiert.')}catch(e){$('briefing').value=t}};$('resetImg').onclick=()=>{let m=curM();if(m){m.mainZoom=1;m.mainX=0;m.mainY=0;save();renderEditors();renderPreview()}};$('clearPage').onclick=()=>{if(state.selected===0)state.cover=defaults().cover;else if(state.selected>=2)state.machines[state.selected-2]=blankMachine(state.selected-1);save();render()};$('resetAll').onclick=()=>{if(confirm('Alles zurücksetzen?')){localStorage.removeItem(DATA_KEY);state=defaults();save();render()}};
 
-async function runSystemCheck(showAlert=false){
+async function runSystemCheck(showAlert=false){collectCurrentForm();save();
   const results=[];
   const add=(name,ok)=>results.push({name,ok});
   try{localStorage.setItem('__bloc73_test','1');add('Speicher',localStorage.getItem('__bloc73_test')==='1');localStorage.removeItem('__bloc73_test')}catch(e){add('Speicher',false)}
@@ -289,8 +310,8 @@ async function runSystemCheck(showAlert=false){
   return ok;
 }
 
-async function createPdf(){save();const ok=await runSystemCheck(false);if(!window.jspdf||!window.jspdf.jsPDF){alert('PDF-Bibliothek konnte nicht geladen werden. Internetverbindung prüfen und Seite neu laden.');return}status(ok?'PDF wird direkt erstellt. Alle Prüfungen OK.':'PDF wird erstellt, aber bitte Warnung prüfen.');const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});for(let i=0;i<5;i++){status('PDF-Seite '+(i+1)+' von 5 wird erstellt ...');const c=document.createElement('canvas');c.width=W;c.height=H;await renderCanvasPage(c,i);const img=c.toDataURL('image/jpeg',0.92);if(i>0)pdf.addPage('a4','portrait');pdf.addImage(img,'JPEG',0,0,210,297,undefined,'FAST')}pdf.save('BLOC73_Marketing_Studio.pdf');status('PDF erstellt: BLOC73_Marketing_Studio.pdf · 5 feste Seiten')}
-$('pdfBtn').onclick=createPdf;$('pdfBtn2').onclick=createPdf;$('checkBtn').onclick=()=>runSystemCheck(true);$('previewReload').onclick=()=>renderPreview();addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));render();save();setTimeout(()=>{runSystemCheck(false);renderPreview()},1200);
+async function createPdf(){collectCurrentForm();save();const ok=await runSystemCheck(false);if(!window.jspdf||!window.jspdf.jsPDF){alert('PDF-Bibliothek konnte nicht geladen werden. Internetverbindung prüfen und Seite neu laden.');return}status(ok?'PDF wird direkt erstellt. Alle Prüfungen OK.':'PDF wird erstellt, aber bitte Warnung prüfen.');const {jsPDF}=window.jspdf;const pdf=new jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});for(let i=0;i<5;i++){status('PDF-Seite '+(i+1)+' von 5 wird erstellt ...');const c=document.createElement('canvas');c.width=W;c.height=H;await renderCanvasPage(c,i);const img=c.toDataURL('image/jpeg',0.92);if(i>0)pdf.addPage('a4','portrait');pdf.addImage(img,'JPEG',0,0,210,297,undefined,'FAST')}pdf.save('BLOC73_Marketing_Studio.pdf');status('PDF erstellt: BLOC73_Marketing_Studio.pdf · 5 feste Seiten')}
+$('pdfBtn').onclick=createPdf;$('pdfBtn2').onclick=createPdf;$('checkBtn').onclick=()=>runSystemCheck(true);$('previewReload').onclick=()=>{collectCurrentForm();save();renderPreview()};addEventListener('resize',fit);addEventListener('orientationchange',()=>setTimeout(fit,300));addEventListener('pagehide',()=>{collectCurrentForm();save()});addEventListener('visibilitychange',()=>{if(document.hidden){collectCurrentForm();save()}});render();save();setTimeout(()=>{runSystemCheck(false);renderPreview()},1200);
 </script>
 </body>
 </html>
